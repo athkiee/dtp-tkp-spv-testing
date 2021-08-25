@@ -141,6 +141,21 @@
   font-size: 1rem;
 }
 
+.form-link {
+  text-align: center;
+  align-content:center;
+  width: 80%;
+  height: 50px;
+  margin-top: 15px;
+  border-radius: 15px;
+  background: #D51100;
+  outline: none;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  vertical-align: text-bottom;
+}
+
 .form-input-btn:hover {
   cursor: pointer;
   background: #D51100;

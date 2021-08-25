@@ -53,14 +53,12 @@ class FormLanding extends React.Component {
         <div className='form-inputs'>
           <h3> Pilih Peran Anda </h3>
       </div>
-        <Link className='form-input-btn' to="/LoginSupervisor">
-        <button>
-          Supervisor
-        </button>
+      <Link className='form-link' role='button' to='/LoginSupervisor'>
+        Supervisor
         </Link>
-        <button className='form-input-btn' type='submit'>
-          Sekretaris
-        </button>
+      <Link className='form-link' role='button' to='/LoginSekretaris'>
+        Sekretaris
+        </Link>
       </form>
     </div>
   );
