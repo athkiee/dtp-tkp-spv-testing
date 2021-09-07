@@ -98,7 +98,7 @@ const FormRegister = ({ submitForm }) => {
           Register
         </button>
         <span className='form-input-login'>
-          Already have an account? <Link to="/LoginSekretaris">Login</Link>
+          Already have an account? <Link to="/sekretaris/login">Login</Link>
         </span>
       </form>
     </div>

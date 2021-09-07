@@ -2,31 +2,75 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { Table, Input, Button, Space } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
 
 const data = [
   {
     key: '1',
-    name: 'John Brown',
+    name: 'Tono',
     jobTitle: 'Administration',
     roles: 'Digital Business Partnership',
     mitra: 'SKI',
   },
   {
     key: '2',
-    name: 'Joe Black',
+    name: 'Tony',
     jobTitle: 'Administration',
     roles: 'Digital Business Partnership',
     mitra: 'ISH',
   },
   {
     key: '3',
-    name: 'Jim Green',
+    name: 'Timmy',
     jobTitle: 'Administration',
     roles: 'Digital Business Partnership',
     mitra: 'ISH',
   },
   {
     key: '4',
+    name: 'Bambang',
+    jobTitle: 'Administration',
+    roles: 'Digital Business Partnership',
+    mitra: 'SKI',
+  },
+  {
+    key: '5',
+    name: 'Jonathan',
+    jobTitle: 'Developer',
+    roles: 'Chapter Developer',
+    mitra: 'SKI',
+  },
+  {
+    key: '6',
+    name: 'Budi',
+    jobTitle: 'Developer',
+    roles: 'Chapter Developer',
+    mitra: 'SKI',
+  },
+  {
+    key: '7',
+    name: 'Setiawan',
+    jobTitle: 'Administration',
+    roles: 'Digital Business Partnership',
+    mitra: 'SKI',
+  },
+  {
+    key: '8',
+    name: 'Chaerul',
+    jobTitle: 'Janitor',
+    roles: 'Digital Business Partnership',
+    mitra: 'SKI',
+  },
+  {
+    key: '9',
+    name: 'Syahrul',
+    jobTitle: 'Administration',
+    roles: 'Digital Business Partnership',
+    mitra: 'SKI',
+  },
+  {
+    key: '10',
     name: 'Jim Red',
     jobTitle: 'Administration',
     roles: 'Digital Business Partnership',
@@ -128,16 +172,25 @@ export default class TableDashboard extends React.Component {
         dataIndex: 'roles',
         key: 'roles',
         ...this.getColumnSearchProps('roles'),
-        sorter: (a, b) => a.address.length - b.address.length,
-        sortDirections: ['descend', 'ascend'],
       },
       {
         title: 'Mitra',
         dataIndex: 'mitra',
         key: 'mitra',
         ...this.getColumnSearchProps('mitra'),
-        sorter: (a, b) => a.address.length - b.address.length,
-        sortDirections: ['descend', 'ascend'],
+      },
+      {
+        width: 125,
+        title: 'Aksi',
+        dataIndex: 'aksi',
+        fixed: 'right',
+        render: () => (
+          <div>
+          <VisibilityOutlinedIcon></VisibilityOutlinedIcon>
+          <span> </span>
+          <GetAppOutlinedIcon></GetAppOutlinedIcon>
+          </div>
+        )
       },
     ];
     return <Table columns={columns} dataSource={data} />;

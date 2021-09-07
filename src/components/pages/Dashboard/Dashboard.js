@@ -8,15 +8,16 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
+import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
+import ForumOutlinedIcon from '@material-ui/icons/ForumOutlined';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import SideMenu from '../../constant/sideMenu';
 import TableDashboard from './Table';
 import ActiveLastBreadcrumb from './Breadcumbs';
 
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    backgroundColor: '#E5E5E5',
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -85,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto',
+    backgroundColor: '#E5E5E5',
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -127,12 +130,20 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
+            
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
+              <ForumOutlinedIcon style={{color: 'black'}} />
             </Badge>
+          </IconButton>
+          <IconButton color="inherit">
+            <Badge badgeContent={4} color="secondary">
+              <NotificationsNoneIcon style={{color: 'black'}} />
+            </Badge>
+          </IconButton>
+          <IconButton color="inherit">
+            <AccountCircleIcon style={{color: 'black'}} />
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -148,15 +159,14 @@ export default function Dashboard() {
             <ChevronLeftIcon />
           </IconButton>
         </div>
-        <List>{mainListItems}</List>
-        <Divider />
+        <List><SideMenu /></List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-            Dashboard
+        <h2>Dashboard</h2>
           <ActiveLastBreadcrumb />
             Kelola data TKP pada halaman ini.
+        <Container maxWidth="lg" className={classes.container}>
           <TableDashboard />
         </Container>
       </main>

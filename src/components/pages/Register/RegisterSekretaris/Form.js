@@ -13,7 +13,7 @@ const Form = () => {
     <>
       <div className='form-container'>
         <div className='form-content-left'>
-          <img className='form-img' src='static/landing/register.svg' alt='' />
+          <img className='form-img' src='static/landing/register.png' alt='' />
         </div>
         {!isSubmitted ? (
           <FormRegister submitForm={submitForm} />

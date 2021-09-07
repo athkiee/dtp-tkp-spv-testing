@@ -25,7 +25,7 @@ const FormLogin = ({ submitForm }) => {
         </h1>
       </div>
         <div className='form-inputs'>
-          <label className='form-label'>Username</label>
+          <label className='form-label'>Username - Sekretaris</label>
           <input
             className='form-input'
             type='text'
@@ -52,7 +52,7 @@ const FormLogin = ({ submitForm }) => {
           Login
         </button>
         <span className='form-input-login'>
-          Belum punya akun?  <Link to="/RegisterSupervisor">Register</Link>
+          Belum punya akun?  <Link to="/sekretaris/register">Register</Link>
         </span>
       </form>
     </div>
