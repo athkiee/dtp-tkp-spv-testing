@@ -1,9 +1,9 @@
 import React from 'react';
-import './App.css';
-import Form from './Form';
+import '../styles/App.css';
+import LoginSupervisor from './component';
 
 function LoginSpv() {
-  return <Form />;
+  return <LoginSupervisor />;
 }
 
 export default LoginSpv;

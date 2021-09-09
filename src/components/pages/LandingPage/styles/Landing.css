@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 
-.form-container {
+.container-landing {
   margin: 100px auto;
   width: 1280px;
   box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.2);
@@ -11,16 +11,6 @@
   grid-template-columns: 1fr 1fr;
 }
 
-.close-btn {
-  position: absolute;
-  top: 2%;
-  right: 3%;
-  font-size: 1.5rem;
-  z-index: 1;
-  color: #fff;
-  cursor: pointer;
-}
-
 .form-content-left {
   background: linear-gradient(
     90deg, white
@@ -29,29 +19,13 @@
   position: relative;
 }
 
-.form-img {
-  width: 100%;
+.landing-img {
+  width: 125%;
   height: 100%;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.form-img-2 {
-  width: 60%;
-  height: 60%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.form-success {
-  text-align: center;
-  font-size: 24px;
-  margin-top: 80px;
-  color: #fff;
+  transform: translate(-40%, -50%);
 }
 
 .form-content-right {
@@ -60,7 +34,7 @@
   background: white;
 }
 
-.form {
+.landing {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -73,21 +47,24 @@
   align-items: center;
 }
 
-.title{
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  margin-bottom: 80px;
+.landing-title{
+  display: block;
+  padding-left: 10px;
+  outline: none;
+  border-radius: 2px;
+  height: 40px;
+  width: 100%;
+  border: none;
 }
 
-.form h2 {
+.landing h2 {
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.6);;
 }
 
-.form h1 {
+.landing h1 {
   float: left;
   font-family: Montserrat;
   font-style: normal;
@@ -96,7 +73,7 @@
 }
 
 .form-inputs {
-  margin-bottom: 0.5rem;
+  margin-bottom: 18px;
   width: 80%;
 }
 
@@ -139,6 +116,28 @@
   border: none;
   color: #fff;
   font-size: 1rem;
+}
+
+.button-landing {
+  display: grid;
+  text-align: center;
+  align-content:center;
+  width: 228px;
+  height: 62px;
+  margin-right: 15px;
+  border-radius: 15px;
+  background: #fff;
+  font-weight: bold;
+  outline-color: #D51100;
+  border: 1px solid #D51100;
+  color: #D51100;
+  font-size: 1rem;
+}
+
+.button-landing:hover {
+  cursor: pointer;
+  background: #D51100;
+  color: #fff;
 }
 
 .form-input-btn:hover {

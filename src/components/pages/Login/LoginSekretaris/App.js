@@ -1,9 +1,9 @@
 import React from 'react';
-import './App.css';
-import Form from './Form';
+import '../styles/App.css';
+import LoginSekre from './component';
 
 function LoginSekretaris() {
-  return <Form />;
+  return <LoginSekre />;
 }
 
 export default LoginSekretaris;

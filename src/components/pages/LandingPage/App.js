@@ -1,9 +1,9 @@
 import React from 'react';
-import './App.css';
-import Form from './Form';
+import './styles/App.css';
+import LandingPage from './component';
 
 function Landing() {
-  return <Form />;
+  return <LandingPage />;
 }
 
 export default Landing;

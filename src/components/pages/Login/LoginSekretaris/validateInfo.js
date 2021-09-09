@@ -7,8 +7,10 @@ export default function validateInfo(values) {
   // else if (!/^[A-Za-z]+/.test(values.name.trim())) {
   //   errors.name = 'Enter a valid name';
   // }
-  if (!values.username) {
-    errors.username = 'Pastikan Username anda terisi';
+  if (!values.nik) {
+    errors.nik = 'Pastikan NIK anda terisi';
+  } else if (values.nik < 6) {
+    errors.nik = 'Pastikan NIK anda valid';
   }
 
   if (!values.password) {

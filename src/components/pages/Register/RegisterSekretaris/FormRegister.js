@@ -25,7 +25,7 @@ const FormRegister = ({ submitForm }) => {
         </h2>
         <div className='form-inputs'>
           <label className='form-label'>Nama Lengkap</label>
-          <input
+          <TextField
             className='form-input'
             type='text'
             name='nama_lengkap'
@@ -37,7 +37,7 @@ const FormRegister = ({ submitForm }) => {
         </div>
         <div className='form-inputs'>
           <label className='form-label'>Username</label>
-          <input
+          <TextField
             className='form-input'
             type='text'
             name='username'
@@ -60,7 +60,7 @@ const FormRegister = ({ submitForm }) => {
         </div>
         <div className='form-inputs'>
           <label className='form-label'>No. WhatsApp Aktif</label>
-          <input
+          <TextField
             className='form-input'
             type='number'
             name='no_hp'
@@ -72,7 +72,7 @@ const FormRegister = ({ submitForm }) => {
         </div>
         <div className='form-inputs'>
           <label className='form-label'>Email</label>
-          <input
+          <TextField
             className='form-input'
             type='email'
             name='email'
@@ -84,7 +84,7 @@ const FormRegister = ({ submitForm }) => {
         </div>
         <div className='form-inputs'>
           <label className='form-label'>Password</label>
-          <input
+          <TextField
             className='form-input'
             type='password'
             name='password'
