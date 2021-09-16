@@ -20,6 +20,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SideMenu from '../../constant/sideMenu';
 import TableDashboard from './Table';
 import ActiveLastBreadcrumb from './Breadcumbs';
+import { getUser, removeUserSession } from '../../../utils/Common';
 
 const drawerWidth = 240;
 
@@ -114,6 +115,7 @@ export default function Dashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  console.log('sess', sessionStorage);
 
   return (
     <div className={classes.root}>
