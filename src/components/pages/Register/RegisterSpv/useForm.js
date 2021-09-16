@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const useForm = (callback, validate) => {
   const [values, setValues] = useState({
@@ -7,7 +8,7 @@ const useForm = (callback, validate) => {
     password: '',
     nik: '',
     no_hp: '',
-    id_bidang: '',
+    id_bidang: 1,
     id_status_spv: 1
   });
   const [errors, setErrors] = useState({});
@@ -28,24 +29,27 @@ const useForm = (callback, validate) => {
     setIsSubmitting(true);
   };
 
+  async function registerSpv(props) {
+    await axios.post('http://localhost:4004/spv_api/register', {
+      values
+    }).then(res => {
+      console.log('Registrasi telah berhasil!');
+      window.location = "/supervisor/login";
+    })
+      .catch(error => {
+        console.log(error + 'Registrasi Gagal!')
+      });
+  }
+
   useEffect(
     () => {
       if (Object.keys(errors).length === 0 && isSubmitting) {
-        console.log(JSON.stringify(values))
-        fetch('http://localhost:4004/spv_api/register', {
-          method: 'POST',
-          body: JSON.stringify(values),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(console.log('Registration Form Submitted!'))
-
+        registerSpv();
         callback();
       }
     },
     [errors]
   );
-
   return { handleChange, handleSubmit, values, errors };
 };
 
