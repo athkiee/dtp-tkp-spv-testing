@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import PrivateRoute from '../utils/PrivateRoute';
+
 import Landing from '../components/pages/LandingPage/App';
 import LoginSpv from '../components/pages/Login/LoginSpv/App';
 import RegisterSpv from '../components/pages/Register/RegisterSpv/App';

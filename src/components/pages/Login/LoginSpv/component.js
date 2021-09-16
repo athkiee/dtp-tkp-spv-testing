@@ -1,16 +1,39 @@
-import React from "react";
-import validate from "./validateInfo";
-import useForm from "./useForm";
+import React, { useState } from "react";
+import { setUserSession } from '../../../../utils/Common';
+import axios from "axios";
 import "../styles/Login.css";
 import TextField from "@material-ui/core/TextField";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 
-const LoginSupervisor = ({ submitForm }) => {
-  const { handleChange, handleSubmit, values, errors } = useForm(
-    submitForm,
-    validate
-  );
-  
+function LoginSupervisor(props) {
+  const [loading, setLoading] = useState(false);
+  const nik = useFormInput("");
+  const password = useFormInput("");
+  const [error, setError] = useState(null);
+  let history = useHistory();
+
+  const handleLogin = () => {
+    setError(null);
+    setLoading(true);
+    axios
+      .post("http://localhost:4004/spv_api/login", {
+        nik: nik.value,
+        password: password.value,
+      })
+      .then((response) => {
+        setLoading(false);
+        setUserSession(response.data.token, response.data.user);
+        history.push("/Dashboard");
+      })
+      .catch((error) => {
+        setLoading(false);
+        if (error.response.status === 401)
+          setError(error.response.data.message);
+        else setError("Something went wrong. Please try again later.");
+      });
+  };
+
   return (
     <div className="form-container">
       <span className="close-btn">×</span>
@@ -18,7 +41,7 @@ const LoginSupervisor = ({ submitForm }) => {
         <img className="login-img" src="static/landing/login.png" alt="" />
       </div>
       <div className="form-content-right">
-        <form onSubmit={handleSubmit} className="login-form" noValidate>
+        <form  className="login-form" noValidate>
           <div className="form-inputs">
             <h2 style={{ marginBottom: 0 }}>Selamat datang di</h2>
             <h1 style={{ marginBottom: 0 }}>Pengajuan Kebutuhan</h1>
@@ -31,10 +54,8 @@ const LoginSupervisor = ({ submitForm }) => {
               type="number"
               name="nik"
               placeholder="Masukkan NIK anda"
-              value={values.nik}
-              onChange={handleChange}
+              {...nik}
             />
-            {errors.nik && <p>{errors.nik}</p>}
           </div>
           <div className="form-inputs">
             <label className="form-label">Password</label>
@@ -43,12 +64,17 @@ const LoginSupervisor = ({ submitForm }) => {
               type="password"
               name="password"
               placeholder="Masukkan Password Anda"
-              value={values.password}
-              onChange={handleChange}
+              {...password}
             />
-            {errors.password && <p>{errors.password}</p>}
           </div>
-          <button className="form-input-btn" type="submit">
+          {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
+          <button
+            className="form-input-btn"
+            type="submit"
+            value={loading ? "Loading..." : "Login"}
+            onClick={handleLogin}
+            disabled={loading}
+          >
             Login
           </button>
           <span className="form-input-login">
@@ -58,6 +84,18 @@ const LoginSupervisor = ({ submitForm }) => {
       </div>
     </div>
   );
+}
+
+const useFormInput = (initialValue) => {
+  const [value, setValue] = useState(initialValue);
+
+  const handleChange = (e) => {
+    setValue(e.target.value);
+  };
+  return {
+    value,
+    onChange: handleChange,
+  };
 };
 
 export default LoginSupervisor;
