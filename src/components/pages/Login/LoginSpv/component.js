@@ -23,7 +23,7 @@ function LoginSupervisor(props) {
       })
       .then((response) => {
         setLoading(false);
-        setUserSession(response.data.token, response.data.user);
+        setUserSession(nik.value);
         history.push("/Dashboard");
       })
       .catch((error) => {

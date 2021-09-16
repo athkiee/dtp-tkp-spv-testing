@@ -21,6 +21,7 @@ import SideMenu from '../../constant/sideMenu';
 import TableDashboard from './Table';
 import ActiveLastBreadcrumb from './Breadcumbs';
 import { getUser, removeUserSession } from '../../../utils/Common';
+import { props } from 'ramda';
 
 const drawerWidth = 240;
 
@@ -106,6 +107,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
+  const user = getUser();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -115,6 +117,10 @@ export default function Dashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const handleLogout = () => {
+    removeUserSession();
+    props.history.push('/LandingPage');
+  }
   console.log('sess', sessionStorage);
 
   return (
@@ -132,7 +138,7 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            
+            {user.nik}
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -145,7 +151,7 @@ export default function Dashboard() {
             </Badge>
           </IconButton>
           <IconButton color="inherit">
-            <AccountCircleIcon style={{color: 'black'}} />
+            <AccountCircleIcon style={{color: 'black'}} onClick={handleLogout} />
           </IconButton>
         </Toolbar>
       </AppBar>
