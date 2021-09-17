@@ -52,7 +52,6 @@ const FormRegister = ({ submitForm }) => {
           <Autocomplete
           id="combo-box-demo"
           options={bidang}
-          defaultValue='Masukkan Tribe/Bidang/Chapter anda'
           getOptionLabel={(option) => option.id_bidang}
           renderInput={(params) => <TextField {...params} />}
           />

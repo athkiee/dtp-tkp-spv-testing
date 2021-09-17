@@ -25,13 +25,13 @@ const LoginSekre = ({ submitForm }) => {
             <h1 style={{ marginBottom: 40 }}>Tenaga Kerja Penunjang</h1>
           </div>
           <div className="form-inputs">
-            <label className="form-label">NIK - Supervisor</label>
+            <label className="form-label">Username - Sekretaris</label>
             <TextField
               className="form-input"
-              type="number"
-              name="nik"
-              placeholder="Masukkan NIK anda"
-              value={values.nik}
+              type="text"
+              name="username"
+              placeholder="Masukkan Username anda"
+              value={values.username}
               onChange={handleChange}
             />
             {errors.nik && <p>{errors.nik}</p>}
@@ -52,7 +52,7 @@ const LoginSekre = ({ submitForm }) => {
             Login
           </button>
           <span className="form-input-login">
-            Belum punya akun? <Link to="/supervisor/register">Register</Link>
+            Belum punya akun? <Link to="/sekretaris/register">Register</Link>
           </span>
         </form>
       </div>

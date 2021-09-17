@@ -23,14 +23,23 @@ function LoginSupervisor(props) {
       })
       .then((response) => {
         setLoading(false);
+        // setUserSession(response.data.token, response.data.user);
         setUserSession(nik.value);
-        history.push("/Dashboard");
+
+        console.log(response);
+
+        if (response.status === 200) {
+          history.push("/Dashboard");
+        }
+
       })
-      .catch((error) => {
+      .catch((error, response) => {
         setLoading(false);
-        if (error.response.status === 401)
-          setError(error.response.data.message);
-        else setError("Something went wrong. Please try again later.");
+          alert('NIK atau Password salah');
+        
+
+        // else setError("Something went wrong. Please try again later.");
+        // setError(response.data.errors[0].message);
       });
   };
 
@@ -41,7 +50,7 @@ function LoginSupervisor(props) {
         <img className="login-img" src="static/landing/login.png" alt="" />
       </div>
       <div className="form-content-right">
-        <form  className="login-form" noValidate>
+        <form className="login-form" noValidate>
           <div className="form-inputs">
             <h2 style={{ marginBottom: 0 }}>Selamat datang di</h2>
             <h1 style={{ marginBottom: 0 }}>Pengajuan Kebutuhan</h1>

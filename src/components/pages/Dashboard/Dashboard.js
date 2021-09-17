@@ -20,7 +20,11 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SideMenu from '../../constant/sideMenu';
 import TableDashboard from './Table';
 import ActiveLastBreadcrumb from './Breadcumbs';
-import { getUser, removeUserSession } from '../../../utils/Common';
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import { Menu, MenuItem } from '@material-ui/core';
+import { useHistory } from "react-router";
+// import { getUser, removeUserSession } from '../../../utils/Common';
 import { props } from 'ramda';
 
 const drawerWidth = 240;
@@ -104,23 +108,38 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
 }));
 
 export default function Dashboard() {
-  const user = getUser();
+  // const user = getUser();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  let history = useHistory();
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const handleClick = () => {
+    setOpen(!open);
+  };
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open1 = Boolean(anchorEl);
+  const handleClick1 = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const handleLogout = () => {
-    removeUserSession();
-    props.history.push('/LandingPage');
+    sessionStorage.clear();
+    history.push('/');
   }
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   console.log('sess', sessionStorage);
 
   return (
@@ -138,7 +157,7 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            {user.nik}
+
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -151,7 +170,29 @@ export default function Dashboard() {
             </Badge>
           </IconButton>
           <IconButton color="inherit">
-            <AccountCircleIcon style={{color: 'black'}} onClick={handleLogout} />
+            <AccountCircleIcon style={{color: 'black'}} />
+          </IconButton>
+          <IconButton color="inherit" button onClick={handleClick1}>
+          {open ? <ExpandMore style={{color: 'black'}} /> : <ExpandLess style={{color: 'black'}} />}
+          <Menu
+        id="demo-positioned-menu"
+        aria-labelledby="demo-positioned-button"
+        anchorEl={anchorEl}
+        open={open1}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      </Menu>
           </IconButton>
         </Toolbar>
       </AppBar>
