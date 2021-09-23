@@ -19,7 +19,7 @@ function routes() {
                 <Route path="/sekretaris/login" component={LoginSekretaris} />
                 <Route path="/supervisor/register" component={RegisterSpv} />
                 <Route path="/sekretaris/register" component={RegisterSekretaris} />
-                <Route path="/Dashboard" component={Dashboard} />
+                <PrivateRoute path="/Dashboard" component={Dashboard} />
                 <Route path="/EvaluasiTKP" component={EvaluasiTKP} />
         </Router>
     );

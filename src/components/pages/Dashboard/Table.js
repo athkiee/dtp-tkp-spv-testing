@@ -193,6 +193,6 @@ export default class TableDashboard extends React.Component {
         )
       },
     ];
-    return <Table columns={columns} dataSource={data} />;
+    return <Table columns={columns} dataSource={data} pagination={true} />;
   }
 }

@@ -17,7 +17,7 @@ export const getUser = () => {
   }
    
   // set the token and user from the session storage
-  export const setUserSession = (nik) => {
+  export const setUserSession = (token, nik) => {
+    sessionStorage.setItem('token', token);
     sessionStorage.setItem('nik', nik);
-    //sessionStorage.setItem('user', JSON.stringify(user));
   }

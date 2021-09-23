@@ -23,8 +23,7 @@ function LoginSupervisor(props) {
       })
       .then((response) => {
         setLoading(false);
-        // setUserSession(response.data.token, response.data.user);
-        setUserSession(nik.value);
+        setUserSession(response.data.token, response.data.nik);
 
         console.log(response);
 

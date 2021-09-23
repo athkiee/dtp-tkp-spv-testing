@@ -13,7 +13,6 @@ import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import ForumOutlinedIcon from '@material-ui/icons/ForumOutlined';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -24,8 +23,8 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import { Menu, MenuItem } from '@material-ui/core';
 import { useHistory } from "react-router";
-// import { getUser, removeUserSession } from '../../../utils/Common';
-import { props } from 'ramda';
+import { getUser, removeUserSession } from '../../../utils/Common';
+import './dashboard.css'
 
 const drawerWidth = 240;
 
@@ -77,6 +76,10 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
+  navLogo: {
+    width: 294,
+    height: 152,
+  },
   drawerPaperClose: {
     overflowX: 'hidden',
     transition: theme.transitions.create('width', {
@@ -114,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
-  // const user = getUser();
+  const user = getUser();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   let history = useHistory();
@@ -136,7 +139,7 @@ export default function Dashboard() {
     setAnchorEl(null);
   };
   const handleLogout = () => {
-    sessionStorage.clear();
+    removeUserSession();
     history.push('/');
   }
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -157,7 +160,7 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-
+            {user.nik}
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -204,9 +207,7 @@ export default function Dashboard() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
+            <img onClick={handleDrawerClose} src='static/logo.png' className="nav-Logo"/>
         </div>
         <List><SideMenu /></List>
       </Drawer>
