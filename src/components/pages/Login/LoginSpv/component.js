@@ -23,9 +23,16 @@ function LoginSupervisor(props) {
       })
       .then((response) => {
         setLoading(false);
-        setUserSession(response.data.token, response.data.nik);
-
-        console.log(response);
+        setUserSession(
+          response.data.token,
+          response.data.nik,
+          response.data.nama_lengkap,
+          response.data.id_spv,
+          response.data.no_hp,
+          response.data.email,
+          response.data.foto_profil,
+          );
+        console.log('test', response);
 
         if (response.status === 200) {
           history.push("/Dashboard");

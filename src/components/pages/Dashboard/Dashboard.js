@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -25,6 +25,7 @@ import { Menu, MenuItem } from '@material-ui/core';
 import { useHistory } from "react-router";
 import { getUser, removeUserSession } from '../../../utils/Common';
 import './dashboard.css'
+import axios from 'axios';
 
 const drawerWidth = 240;
 
@@ -120,6 +121,22 @@ export default function Dashboard() {
   const user = getUser();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [supervisor, setSupervisor] = useState();
+
+  const handleGetDATA = async () => {
+    try {
+      const resp = await axios.get('http://localhost:4004/spv_api');
+      console.log(resp.data[1]);
+  } catch (err) {
+      // Handle Error Here
+      console.error(err);
+  }
+  }
+
+  const handleTest = () => {
+    handleGetDATA();
+  }
+
   let history = useHistory();
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -144,6 +161,7 @@ export default function Dashboard() {
   }
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   console.log('sess', sessionStorage);
+  const nama_user = sessionStorage.getItem('nama');
 
   return (
     <div className={classes.root}>
@@ -173,7 +191,8 @@ export default function Dashboard() {
             </Badge>
           </IconButton>
           <IconButton color="inherit">
-            <AccountCircleIcon style={{color: 'black'}} />
+            <AccountCircleIcon style={{color: 'black'}} button onClick={handleTest} />
+            {nama_user}
           </IconButton>
           <IconButton color="inherit" button onClick={handleClick1}>
           {open ? <ExpandMore style={{color: 'black'}} /> : <ExpandLess style={{color: 'black'}} />}

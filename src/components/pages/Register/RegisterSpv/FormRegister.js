@@ -5,6 +5,17 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import axios from 'axios';
+
+const handleGetDATA = async () => {
+  try {
+    const resp = await axios.get('http://localhost:4004/bidang_api/');
+    console.log(resp.data);
+} catch (err) {
+    // Handle Error Here
+    console.error(err);
+}
+}
 
 const bidang = [
  { id_bidang: "DEV" },
@@ -52,6 +63,7 @@ const FormRegister = ({ submitForm }) => {
           <Autocomplete
           id="combo-box-demo"
           options={bidang}
+          onLoad={handleGetDATA()}
           getOptionLabel={(option) => option.id_bidang}
           renderInput={(params) => <TextField {...params} />}
           />
