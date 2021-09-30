@@ -4,6 +4,7 @@ import { Table, Input, Button, Space } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
+import axios from 'axios';
 
 const data = [
   {
@@ -79,10 +80,41 @@ const data = [
 ];
 
 export default class TableDashboard extends React.Component {
-  state = {
-    searchText: '',
-    searchedColumn: '',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchText: '',
+      searchedColumn: '',
+      dataTKP: [{
+        key: '1',
+        name: 'Tono',
+        jobTitle: 'Administration',
+        roles: 'Digital Business Partnership',
+        mitra: 'SKI',
+      }]
+
+    }
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:4004/spv_api/')
+      .then((response) => {
+        console.log(response.data)
+        console.log('OLD this.state ', this.state.dataTKP)
+        const tkp = response.data.map(spv => ({
+          key: spv.id_spv,
+          name: spv.nama_lengkap,
+          jobTitle: spv.email,
+          roles: spv.no_hp,
+          mitra: spv.nik
+        }))
+        this.setState({
+          dataTKP: tkp
+        })
+        console.log('NEW this.state ', this.state.dataTKP)
+      })
+  }
+
 
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -152,6 +184,7 @@ export default class TableDashboard extends React.Component {
   };
 
   render() {
+
     const columns = [
       {
         title: 'Nama TKP',
@@ -186,13 +219,13 @@ export default class TableDashboard extends React.Component {
         fixed: 'right',
         render: () => (
           <div>
-          <VisibilityOutlinedIcon></VisibilityOutlinedIcon>
-          <span> </span>
-          <GetAppOutlinedIcon></GetAppOutlinedIcon>
+            <VisibilityOutlinedIcon></VisibilityOutlinedIcon>
+            <span> </span>
+            <GetAppOutlinedIcon></GetAppOutlinedIcon>
           </div>
         )
       },
     ];
-    return <Table columns={columns} dataSource={data} pagination={true} />;
+    return <Table columns={columns} dataSource={this.state.dataTKP} pagination={true} />;
   }
 }
