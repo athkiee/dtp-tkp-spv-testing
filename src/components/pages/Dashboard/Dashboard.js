@@ -26,7 +26,6 @@ import { useHistory } from "react-router";
 import { getUser, removeUserSession } from '../../../utils/Common';
 import './dashboard.css'
 import axios from 'axios';
-import $ from 'jquery';
 
 const drawerWidth = 240;
 
@@ -216,39 +215,39 @@ export default function Dashboard() {
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
-              <ForumOutlinedIcon style={{color: 'black'}} />
+              <ForumOutlinedIcon style={{ color: 'black' }} />
             </Badge>
           </IconButton>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
-              <NotificationsNoneIcon style={{color: 'black'}} />
+              <NotificationsNoneIcon style={{ color: 'black' }} />
             </Badge>
           </IconButton>
           <IconButton color="inherit">
-            <AccountCircleIcon style={{color: 'black'}} button onClick={handleTest} />
+            <AccountCircleIcon style={{ color: 'black' }} button onClick={handleTest} />
             {nama_user}
           </IconButton>
           <IconButton color="inherit" button onClick={handleClick1}>
-          {open ? <ExpandMore style={{color: 'black'}} /> : <ExpandLess style={{color: 'black'}} />}
-          <Menu
-        id="demo-positioned-menu"
-        aria-labelledby="demo-positioned-button"
-        anchorEl={anchorEl}
-        open={open1}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
-      </Menu>
+            {open ? <ExpandMore style={{ color: 'black' }} /> : <ExpandLess style={{ color: 'black' }} />}
+            <Menu
+              id="demo-positioned-menu"
+              aria-labelledby="demo-positioned-button"
+              anchorEl={anchorEl}
+              open={open1}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -260,7 +259,7 @@ export default function Dashboard() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-            <img onClick={handleDrawerClose} src='static/logo.png' className="nav-Logo"/>
+          <img onClick={handleDrawerClose} src='static/logo.png' className="nav-Logo" />
         </div>
         <List><SideMenu /></List>
       </Drawer>
@@ -268,13 +267,13 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <h2>Dashboard</h2>
         <ul>
-        {/* {items.map(item => ( */}
+          {/* {items.map(item => ( */}
           <li key={items.id_spv}>
             {items.nama_lengkap} {items.nik}
           </li>
-        {/* ))} */}
-      </ul>
-          <ActiveLastBreadcrumb />
+          {/* ))} */}
+        </ul>
+        <ActiveLastBreadcrumb />
             Kelola data TKP pada halaman ini.
         <Container maxWidth="lg" className={classes.container}>
           <TableDashboard />
