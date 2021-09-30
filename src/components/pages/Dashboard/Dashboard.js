@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -26,6 +26,7 @@ import { useHistory } from "react-router";
 import { getUser, removeUserSession } from '../../../utils/Common';
 import './dashboard.css'
 import axios from 'axios';
+import $ from 'jquery';
 
 const drawerWidth = 240;
 
@@ -123,18 +124,51 @@ export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
   const [supervisor, setSupervisor] = useState();
 
-  const handleGetDATA = async () => {
-    try {
-      const resp = await axios.get('http://localhost:4004/spv_api');
-      console.log(resp.data[1]);
-  } catch (err) {
-      // Handle Error Here
-      console.error(err);
-  }
-  }
+  // const handleGetDATA = async () => {
+  //   try {
+  //     const resp = await axios.get('http://localhost:4004/spv_api');
+  //     console.log(resp.data[1]);
+  // } catch (err) {
+  //     // Handle Error Here
+  //     console.error(err);
+  // }
+  // }
+
+  // const handleGetDATA = () => {
+  //   $.ajax({url: "http://localhost:4004/spv_api",
+  //           success: function(data){
+  //             console.log('test', data)
+  //             // $('#test').html(String(data)),
+  //             //   this.setState({cek:data},function(){console.log(data)})}.bind(this),
+  //           }
+  // }}
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [items, setItems] = useState([]);
+
+  // Note: the empty deps array [] means
+  // this useEffect will run once
+  // similar to componentDidMount()
+  useEffect(() => {
+    fetch("http://localhost:4004/spv_api/1")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          setItems(result);
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      )
+  }, [])
 
   const handleTest = () => {
-    handleGetDATA();
+
   }
 
   let history = useHistory();
@@ -233,6 +267,13 @@ export default function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <h2>Dashboard</h2>
+        <ul>
+        {/* {items.map(item => ( */}
+          <li key={items.id_spv}>
+            {items.nama_lengkap} {items.nik}
+          </li>
+        {/* ))} */}
+      </ul>
           <ActiveLastBreadcrumb />
             Kelola data TKP pada halaman ini.
         <Container maxWidth="lg" className={classes.container}>
