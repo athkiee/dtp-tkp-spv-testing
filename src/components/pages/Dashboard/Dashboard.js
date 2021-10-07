@@ -27,6 +27,7 @@ import { getUser, removeUserSession } from '../../../utils/Common';
 import './dashboard.css'
 import axios from 'axios';
 import ChartLoker from './ChartLoker';
+import ChartJenjang from './ChartJenjang';
 
 const drawerWidth = 240;
 
@@ -268,6 +269,7 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <h2>Dashboard</h2>
         <ChartLoker />
+        <ChartJenjang />
         <ul>
           {/* {items.map(item => ( */}
           <li key={items.id_spv}>

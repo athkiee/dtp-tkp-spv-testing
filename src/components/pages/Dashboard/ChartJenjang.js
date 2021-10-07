@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
 
-class ChartLoker extends Component {
+class ChartJenjang extends Component {
     constructor(props) {
         super(props);
 
@@ -71,13 +71,18 @@ class ChartLoker extends Component {
     render() {
         return (
             <div className="chart">
-                <Doughnut
+                <Bar
                     data={this.state.chartData}
                     options={
                         {
-                            width: 1000,
-                            height: 500,
-                            maintainAspectRatio: false,
+                            indexAxis: 'y',
+                            // Elements options apply to all of the options unless overridden in a dataset
+                            // In this case, we are setting the border of each horizontal bar to be 2px wide
+                            elements: {
+                                bar: {
+                                    borderWidth: 2,
+                                }
+                            },
                             responsive: false,
                             plugins: {
                                 legend: {
@@ -85,7 +90,7 @@ class ChartLoker extends Component {
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Lokasi Kerja TKP'
+                                    text: 'Jenjang Pendidikan TKP'
                                 }
                             }
                         }
@@ -96,4 +101,4 @@ class ChartLoker extends Component {
     }
 }
 
-export default ChartLoker;
+export default ChartJenjang;
