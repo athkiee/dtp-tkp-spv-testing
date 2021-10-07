@@ -268,8 +268,15 @@ export default function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <h2>Dashboard</h2>
-        <ChartLoker />
-        <ChartJenjang />
+
+        <Box padding={4}>
+          <ChartLoker />
+        </Box>
+
+        <Box>
+          <ChartJenjang />
+        </Box>
+
         <ul>
           {/* {items.map(item => ( */}
           <li key={items.id_spv}>

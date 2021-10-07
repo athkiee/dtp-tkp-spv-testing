@@ -38,23 +38,23 @@ class ChartJenjang extends Component {
     }
 
     componentDidMount() {
-        var daftar_loker = []
-        var jumlah_tkp_loker = []
-        axios.get('http://localhost:4004/tkp/data-lokasi-kerja')
+        var daftar_jenjang = []
+        var jumlah_tkp_jenjang = []
+        axios.get('http://localhost:4004/tkp/data-jenjang-pendidikan')
             .then((response) => {
-                response.data.map(nama_lokasi => (
-                    daftar_loker.push(nama_lokasi.nama_lokasi_kerja)
+                response.data.map(nama_jenjang => (
+                    daftar_jenjang.push(nama_jenjang.nama_jenjang_pendidikan)
                 ))
 
-                response.data.map(jumlah_lokasi => (
-                    jumlah_tkp_loker.push(jumlah_lokasi.jumlah_tkp)
+                response.data.map(jumlah_jenjang => (
+                    jumlah_tkp_jenjang.push(jumlah_jenjang.jumlah_tkp)
                 ))
                 this.setState({
                     chartData: {
-                        labels: daftar_loker,
+                        labels: daftar_jenjang,
                         datasets: [
                             {
-                                data: jumlah_tkp_loker
+                                data: jumlah_tkp_jenjang
                             }
                         ]
                     }
