@@ -13,70 +13,7 @@ const data = [
     jobTitle: 'Administration',
     roles: 'Digital Business Partnership',
     mitra: 'SKI',
-  },
-  {
-    key: '2',
-    name: 'Tony',
-    jobTitle: 'Administration',
-    roles: 'Digital Business Partnership',
-    mitra: 'ISH',
-  },
-  {
-    key: '3',
-    name: 'Timmy',
-    jobTitle: 'Administration',
-    roles: 'Digital Business Partnership',
-    mitra: 'ISH',
-  },
-  {
-    key: '4',
-    name: 'Bambang',
-    jobTitle: 'Administration',
-    roles: 'Digital Business Partnership',
-    mitra: 'SKI',
-  },
-  {
-    key: '5',
-    name: 'Jonathan',
-    jobTitle: 'Developer',
-    roles: 'Chapter Developer',
-    mitra: 'SKI',
-  },
-  {
-    key: '6',
-    name: 'Budi',
-    jobTitle: 'Developer',
-    roles: 'Chapter Developer',
-    mitra: 'SKI',
-  },
-  {
-    key: '7',
-    name: 'Setiawan',
-    jobTitle: 'Administration',
-    roles: 'Digital Business Partnership',
-    mitra: 'SKI',
-  },
-  {
-    key: '8',
-    name: 'Chaerul',
-    jobTitle: 'Janitor',
-    roles: 'Digital Business Partnership',
-    mitra: 'SKI',
-  },
-  {
-    key: '9',
-    name: 'Syahrul',
-    jobTitle: 'Administration',
-    roles: 'Digital Business Partnership',
-    mitra: 'SKI',
-  },
-  {
-    key: '10',
-    name: 'Jim Red',
-    jobTitle: 'Administration',
-    roles: 'Digital Business Partnership',
-    mitra: 'SKI',
-  },
+  }
 ];
 
 export default class TableDashboard extends React.Component {
@@ -97,21 +34,18 @@ export default class TableDashboard extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:4004/spv_api/')
+    axios.get('http://localhost:4004/tkp/')
       .then((response) => {
-        console.log(response.data)
-        console.log('OLD this.state ', this.state.dataTKP)
-        const tkp = response.data.map(spv => ({
-          key: spv.id_spv,
-          name: spv.nama_lengkap,
-          jobTitle: spv.email,
-          roles: spv.no_hp,
-          mitra: spv.nik
+        const tkp = response.data.map(tkp => ({
+          key: tkp.id_tkp,
+          name: tkp.nama_lengkap,
+          jobTitle: tkp.t_job_title.nama_job_title,
+          roles: tkp.t_job_role.nama_job_role,
+          mitra: tkp.t_mitra.nama_mitra
         }))
         this.setState({
           dataTKP: tkp
         })
-        console.log('NEW this.state ', this.state.dataTKP)
       })
   }
 

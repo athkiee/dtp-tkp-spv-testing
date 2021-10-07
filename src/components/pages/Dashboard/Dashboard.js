@@ -26,6 +26,7 @@ import { useHistory } from "react-router";
 import { getUser, removeUserSession } from '../../../utils/Common';
 import './dashboard.css'
 import axios from 'axios';
+import ChartLoker from './ChartLoker';
 
 const drawerWidth = 240;
 
@@ -149,7 +150,7 @@ export default function Dashboard() {
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    fetch("http://localhost:4004/spv_api/1")
+    fetch("http://localhost:4004/spv/1")
       .then(res => res.json())
       .then(
         (result) => {
@@ -266,6 +267,7 @@ export default function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <h2>Dashboard</h2>
+        <ChartLoker />
         <ul>
           {/* {items.map(item => ( */}
           <li key={items.id_spv}>

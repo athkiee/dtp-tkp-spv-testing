@@ -17,7 +17,7 @@ function LoginSupervisor(props) {
     setError(null);
     setLoading(true);
     axios
-      .post("http://localhost:4004/spv_api/login", {
+      .post("http://localhost:4004/spv/login", {
         nik: nik.value,
         password: password.value,
       })
@@ -31,7 +31,7 @@ function LoginSupervisor(props) {
           response.data.no_hp,
           response.data.email,
           response.data.foto_profil,
-          );
+        );
         console.log('test', response);
 
         if (response.status === 200) {
@@ -41,8 +41,8 @@ function LoginSupervisor(props) {
       })
       .catch((error, response) => {
         setLoading(false);
-          alert('NIK atau Password salah');
-        
+        alert('NIK atau Password salah');
+
 
         // else setError("Something went wrong. Please try again later.");
         // setError(response.data.errors[0].message);

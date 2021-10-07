@@ -31,7 +31,7 @@ const useForm = (callback, validate) => {
   };
 
   async function registerSekretaris(props) {
-    await axios.post('http://localhost:4004/sekretaris_api/register', {
+    await axios.post('http://localhost:4004/sekretaris/register', {
       values
     }).then(res => {
       console.log('Registrasi telah berhasil!');
