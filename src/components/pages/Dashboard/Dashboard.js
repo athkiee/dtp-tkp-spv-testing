@@ -28,6 +28,7 @@ import './dashboard.css'
 import axios from 'axios';
 import ChartLoker from './ChartLoker';
 import ChartJenjang from './ChartJenjang';
+import ChartMitra from './ChartMitra';
 
 const drawerWidth = 240;
 
@@ -269,13 +270,8 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <h2>Dashboard</h2>
 
-        <Box padding={4}>
-          <ChartLoker />
-        </Box>
 
-        <Box>
-          <ChartJenjang />
-        </Box>
+
 
         <ul>
           {/* {items.map(item => ( */}
@@ -287,6 +283,39 @@ export default function Dashboard() {
         <ActiveLastBreadcrumb />
             Kelola data TKP pada halaman ini.
         <Container maxWidth="lg" className={classes.container}>
+
+          <Box display="flex" marginBottom={2}>
+            <Box display="flex"
+              marginRight={5}
+              padding={7}
+              boxShadow={3}
+              bgcolor="white"
+              minHeight="1vh">
+              <ChartLoker />
+            </Box>
+
+            <Box display="flex"
+              marginRight={20}
+              padding={7}
+              boxShadow={3}
+              bgcolor="white"
+              minHeight="1vh">
+              <ChartJenjang />
+            </Box>
+          </Box>
+
+          <Box display="flex" marginBottom={2}>
+            <Box display="flex"
+              marginRight={20}
+              padding={7}
+              boxShadow={3}
+              bgcolor="white"
+              minHeight="1vh">
+              <ChartMitra />
+            </Box>
+          </Box>
+
+
           <TableDashboard />
         </Container>
       </main>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import axios from 'axios';
 
-class ChartLoker extends Component {
+class ChartMitra extends Component {
     constructor(props) {
         super(props);
 
@@ -23,23 +23,23 @@ class ChartLoker extends Component {
     }
 
     componentDidMount() {
-        var daftar_loker = []
-        var jumlah_tkp_loker = []
-        axios.get('http://localhost:4004/tkp/data-lokasi-kerja')
+        var daftar_mitra = []
+        var jumlah_tkp_mitra = []
+        axios.get('http://localhost:4004/tkp/data-mitra')
             .then((response) => {
-                response.data.map(nama_lokasi => (
-                    daftar_loker.push(nama_lokasi.nama_lokasi_kerja)
+                response.data.map(nama_mitra => (
+                    daftar_mitra.push(nama_mitra.nama_mitra)
                 ))
 
-                response.data.map(jumlah_lokasi => (
-                    jumlah_tkp_loker.push(jumlah_lokasi.jumlah_tkp)
+                response.data.map(jumlah_mitra => (
+                    jumlah_tkp_mitra.push(jumlah_mitra.jumlah_tkp)
                 ))
                 this.setState({
                     chartData: {
-                        labels: daftar_loker,
+                        labels: daftar_mitra,
                         datasets: [
                             {
-                                data: jumlah_tkp_loker,
+                                data: jumlah_tkp_mitra,
                                 backgroundColor: [
                                     '#D51100',
                                     '#D58780'
@@ -75,7 +75,7 @@ class ChartLoker extends Component {
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Lokasi Kerja TKP'
+                                    text: 'Mitra'
                                 }
                             }
                         }
@@ -86,4 +86,4 @@ class ChartLoker extends Component {
     }
 }
 
-export default ChartLoker;
+export default ChartMitra;

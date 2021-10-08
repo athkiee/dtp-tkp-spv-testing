@@ -15,24 +15,7 @@ class ChartJenjang extends Component {
                             label: 'Data Set 1',
                             data: [32, 43, 54, 37]
                         }
-                    ],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
+                    ]
             }
         }
     }
@@ -54,7 +37,12 @@ class ChartJenjang extends Component {
                         labels: daftar_jenjang,
                         datasets: [
                             {
-                                data: jumlah_tkp_jenjang
+                                data: jumlah_tkp_jenjang,
+                                backgroundColor: [
+                                    '#D51100'
+                                ],
+                                borderWidth: 0.1,
+                                borderRadius: Number.MAX_VALUE,
                             }
                         ]
                     }
@@ -86,6 +74,7 @@ class ChartJenjang extends Component {
                             responsive: false,
                             plugins: {
                                 legend: {
+                                    display: false,
                                     position: 'right',
                                 },
                                 title: {
