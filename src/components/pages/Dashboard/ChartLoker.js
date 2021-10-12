@@ -25,7 +25,7 @@ class ChartLoker extends Component {
     componentDidMount() {
         var daftar_loker = []
         var jumlah_tkp_loker = []
-        axios.get('http://localhost:4004/tkp/data-lokasi-kerja')
+        axios.get('http://localhost:4004/tkp/chart-lokasi-kerja')
             .then((response) => {
                 response.data.map(nama_lokasi => (
                     daftar_loker.push(nama_lokasi.nama_lokasi_kerja)
@@ -71,7 +71,11 @@ class ChartLoker extends Component {
                             responsive: false,
                             plugins: {
                                 legend: {
-                                    position: 'right',
+                                    position: 'bottom',
+                                    labels: {
+                                        usePointStyle: true,
+                                        pointStyle: 'circle'
+                                    }
                                 },
                                 title: {
                                     display: true,

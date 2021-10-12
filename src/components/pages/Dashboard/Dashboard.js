@@ -29,6 +29,13 @@ import axios from 'axios';
 import ChartLoker from './ChartLoker';
 import ChartJenjang from './ChartJenjang';
 import ChartMitra from './ChartMitra';
+import ChartUmur from './ChartUmur';
+import ChartThp from './ChartThp';
+import ChartJobTitle from './ChartJobTitle';
+import ChartJobRole from './ChartJobRole';
+
+
+
 
 const drawerWidth = 240;
 
@@ -306,13 +313,56 @@ export default function Dashboard() {
 
           <Box display="flex" marginBottom={2}>
             <Box display="flex"
-              marginRight={20}
+              marginRight={5}
               padding={7}
               boxShadow={3}
               bgcolor="white"
               minHeight="1vh">
               <ChartMitra />
             </Box>
+
+            <Box display="flex"
+              marginRight={5}
+              padding={7}
+              boxShadow={3}
+              bgcolor="white"
+              minHeight="1vh">
+              <ChartUmur />
+            </Box>
+          </Box>
+
+          <Box display="flex" marginBottom={2}>
+            <Box display="flex"
+              marginRight={5}
+              padding={7}
+              boxShadow={3}
+              bgcolor="white"
+              minHeight="1vh">
+              <ChartThp />
+            </Box>
+
+            <Box display="flex"
+              marginRight={5}
+              padding={7}
+              boxShadow={3}
+              bgcolor="white"
+              minHeight="1vh">
+              <ChartJobTitle />
+            </Box>
+
+
+          </Box>
+
+          <Box display="flex" marginBottom={2}>
+            <Box display="flex"
+              marginRight={5}
+              padding={7}
+              boxShadow={3}
+              bgcolor="white"
+              minHeight="1vh">
+              <ChartJobRole />
+            </Box>
+
           </Box>
 
 

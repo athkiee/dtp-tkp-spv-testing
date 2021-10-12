@@ -25,7 +25,7 @@ class ChartMitra extends Component {
     componentDidMount() {
         var daftar_mitra = []
         var jumlah_tkp_mitra = []
-        axios.get('http://localhost:4004/tkp/data-mitra')
+        axios.get('http://localhost:4004/tkp/chart-mitra')
             .then((response) => {
                 response.data.map(nama_mitra => (
                     daftar_mitra.push(nama_mitra.nama_mitra)
@@ -71,7 +71,11 @@ class ChartMitra extends Component {
                             responsive: false,
                             plugins: {
                                 legend: {
-                                    position: 'right',
+                                    position: 'bottom',
+                                    labels: {
+                                        usePointStyle: true,
+                                        pointStyle: 'circle'
+                                    }
                                 },
                                 title: {
                                     display: true,

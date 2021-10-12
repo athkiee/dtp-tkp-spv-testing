@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
 import axios from 'axios';
 
-class ChartJenjang extends Component {
+class ChartJobRole extends Component {
     constructor(props) {
         super(props);
 
@@ -21,23 +21,23 @@ class ChartJenjang extends Component {
     }
 
     componentDidMount() {
-        var daftar_jenjang = []
-        var jumlah_tkp_jenjang = []
-        axios.get('http://localhost:4004/tkp/chart-jenjang-pendidikan')
+        var daftar_job_role = []
+        var jumlah_tkp = []
+        axios.get('http://localhost:4004/tkp/chart-tkp-job-role')
             .then((response) => {
-                response.data.map(nama_jenjang => (
-                    daftar_jenjang.push(nama_jenjang.nama_jenjang_pendidikan)
+                response.data.map(nama_job_role => (
+                    daftar_job_role.push(nama_job_role.nama_job_role)
                 ))
 
-                response.data.map(jumlah_jenjang => (
-                    jumlah_tkp_jenjang.push(jumlah_jenjang.jumlah_tkp)
+                response.data.map(jumlah_tkp_a => (
+                    jumlah_tkp.push(jumlah_tkp_a.jumlah_tkp)
                 ))
                 this.setState({
                     chartData: {
-                        labels: daftar_jenjang,
+                        labels: daftar_job_role,
                         datasets: [
                             {
-                                data: jumlah_tkp_jenjang,
+                                data: jumlah_tkp,
                                 backgroundColor: [
                                     '#D51100'
                                 ],
@@ -71,7 +71,7 @@ class ChartJenjang extends Component {
                                     }
                                 }]
                             },
-                            indexAxis: 'y',
+                            indexAxis: 'x',
                             // Elements options apply to all of the options unless overridden in a dataset
                             // In this case, we are setting the border of each horizontal bar to be 2px wide
                             elements: {
@@ -91,7 +91,7 @@ class ChartJenjang extends Component {
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Jenjang Pendidikan TKP'
+                                    text: 'Job Role'
                                 }
                             }
                         }
@@ -102,4 +102,4 @@ class ChartJenjang extends Component {
     }
 }
 
-export default ChartJenjang;
+export default ChartJobRole;

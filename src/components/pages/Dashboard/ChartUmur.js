@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
 import axios from 'axios';
 
-class ChartJenjang extends Component {
+class ChartUmur extends Component {
     constructor(props) {
         super(props);
 
@@ -13,36 +13,41 @@ class ChartJenjang extends Component {
                     [
                         {
                             label: 'Data Set 1',
-                            data: [32, 43, 54, 37]
+                            data: [32, 43, 54, 37],
+
                         }
-                    ]
+                    ],
+
             }
         }
     }
 
     componentDidMount() {
-        var daftar_jenjang = []
-        var jumlah_tkp_jenjang = []
-        axios.get('http://localhost:4004/tkp/chart-jenjang-pendidikan')
+        var daftar_umur = []
+        var jumlah_tkp_umur = []
+        axios.get('http://localhost:4004/tkp/chart-range-umur')
             .then((response) => {
-                response.data.map(nama_jenjang => (
-                    daftar_jenjang.push(nama_jenjang.nama_jenjang_pendidikan)
+                response.data.map(range => (
+                    daftar_umur.push(range.umur_range)
                 ))
 
-                response.data.map(jumlah_jenjang => (
-                    jumlah_tkp_jenjang.push(jumlah_jenjang.jumlah_tkp)
+                response.data.map(jumlah_range_umur => (
+                    jumlah_tkp_umur.push(jumlah_range_umur.jumlah_tkp)
                 ))
                 this.setState({
                     chartData: {
-                        labels: daftar_jenjang,
+                        labels: daftar_umur,
                         datasets: [
                             {
-                                data: jumlah_tkp_jenjang,
+                                data: jumlah_tkp_umur,
                                 backgroundColor: [
-                                    '#D51100'
+                                    '#D51100',
+                                    '#D55F55',
+                                    '#D58780',
+                                    '#D5AEAA',
+                                    '#D5C1C0'
                                 ],
-                                borderWidth: 0.1,
-                                borderRadius: Number.MAX_VALUE,
+                                borderWidth: 0.1
                             }
                         ]
                     }
@@ -59,39 +64,26 @@ class ChartJenjang extends Component {
     render() {
         return (
             <div className="chart">
-                <Bar
+                <Doughnut
                     data={this.state.chartData}
                     options={
                         {
-                            scaleShowValues: true,
-                            scales: {
-                                xAxes: [{
-                                    ticks: {
-                                        autoSkip: false
-                                    }
-                                }]
-                            },
-                            indexAxis: 'y',
-                            // Elements options apply to all of the options unless overridden in a dataset
-                            // In this case, we are setting the border of each horizontal bar to be 2px wide
-                            elements: {
-                                bar: {
-                                    borderWidth: 2,
-                                }
-                            },
+                            width: 1000,
+                            height: 500,
+                            maintainAspectRatio: false,
                             responsive: false,
                             plugins: {
                                 legend: {
-                                    display: false,
                                     position: 'bottom',
                                     labels: {
                                         usePointStyle: true,
                                         pointStyle: 'circle'
                                     }
+
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Jenjang Pendidikan TKP'
+                                    text: 'Usia TKP'
                                 }
                             }
                         }
@@ -102,4 +94,4 @@ class ChartJenjang extends Component {
     }
 }
 
-export default ChartJenjang;
+export default ChartUmur;
