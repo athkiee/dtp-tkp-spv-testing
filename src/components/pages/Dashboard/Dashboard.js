@@ -1,62 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
-import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
-import ForumOutlinedIcon from '@material-ui/icons/ForumOutlined';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import SideMenu from '../../constant/sideMenu';
-import TableDashboard from './Table';
-import ActiveLastBreadcrumb from './Breadcumbs';
+import React, { useState, useEffect } from "react";
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Drawer from "@material-ui/core/Drawer";
+import Box from "@material-ui/core/Box";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import Badge from "@material-ui/core/Badge";
+import Container from "@material-ui/core/Container";
+import Link from "@material-ui/core/Link";
+import MenuIcon from "@material-ui/icons/Menu";
+import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
+import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import SideMenu from "../../constant/sideMenu";
+import TableDashboard from "./Table";
+import ActiveLastBreadcrumb from "./Breadcumbs";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import { Menu, MenuItem } from '@material-ui/core';
+import { Menu, MenuItem } from "@material-ui/core";
 import { useHistory } from "react-router";
-import { getUser, removeUserSession } from '../../../utils/Common';
-import './dashboard.css'
-import axios from 'axios';
-import ChartLoker from './ChartLoker';
-import ChartJenjang from './ChartJenjang';
-import ChartMitra from './ChartMitra';
-import ChartUmur from './ChartUmur';
-import ChartThp from './ChartThp';
-import ChartJobTitle from './ChartJobTitle';
-import ChartJobRole from './ChartJobRole';
-
-
-
+import { getUser, removeUserSession } from "../../../utils/Common";
+import "./dashboard.css";
+import axios from "axios";
+import ChartLoker from "./ChartLoker";
+import ChartJenjang from "./ChartJenjang";
+import ChartMitra from "./ChartMitra";
+import ChartUmur from "./ChartUmur";
+import ChartThp from "./ChartThp";
+import ChartJobTitle from "./ChartJobTitle";
+import ChartJobRole from "./ChartJobRole";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
   toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: "0 8px",
     ...theme.mixins.toolbar,
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: '#E5E5E5',
-    transition: theme.transitions.create(['width', 'margin'], {
+    backgroundColor: "#E5E5E5",
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -64,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   appBarShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -73,16 +70,16 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 36,
   },
   menuButtonHidden: {
-    display: 'none',
+    display: "none",
   },
   title: {
     flexGrow: 1,
   },
   drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
+    position: "relative",
+    whiteSpace: "nowrap",
     width: drawerWidth,
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -92,22 +89,22 @@ const useStyles = makeStyles((theme) => ({
     height: 152,
   },
   drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
+    overflowX: "hidden",
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       width: theme.spacing(9),
     },
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-    backgroundColor: '#E5E5E5',
+    height: "100vh",
+    overflow: "auto",
+    backgroundColor: "#E5E5E5",
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -115,9 +112,9 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
   },
   fixedHeight: {
     height: 240,
@@ -160,7 +157,7 @@ export default function Dashboard() {
   // similar to componentDidMount()
   useEffect(() => {
     fetch("http://localhost:4004/spv/1")
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(
         (result) => {
           setIsLoaded(true);
@@ -173,12 +170,10 @@ export default function Dashboard() {
           setIsLoaded(true);
           setError(error);
         }
-      )
-  }, [])
+      );
+  }, []);
 
-  const handleTest = () => {
-
-  }
+  const handleTest = () => {};
 
   let history = useHistory();
   const handleDrawerOpen = () => {
@@ -200,45 +195,65 @@ export default function Dashboard() {
   };
   const handleLogout = () => {
     removeUserSession();
-    history.push('/');
-  }
+    history.push("/");
+  };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  console.log('sess', sessionStorage);
-  const nama_user = sessionStorage.getItem('nama');
+  console.log("sess", sessionStorage);
+  const nama_user = sessionStorage.getItem("nama");
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+      <AppBar
+        position="absolute"
+        className={clsx(classes.appBar, open && classes.appBarShift)}
+      >
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+            className={clsx(
+              classes.menuButton,
+              open && classes.menuButtonHidden
+            )}
           >
             <MenuIcon />
           </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            className={classes.title}
+          >
             {user.nik}
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
-              <ForumOutlinedIcon style={{ color: 'black' }} />
+              <ForumOutlinedIcon style={{ color: "black" }} />
             </Badge>
           </IconButton>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
-              <NotificationsNoneIcon style={{ color: 'black' }} />
+              <NotificationsNoneIcon style={{ color: "black" }} />
             </Badge>
           </IconButton>
           <IconButton color="inherit">
-            <AccountCircleIcon style={{ color: 'black' }} button onClick={handleTest} />
+            <AccountCircleIcon
+              style={{ color: "black" }}
+              button
+              onClick={handleTest}
+            />
             {nama_user}
           </IconButton>
           <IconButton color="inherit" button onClick={handleClick1}>
-            {open ? <ExpandMore style={{ color: 'black' }} /> : <ExpandLess style={{ color: 'black' }} />}
+            {open ? (
+              <ExpandMore style={{ color: "black" }} />
+            ) : (
+              <ExpandLess style={{ color: "black" }} />
+            )}
             <Menu
               id="demo-positioned-menu"
               aria-labelledby="demo-positioned-button"
@@ -246,12 +261,12 @@ export default function Dashboard() {
               open={open1}
               onClose={handleClose}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
@@ -269,104 +284,144 @@ export default function Dashboard() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <img onClick={handleDrawerClose} src='static/logo.png' className="nav-Logo" />
+          <img
+            onClick={handleDrawerClose}
+            src="static/logo.png"
+            className="nav-Logo"
+          />
         </div>
-        <List><SideMenu /></List>
+        <List>
+          <SideMenu />
+        </List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <h2>Dashboard</h2>
-
-
-
-
-        <ul>
-          {/* {items.map(item => ( */}
-          <li key={items.id_spv}>
-            {items.nama_lengkap} {items.nik}
-          </li>
-          {/* ))} */}
-        </ul>
         <ActiveLastBreadcrumb />
-            Kelola data TKP pada halaman ini.
+        Kelola data TKP pada halaman ini.
         <Container maxWidth="lg" className={classes.container}>
-
-          <Box display="flex" marginBottom={2}>
-            <Box display="flex"
+          <Box display="flex" marginBottom={3}>
+            {/* Chart Lokasi Kerja TKP */}
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              width="100%"
+              height="100%"
               marginRight={5}
               padding={7}
               boxShadow={3}
               bgcolor="white"
-              minHeight="1vh">
+              minHeight="1vh"
+              borderRadius="15px"
+            >
               <ChartLoker />
             </Box>
 
-            <Box display="flex"
-              marginRight={20}
+            {/* Chart Jenjang Pendidikan TKP */}
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              width="100%"
+              height="100%"
+              marginRight={5}
               padding={7}
               boxShadow={3}
               bgcolor="white"
-              minHeight="1vh">
+              minHeight="1vh"
+              borderRadius="15px"
+            >
               <ChartJenjang />
             </Box>
           </Box>
 
-          <Box display="flex" marginBottom={2}>
-            <Box display="flex"
+          <Box display="flex" marginBottom={3}>
+            {/* Chart Mitra */}
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              width="100%"
+              height="100%"
               marginRight={5}
               padding={7}
               boxShadow={3}
               bgcolor="white"
-              minHeight="1vh">
+              minHeight="1vh"
+              borderRadius="15px"
+            >
               <ChartMitra />
             </Box>
 
-            <Box display="flex"
+            {/* Chat Usia TKP */}
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              width="100%"
+              height="100%"
               marginRight={5}
               padding={7}
               boxShadow={3}
               bgcolor="white"
-              minHeight="1vh">
+              minHeight="1vh"
+              borderRadius="15px"
+            >
               <ChartUmur />
             </Box>
           </Box>
 
           <Box display="flex" marginBottom={2}>
-            <Box display="flex"
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              width="100%"
+              height="100%"
               marginRight={5}
               padding={7}
               boxShadow={3}
               bgcolor="white"
-              minHeight="1vh">
-              <ChartThp />
-            </Box>
-
-            <Box display="flex"
-              marginRight={5}
-              padding={7}
-              boxShadow={3}
-              bgcolor="white"
-              minHeight="1vh">
-              <ChartJobTitle />
-            </Box>
-
-
-          </Box>
-
-          <Box display="flex" marginBottom={2}>
-            <Box display="flex"
-              marginRight={5}
-              padding={7}
-              boxShadow={3}
-              bgcolor="white"
-              minHeight="1vh">
+              minHeight="1vh"
+              borderRadius="15px"
+            >
               <ChartJobRole />
             </Box>
-
           </Box>
 
-
           <TableDashboard />
+
+          {/* Chart Headcount */}
+          <Box
+            display="flex"
+            width="100%"
+            height="100%"
+            marginRight={5}
+            marginBottom={3}
+            padding={7}
+            boxShadow={3}
+            bgcolor="white"
+            minHeight="1vh"
+            borderRadius="15px"
+          >
+            <ChartThp />
+          </Box>
+
+          <Box
+            display="flex"
+            width="100%"
+            height="100%"
+            marginRight={5}
+            marginBottom={3}
+            padding={7}
+            boxShadow={3}
+            bgcolor="white"
+            minHeight="1vh"
+            borderRadius="15px"
+          >
+            <ChartJobTitle />
+          </Box>
         </Container>
       </main>
     </div>

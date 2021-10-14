@@ -50,11 +50,13 @@ export default function SideMenu() {
             <ListItemText primary="Mengajukan TKP" />
           </ListItem>
         </List>
-        <List component="div">
-          <ListItem button className={classes.nested}>
-            <ListItemText primary="Dalam Proses" />
-          </ListItem>
-        </List>
+        <Link to="/OnProcessTKP" style={{ color: "black" }}>
+          <List component="div">
+            <ListItem button className={classes.nested}>
+              <ListItemText primary="Dalam Proses"></ListItemText>
+            </ListItem>
+          </List>
+        </Link>
         <List component="div">
           <ListItem button className={classes.nested}>
             <ListItemText primary="Riwayat" />
@@ -66,7 +68,9 @@ export default function SideMenu() {
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>
-        <ListItemText primary="Evaluasi TKP" />
+        <Link to="/EvaluasiTKP" style={{ color: "black" }}>
+          <ListItemText primary="Evaluasi TKP"></ListItemText>
+        </Link>
       </ListItem>
     </div>
   );

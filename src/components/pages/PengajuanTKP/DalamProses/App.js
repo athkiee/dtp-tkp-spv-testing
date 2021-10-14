@@ -13,16 +13,16 @@ import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
 import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SideMenu from "../../constant/sideMenu";
+import SideMenu from "../../../constant/sideMenu";
 import TableDashboard from "./Table";
 import { DownloadOutlined } from "@ant-design/icons";
 import ActiveLastBreadcrumb from "./Breadcumbs";
 import { Button } from "antd";
 import FileSaver from "file-saver";
+import TableDalamProses from "./Table";
 
 const drawerWidth = 240;
 
@@ -126,14 +126,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EvaluasiTKP() {
+export default function DalamProsesTKP() {
   const classes = useStyles();
-  const download = () => {
-    FileSaver.saveAs(
-      "https://drive.google.com/u/0/uc?id=1kpX-YeopvB90bjc8VuhdTqawMkeJNDax&export=download",
-      "test.pdf"
-    );
-  };
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -205,39 +199,11 @@ export default function EvaluasiTKP() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+        <h2>Dalam Proses</h2>
         <ActiveLastBreadcrumb />
-        <Container className={classes.containerTataCara}>
-          <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}>
-            Tata Cara Pengisian Evaluasi TKP
-          </h2>
-          <ol style={{ marginLeft: 20 }}>
-            <li>Silahkan unduh Dokumen Form Evaluasi sesuai kebutuhan</li>
-            <li>
-              Bila pengisian dokumen telah selesai, simpan dengan format Excel
-              (.xls)
-            </li>
-            <li>Upload Dokumen Evaluasi pada kolom “Aksi”</li>
-          </ol>
-          <Button
-            type="primary"
-            icon={<DownloadOutlined />}
-            onClick={download}
-            className={classes.downloadForm}
-          >
-            Unduh Form Evaluasi ISH
-          </Button>
-
-          <Button
-            type="primary"
-            icon={<DownloadOutlined />}
-            onClick={download}
-            className={classes.downloadForm}
-          >
-            Unduh Form Evaluasi SKI
-          </Button>
-        </Container>
+        Kelola data berstatus Menunggu Konfirmasi dan Wawancara pada tabel dibawah ini.
         <Container maxWidth="lg" className={classes.container}>
-          <TableDashboard />
+          <TableDalamProses />
         </Container>
       </main>
     </div>
