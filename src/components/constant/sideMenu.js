@@ -57,11 +57,13 @@ export default function SideMenu() {
             </ListItem>
           </List>
         </Link>
-        <List component="div">
-          <ListItem button className={classes.nested}>
-            <ListItemText primary="Riwayat" />
-          </ListItem>
-        </List>
+        <Link to="/OnProcessTKP" style={{ color: "black" }}>
+          <List component="div">
+            <ListItem button className={classes.nested}>
+              <ListItemText primary="Riwayat" />
+            </ListItem>
+          </List>
+        </Link>
       </Collapse>
 
       <ListItem>
