@@ -45,11 +45,13 @@ export default function SideMenu() {
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List alignItems="center" component="div">
-          <ListItem button className={classes.nested}>
-            <ListItemText primary="Mengajukan TKP" />
-          </ListItem>
-        </List>
+        <Link to="/MengajukanTKP" style={{ color: "black" }}>
+          <List alignItems="center" component="div">
+            <ListItem button className={classes.nested}>
+              <ListItemText primary="Mengajukan TKP" />
+            </ListItem>
+          </List>
+        </Link>
         <Link to="/OnProcessTKP" style={{ color: "black" }}>
           <List component="div">
             <ListItem button className={classes.nested}>
@@ -57,7 +59,7 @@ export default function SideMenu() {
             </ListItem>
           </List>
         </Link>
-        <Link to="/OnProcessTKP" style={{ color: "black" }}>
+        <Link to="/RiwayatTKP" style={{ color: "black" }}>
           <List component="div">
             <ListItem button className={classes.nested}>
               <ListItemText primary="Riwayat" />

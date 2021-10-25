@@ -11,6 +11,7 @@ import Dashboard from "../components/pages/Dashboard/Dashboard";
 import EvaluasiTKP from "../components/pages/EvaluasiTKP/App";
 import DalamProsesTKP from "../components/pages/PengajuanTKP/DalamProses/App";
 import RiwayatPengajuanTKP from "../components/pages/PengajuanTKP/Riwayat/App";
+import MengajukanTKP from "../components/pages/PengajuanTKP/MengajukanTKP/App";
 
 function routes() {
   return (
@@ -24,6 +25,7 @@ function routes() {
       <PrivateRoute path="/EvaluasiTKP" component={EvaluasiTKP} />
       <PrivateRoute path="/OnProcessTKP" component={DalamProsesTKP} />
       <PrivateRoute path="/RiwayatTKP" component={RiwayatPengajuanTKP} />
+      <PrivateRoute path="/MengajukanTKP" component={MengajukanTKP} />
     </Router>
   );
 }

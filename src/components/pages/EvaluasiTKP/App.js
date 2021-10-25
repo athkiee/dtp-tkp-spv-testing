@@ -114,6 +114,12 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
+    width: "100%",
+    height: "auto",
+    float: "left",
+    marginLeft: 35,
+    backgroundColor: "white",
+    borderRadius: 10,
   },
   paper: {
     padding: theme.spacing(2),
