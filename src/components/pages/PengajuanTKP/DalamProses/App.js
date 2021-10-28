@@ -23,6 +23,7 @@ import ActiveLastBreadcrumb from "./Breadcumbs";
 import { Button } from "antd";
 import FileSaver from "file-saver";
 import TableDalamProses from "./Table";
+import HeadBar from "../../../constant/headBar";
 
 const drawerWidth = 240;
 
@@ -139,64 +140,7 @@ export default function DalamProsesTKP() {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
-      >
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          ></Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <ForumOutlinedIcon style={{ color: "black" }} />
-            </Badge>
-          </IconButton>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsNoneIcon style={{ color: "black" }} />
-            </Badge>
-          </IconButton>
-          <IconButton color="inherit">
-            <AccountCircleIcon style={{ color: "black" }} />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <img
-            onClick={handleDrawerClose}
-            src="static/logo.png"
-            className="nav-Logo"
-          />
-        </div>
-        <List>
-          <SideMenu />
-        </List>
-      </Drawer>
+      <HeadBar />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <h2>Dalam Proses</h2>

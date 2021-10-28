@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,23 +10,17 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
-import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
 import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SideMenu from "../../constant/sideMenu";
-import TableDashboard from "./Table";
-import ActiveLastBreadcrumb from "./Breadcumbs";
+import SideMenu from "./sideMenu";
+import FileSaver from "file-saver";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import { Menu, MenuItem } from "@material-ui/core";
 import { useHistory } from "react-router";
-import { getUser, removeUserSession } from "../../../utils/Common";
-import "./dashboard.css";
-import axios from "axios";
-import HeadBar from "../../constant/headBar";
+import { getUser, removeUserSession } from "../../utils/Common";
 
 const drawerWidth = 240;
 
@@ -43,6 +37,25 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
     padding: "0 8px",
     ...theme.mixins.toolbar,
+  },
+  submitForm: {
+    color: "white",
+    borderColor: "#DA1E20",
+    borderRadius: 10,
+    backgroundColor: "#DA1E20",
+    "&:hover": {
+      color: "#DA1E20",
+      backgroundColor: "white",
+      borderColor: "#DA1E20",
+    },
+  },
+  containerTataCara: {
+    width: "100%",
+    height: 360,
+    float: "left",
+    marginLeft: 35,
+    backgroundColor: "white",
+    borderRadius: 10,
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -78,10 +91,6 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  navLogo: {
-    width: 294,
-    height: 152,
-  },
   drawerPaperClose: {
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
@@ -103,12 +112,6 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-    width: "100%",
-    height: "auto",
-    float: "left",
-    marginLeft: 35,
-    backgroundColor: "white",
-    borderRadius: 10,
   },
   paper: {
     padding: theme.spacing(2),
@@ -119,42 +122,12 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
 }));
 
-export default function Dashboard() {
+export default function HeadBar() {
   const user = getUser();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const [supervisor, setSupervisor] = useState();
-  
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [items, setItems] = useState([]);
-
-  // Note: the empty deps array [] means
-  // this useEffect will run once
-  // similar to componentDidMount()
-  useEffect(() => {
-    fetch("http://localhost:4004/spv/1")
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setItems(result);
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      );
-  }, []);
-
   const handleTest = () => {};
 
   let history = useHistory();
@@ -180,20 +153,101 @@ export default function Dashboard() {
     history.push("/");
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  console.log("sess", sessionStorage);
   const nama_user = sessionStorage.getItem("nama");
 
   return (
-    <div className={classes.root}>
-      <HeadBar />
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <h1 style={{ marginLeft:35, marginTop:35 }}><strong>Dashboard</strong></h1>
-        <p style={{ marginLeft:35 }}>Kelola data TKP pada halaman ini.</p>
-        <Container maxWidth="lg" className={classes.container}>
-          <TableDashboard />
-        </Container>
-      </main>
+    <div>
+      <CssBaseline />
+      <AppBar
+        position="absolute"
+        className={clsx(classes.appBar, open && classes.appBarShift)}
+      >
+        <Toolbar className={classes.toolbar}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            className={clsx(
+              classes.menuButton,
+              open && classes.menuButtonHidden
+            )}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            className={classes.title}
+          >
+            {user.nik}
+          </Typography>
+          <IconButton color="inherit">
+            <Badge badgeContent={4} color="secondary">
+              <ForumOutlinedIcon style={{ color: "black" }} />
+            </Badge>
+          </IconButton>
+          <IconButton color="inherit">
+            <Badge badgeContent={4} color="secondary">
+              <NotificationsNoneIcon style={{ color: "black" }} />
+            </Badge>
+          </IconButton>
+          <IconButton color="inherit">
+            <AccountCircleIcon
+              style={{ color: "black" }}
+              button
+              onClick={handleTest}
+            />
+            {nama_user}
+          </IconButton>
+          <IconButton color="inherit" button onClick={handleClick1}>
+            {open ? (
+              <ExpandMore style={{ color: "black" }} />
+            ) : (
+              <ExpandLess style={{ color: "black" }} />
+            )}
+            <Menu
+              id="demo-positioned-menu"
+              aria-labelledby="demo-positioned-button"
+              anchorEl={anchorEl}
+              open={open1}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+        }}
+        open={open}
+      >
+        <div className={classes.toolbarIcon}>
+          <img
+            onClick={handleDrawerClose}
+            src="static/logo.png"
+            className="nav-Logo"
+          />
+        </div>
+        <List>
+          <SideMenu />
+        </List>
+      </Drawer>
     </div>
   );
 }
