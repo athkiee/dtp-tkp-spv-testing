@@ -170,10 +170,10 @@ export default class TableDalamProses extends React.Component {
 
   render() {
     const { selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    };
+    // const rowSelection = {
+    //   selectedRowKeys,
+    //   onChange: this.onSelectChange,
+    // };
 
     const columns = [
       {

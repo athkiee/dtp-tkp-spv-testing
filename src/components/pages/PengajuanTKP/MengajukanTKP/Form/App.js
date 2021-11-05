@@ -11,28 +11,21 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
-import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SideMenu from "../../../../constant/sideMenu";
-import { DownloadOutlined } from "@ant-design/icons";
-import ActiveLastBreadcrumb from "./Breadcumbs";
+import DragAndDrop from "../../../../element/DragAndDrop";
 import { Button } from "antd";
 import FileSaver from "file-saver";
-import TextField from "@material-ui/core/TextField";
 import HeadBar from "../../../../constant/headBar";
 import { Grid } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
+import moment from "moment";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
+import FileUpload from "./FileUpload";
+import { Select, Input, DatePicker, AutoComplete } from "antd";
+
+const { Option } = Select;
+const dateFormatList = ['DD/MM/YYYY'];
+const { TextArea } = Input;
 
 const drawerWidth = 240;
 
@@ -226,7 +219,7 @@ class FormMengajukanTKP extends React.Component {
             </h2>
             <div style={{ marginBottom: 40 }}>
               <label className="form-label">Nama Supervisor</label>
-              <TextField
+              <Input
                 id="outlined-basic"
                 variant="outlined"
                 className="form-input"
@@ -238,7 +231,7 @@ class FormMengajukanTKP extends React.Component {
             </div>
             <div style={{ marginBottom: 40 }}>
               <label className="form-label">NIK Supervisor</label>
-              <TextField
+              <Input
                 id="outlined-basic"
                 variant="outlined"
                 className="form-input"
@@ -255,92 +248,72 @@ class FormMengajukanTKP extends React.Component {
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Nama Lengkap sesuai TKP</label>
-                  <TextField
+                  <Input
                     id="outlined-basic"
                     variant="outlined"
                     className="form-input"
+                    placeholder="Contoh: John Doe"
                     type="text"
                     name="name"
-                    value={namaSpv}
-                    disabled
                   />
                 </div>
               </Grid>
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Nomor KTP</label>
-                  <TextField
+                  <Input
                     id="outlined-basic"
                     variant="outlined"
                     className="form-input"
+                    placeholder="Contoh: 34673268328239232"
                     type="number"
                     name="nik"
-                    value={nikSpv}
-                    disabled
                   />
                 </div>
               </Grid>
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Tempat Lahir</label>
-                  <TextField
+                  <Input
                     id="outlined-basic"
                     variant="outlined"
                     className="form-input"
-                    type="number"
+                    type="text"
                     name="nik"
-                    value={nikSpv}
                   />
                 </div>
               </Grid>
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Tanggal Lahir</label>
-                  <Fragment>
-                    <MuiPickersUtilsProvider utils={MomentUtils}>
-                      <KeyboardDatePicker
-                        className="form-input"
-                        clearable
-                        // value={selectedDate}
-                        inputVariant="outlined"
-                        placeholder="10/10/2018"
-                        // onChange={(date) => handleDateChange(date)}
-                        format="MM/dd/yyyy"
-                      />
-                    </MuiPickersUtilsProvider>
-                  </Fragment>
+                  <DatePicker format={dateFormatList}
+                    className="form-input"
+                    placeholder="Pilih Tanggal"
+                  />
                 </div>
               </Grid>
             </Grid>
             <div style={{ margin: 20 }}>
               <label className="form-label">Alamat Lengkap sesuai KTP</label>
-              <TextField
+              <Input
                 id="outlined-basic"
                 variant="outlined"
                 className="form-input"
-                type="number"
+                type="text"
                 name="nik"
-                value={nikSpv}
-                disabled
               />
             </div>
             <Grid container>
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Provinsi sesuai TKP</label>
-                  <Autocomplete
-                    id="combo-box-demo"
+                  <AutoComplete
                     options={dataProvinsi}
-                    getOptionLabel={(provinsi) => provinsi.name}
-                    renderInput={(params) => (
-                      <TextField
-                        variant="outlined"
-                        placeholder=" Pilih Provinsi"
-                        className="form-input"
-                        value="provinsi.key"
-                        {...params}
-                      />
-                    )}
+                    className={"form-input"}
+                    placeholder=" Pilih Provinsi"
+                    filterOption={(inputValue, option) =>
+                      option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                    }
                   />
                 </div>
               </Grid>
@@ -354,7 +327,7 @@ class FormMengajukanTKP extends React.Component {
                     options={dataProvinsi}
                     getOptionLabel={(option) => option.name}
                     renderInput={(params) => (
-                      <TextField
+                      <Input
                         variant="outlined"
                         placeholder=" Pilih Kota/Kabupaten"
                         className="form-input"
@@ -367,69 +340,75 @@ class FormMengajukanTKP extends React.Component {
             </Grid>
             <div style={{ margin: 20 }}>
               <label className="form-label">Email Aktif</label>
-              <TextField
+              <Input
                 id="outlined-basic"
                 variant="outlined"
                 className="form-input"
-                type="number"
+                placeholder="Contoh: johndoe@gmail.com"
+                type="email"
                 name="nik"
-                value={nikSpv}
-                disabled
               />
             </div>
             <div style={{ margin: 20 }}>
               <label className="form-label">Nomor Handphone Aktif</label>
-              <TextField
+              <Input
                 id="outlined-basic"
                 variant="outlined"
                 className="form-input"
+                placeholder="Contoh: 08977788991"
                 type="number"
                 name="nik"
-                value={nikSpv}
-                disabled
               />
             </div>
             <Grid container>
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Nama Bank (Payroll)</label>
-                  <TextField
+                  <Select
                     id="outlined-basic"
                     variant="outlined"
                     className="form-input"
+                    placeholder="Pilih Nama Bank"
                     type="text"
                     name="name"
-                    value={namaSpv}
-                    disabled
-                  />
+                  >
+                  <Option value="SMA/SMK">BNI</Option>
+                  <Option value="D3">BRI</Option>
+                  <Option value="D4/S1">BCA</Option>
+                  <Option value="S2">Mandiri</Option>
+                  <Option value="S3">Lainnya</Option>
+                  </Select>
                 </div>
               </Grid>
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Nomor Rekening</label>
-                  <TextField
+                  <Input
                     id="outlined-basic"
                     variant="outlined"
                     className="form-input"
                     type="number"
                     name="nik"
-                    value={nikSpv}
-                    disabled
                   />
                 </div>
               </Grid>
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Pendidikan Terakhir</label>
-                  <TextField
+                  <Select
                     id="outlined-basic"
                     variant="outlined"
                     className="form-input"
+                    placeholder="Pilih Pendidikan Terakhir"
                     type="text"
                     name="name"
-                    value={namaSpv}
-                    disabled
-                  />
+                  >
+                  <Option value="SMA/SMK">SMA/SMK</Option>
+                  <Option value="D3">D3</Option>
+                  <Option value="D4/S1">D4/S1</Option>
+                  <Option value="S2">S2</Option>
+                  <Option value="S3">S3</Option>
+                  </Select>
                 </div>
               </Grid>
               <Grid item xs={6}>
@@ -437,56 +416,49 @@ class FormMengajukanTKP extends React.Component {
                   <label className="form-label">
                     Jurusan Pendidikan Terakhir
                   </label>
-                  <TextField
+                  <Input
                     id="outlined-basic"
                     variant="outlined"
                     className="form-input"
-                    type="number"
+                    placeholder="Pilih Jurusan Pendidikan Terakhir"
+                    type="text"
                     name="nik"
-                    value={nikSpv}
-                    disabled
                   />
                 </div>
               </Grid>
             </Grid>
             <div style={{ margin: 20 }}>
               <label className="form-label">Pengalaman Kerja</label>
-              <TextField
+              <Input
                 id="outlined-basic"
                 variant="outlined"
                 className="form-input"
-                type="number"
+                type="text"
                 name="nik"
-                value={nikSpv}
-                disabled
               />
             </div>
             <Grid container>
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Akun T-Money</label>
-                  <TextField
+                  <Input
                     id="outlined-basic"
                     variant="outlined"
                     className="form-input"
                     type="text"
                     name="name"
-                    value={namaSpv}
-                    disabled
                   />
                 </div>
               </Grid>
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Akun Trello/Jira</label>
-                  <TextField
+                  <Input
                     id="outlined-basic"
                     variant="outlined"
                     className="form-input"
-                    type="number"
+                    type="text"
                     name="nik"
-                    value={nikSpv}
-                    disabled
                   />
                 </div>
               </Grid>
@@ -498,36 +470,25 @@ class FormMengajukanTKP extends React.Component {
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Nama Bidang/Tribe</label>
-                  <Autocomplete
-                    id="combo-box-demo"
+                  <AutoComplete
                     options={dataBidang}
-                    getOptionLabel={(option) => option.code}
-                    renderInput={(params) => (
-                      <TextField
-                        variant="outlined"
-                        placeholder=" Pilih Bidang/Tribe"
-                        className="form-input"
-                        {...params}
-                      />
-                    )}
+                    className={"form-input"}
+                    filterOption={(inputValue, option) =>
+                      option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                    }
                   />
                 </div>
               </Grid>
               <Grid item xs={6}>
                 <div style={{ margin: 20 }}>
                   <label className="form-label">Lokasi Kerja</label>
-                  <Autocomplete
-                    id="combo-box-demo"
+                  <AutoComplete
                     options={dataLokasiKerja}
-                    getOptionLabel={(option) => option.name}
-                    renderInput={(params) => (
-                      <TextField
-                        variant="outlined"
-                        placeholder=" Pilih Lokasi Kerja"
-                        className="form-input"
-                        {...params}
-                      />
-                    )}
+                    className={"form-input"}
+                    
+                    filterOption={(inputValue, option) =>
+                      option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                    }
                   />
                 </div>
               </Grid>
@@ -541,7 +502,7 @@ class FormMengajukanTKP extends React.Component {
                     options={dataBidang}
                     getOptionLabel={(option) => option.code}
                     renderInput={(params) => (
-                      <TextField
+                      <Input
                         variant="outlined"
                         placeholder=" Pilih Job Title Usulan"
                         className="form-input"
@@ -561,7 +522,7 @@ class FormMengajukanTKP extends React.Component {
                     options={dataBidang}
                     getOptionLabel={(option) => option.code}
                     renderInput={(params) => (
-                      <TextField
+                      <Input
                         variant="outlined"
                         placeholder=" Pilih Title Levelling Usulan"
                         className="form-input"
@@ -579,7 +540,7 @@ class FormMengajukanTKP extends React.Component {
                     options={dataBidang}
                     getOptionLabel={(option) => option.code}
                     renderInput={(params) => (
-                      <TextField
+                      <Input
                         variant="outlined"
                         placeholder=" Pilih Job Role"
                         className="form-input"
@@ -592,26 +553,25 @@ class FormMengajukanTKP extends React.Component {
             </Grid>
             <div style={{ margin: 20 }}>
               <label className="form-label">Deskripsi Pekerjaan</label>
-              <TextField
+              <TextArea
                 id="outlined-basic"
                 variant="outlined"
                 className="form-input"
-                type="number"
+                placeholder="Contoh: Administrasi mengerjakan surat menyurat"
+                type="text"
                 name="nik"
-                value={nikSpv}
-                disabled
+                rows={4}
               />
             </div>
             <div style={{ margin: 20 }}>
-              <label className="form-label">Ekspetasi TKP</label>
-              <TextField
+              <label className="form-label">Ekspektasi THP</label>
+              <Input
                 id="outlined-basic"
                 variant="outlined"
                 className="form-input"
-                type="number"
+                placeholder="Contoh: Rp. 5.000,000,-"
+                type="text"
                 name="nik"
-                value={nikSpv}
-                disabled
               />
             </div>
             <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}>
@@ -619,14 +579,23 @@ class FormMengajukanTKP extends React.Component {
             </h2>
             <div style={{ margin: 20 }}>
               <label className="form-label">CV</label>
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                className="form-input"
-                type="number"
-                name="nik"
-                value={nikSpv}
-                disabled
+              <DragAndDrop
+                acceptFiles="application/pdf"
+                uploadType="Creative CV"
+              />
+            </div>
+            <div style={{ margin: 20 }}>
+              <label className="form-label">Scan KTP</label>
+              <DragAndDrop
+                acceptFiles=".jpg,.jpeg,.png"
+                uploadType="KTP"
+              />
+            </div>
+            <div style={{ margin: 20 }}>
+              <label className="form-label">SKCK</label>
+              <DragAndDrop
+                acceptFiles="application/pdf"
+                uploadType="SKCK"
               />
             </div>
 
