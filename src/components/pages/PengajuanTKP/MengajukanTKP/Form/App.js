@@ -1,15 +1,5 @@
-import React, { Fragment } from "react";
+import React from "react";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import DragAndDrop from "../../../../element/DragAndDrop";
 import { Button } from "antd";
@@ -17,14 +7,13 @@ import FileSaver from "file-saver";
 import HeadBar from "../../../../constant/headBar";
 import { Grid } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import moment from "moment";
+import { TextField } from "@material-ui/core";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
-import FileUpload from "./FileUpload";
 import { Select, Input, DatePicker, AutoComplete } from "antd";
 
 const { Option } = Select;
-const dateFormatList = ['DD/MM/YYYY'];
+const dateFormatList = ["DD/MM/YYYY"];
 const { TextArea } = Input;
 
 const drawerWidth = 240;
@@ -61,22 +50,6 @@ const styles = (theme) => ({
     marginLeft: 35,
     backgroundColor: "white",
     borderRadius: 10,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: "#E5E5E5",
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   },
   menuButton: {
     marginRight: 36,
@@ -149,8 +122,44 @@ class FormMengajukanTKP extends React.Component {
       dataBidang: [
         {
           key: "1",
-          name: "Tono",
-          code: "YES",
+          name: "Pilih Bidang/Tribe",
+          code: "Pilih Bidang/Tribe",
+        },
+      ],
+      dataKota: [
+        {
+          key: "1",
+          name: "Pilih Kota/Kabupaten",
+        },
+      ],
+      dataBank: [
+        {
+          key: "1",
+          name: "Pilih Bank",
+        },
+      ],
+      dataJurusan: [
+        {
+          key: "1",
+          name: "Pilih Jurusan Pendidikan Terakhir",
+        },
+      ],
+      datajobTitle: [
+        {
+          key: "1",
+          name: "Pilih Job Title Usulan",
+        },
+      ],
+      datajtLevel: [
+        {
+          key: "1",
+          name: "Pilih Job Title Level Usulan",
+        },
+      ],
+      datajobRole: [
+        {
+          key: "1",
+          name: "Pilih Job Role",
         },
       ],
     };
@@ -171,8 +180,7 @@ class FormMengajukanTKP extends React.Component {
     axios.get("http://localhost:4004/bidang/").then((response) => {
       const tribe = response.data.map((tribe) => ({
         key: tribe.id_bidang,
-        code: tribe.kode_bidang,
-        name: tribe.nama_bidang,
+        name: tribe.kode_bidang,
       }));
       this.setState({
         dataBidang: tribe,
@@ -187,18 +195,108 @@ class FormMengajukanTKP extends React.Component {
         dataLokasiKerja: loker,
       });
     });
+    axios.get("http://localhost:4004/bank").then((response) => {
+      const bank = response.data.map((bank) => ({
+        key: bank.id_bank,
+        name: bank.nama_bank,
+      }));
+      this.setState({
+        dataBank: bank,
+      });
+    });
+    axios.get("http://localhost:4004/jurusan").then((response) => {
+      const jurusan = response.data.map((jurusan) => ({
+        key: jurusan.id_jurusan,
+        name: jurusan.nama_jurusan,
+      }));
+      this.setState({
+        dataJurusan: jurusan,
+      });
+    });
+    axios.get("http://localhost:4004/job_title").then((response) => {
+      const jobTitle = response.data.map((jobTitle) => ({
+        key: jobTitle.id_job_title,
+        name: jobTitle.nama_job_title,
+      }));
+      this.setState({
+        datajobTitle: jobTitle,
+      });
+    });
   }
+
+  _onChangeProvinsi = (key) => {
+    axios
+      .get(`http://www.emsifa.com/api-wilayah-indonesia/api/regencies/${key}.json`)
+      .then((response) => {
+        const kota = response.data.map((kota) => ({
+          key: kota.id,
+          name: kota.name,
+        }));
+        this.setState({
+          dataKota: kota,
+        });
+      });
+  };
+
+  _onChangeJobTitle = (key) => {
+    axios
+      .get(`http://localhost:4004/job_title_levelling/${key}`)
+      .then((response) => {
+        const jtLevel = response.data.map((jtLevel) => ({
+          key: jtLevel.id_job_title_levelling,
+          name: jtLevel.nama_job_title_levelling,
+        }));
+        this.setState({
+          datajtLevel: jtLevel,
+        });
+      });
+  };
+
+  _onChangeJobTitleLevelling = (key) => {
+    axios
+      .get(`http://localhost:4004/job_role/${key}`)
+      .then((response) => {
+        const jobRole = response.data.map((jobRole) => ({
+          key: jobRole.id_job_role,
+          name: jobRole.nama_job_role,
+        }));
+        this.setState({
+          datajobRole: jobRole,
+        });
+      });
+  };
 
   render() {
     const { classes } = this.props;
-    const { dataProvinsi, dataBidang, dataLokasiKerja } = this.state;
-    const download = () => {
-      FileSaver.saveAs(
-        "https://drive.google.com/u/0/uc?id=1kpX-YeopvB90bjc8VuhdTqawMkeJNDax&export=download",
-        "test.pdf"
-      );
-    };
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const { dataProvinsi, dataBidang, dataLokasiKerja, dataKota, dataBank, dataJurusan,
+    datajobTitle, datajtLevel, datajobRole } = this.state;
+    const optionProvinsi = dataProvinsi.map((d) => (
+      <Option key={d.key}>{d.name}</Option>
+    ));
+    const optionBidang = dataBidang.map((d) => (
+      <Option key={d.key}>{d.name}</Option>
+    ));
+    const optionLokasi = dataLokasiKerja.map((d) => (
+      <Option key={d.key}>{d.name}</Option>
+    ));
+    const optionKota = dataKota.map((d) => (
+      <Option key={d.key}>{d.name}</Option>
+    ));
+    const optionBank = dataBank.map((d) => (
+      <Option key={d.key}>{d.name}</Option>
+    ));
+    const optionJurusan = dataJurusan.map((d) => (
+      <Option key={d.key}>{d.name}</Option>
+    ));
+    const optionJobTitle = datajobTitle.map((d) => (
+      <Option key={d.key}>{d.name}</Option>
+    ));
+    const optionJTlevel = datajtLevel.map((d) => (
+      <Option key={d.key}>{d.name}</Option>
+    ));
+    const optionJobRole = datajobRole.map((d) => (
+      <Option key={d.key}>{d.name}</Option>
+    ));
     const namaSpv = sessionStorage.getItem("nama");
     const nikSpv = sessionStorage.getItem("nik");
 
@@ -214,398 +312,397 @@ class FormMengajukanTKP extends React.Component {
             Ajukan data diri lengkap TKP dibawah ini.
           </p>
           <Container className={classes.containerTataCara}>
-            <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}>
-              Data Supervisor
-            </h2>
-            <div style={{ marginBottom: 40 }}>
-              <label className="form-label">Nama Supervisor</label>
-              <Input
-                id="outlined-basic"
-                variant="outlined"
-                className="form-input"
-                type="text"
-                name="name"
-                value={namaSpv}
-                disabled
-              />
-            </div>
-            <div style={{ marginBottom: 40 }}>
-              <label className="form-label">NIK Supervisor</label>
-              <Input
-                id="outlined-basic"
-                variant="outlined"
-                className="form-input"
-                type="number"
-                name="nik"
-                value={nikSpv}
-                disabled
-              />
-            </div>
-            <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}>
-              Data Diri Calon TKP
-            </h2>
-            <Grid container>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Nama Lengkap sesuai TKP</label>
-                  <Input
-                    id="outlined-basic"
-                    variant="outlined"
-                    className="form-input"
-                    placeholder="Contoh: John Doe"
-                    type="text"
-                    name="name"
-                  />
-                </div>
+            <form id="pengajuanTKP">
+              <h2
+                style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}
+              >
+                Data Supervisor
+              </h2>
+              <div style={{ marginBottom: 40 }}>
+                <label className="form-label">Nama Supervisor</label>
+                <Input
+                  id="outlined-basic"
+                  variant="outlined"
+                  className="form-input"
+                  type="text"
+                  name="name"
+                  value={namaSpv}
+                  disabled
+                />
+              </div>
+              <div style={{ marginBottom: 40 }}>
+                <label className="form-label">NIK Supervisor</label>
+                <Input
+                  id="outlined-basic"
+                  variant="outlined"
+                  className="form-input"
+                  type="number"
+                  name="nik"
+                  value={nikSpv}
+                  disabled
+                />
+              </div>
+              <h2
+                style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}
+              >
+                Data Diri Calon TKP
+              </h2>
+              <Grid container>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">
+                      Nama Lengkap sesuai TKP
+                    </label>
+                    <Input
+                      id="outlined-basic"
+                      variant="outlined"
+                      className="form-input"
+                      placeholder="Contoh: John Doe"
+                      type="text"
+                      name="name"
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Nomor KTP</label>
+                    <Input
+                      id="outlined-basic"
+                      variant="outlined"
+                      className="form-input"
+                      placeholder="Contoh: 34673268328239232"
+                      type="number"
+                      name="nik"
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Tempat Lahir</label>
+                    <Input
+                      id="outlined-basic"
+                      variant="outlined"
+                      className="form-input"
+                      type="text"
+                      name="nik"
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Tanggal Lahir</label>
+                    <DatePicker
+                      format={dateFormatList}
+                      className="form-input"
+                      placeholder="Pilih Tanggal"
+                    />
+                  </div>
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Nomor KTP</label>
-                  <Input
-                    id="outlined-basic"
-                    variant="outlined"
-                    className="form-input"
-                    placeholder="Contoh: 34673268328239232"
-                    type="number"
-                    name="nik"
-                  />
-                </div>
+              <div style={{ margin: 20 }}>
+                <label className="form-label">Alamat Lengkap sesuai KTP</label>
+                <Input
+                  id="outlined-basic"
+                  variant="outlined"
+                  className="form-input"
+                  type="text"
+                  name="nik"
+                />
+              </div>
+              <Grid container>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Provinsi sesuai TKP</label>
+                    <Select
+                      showSearch
+                      className={"form-input"}
+                      placeholder=" Pilih Provinsi"
+                      onChange={this._onChangeProvinsi}
+                      filterOption={(input, option) =>
+                        option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      {optionProvinsi}
+                    </Select>
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">
+                      Kota/Kabupaten sesuai KTP
+                    </label>
+                    <Select
+                      showSearch
+                      className={"form-input"}
+                      placeholder=" Pilih Kota/Kabupaten"
+                      filterOption={(input, option) =>
+                        option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      {optionKota}
+                    </Select>
+                  </div>
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Tempat Lahir</label>
-                  <Input
-                    id="outlined-basic"
-                    variant="outlined"
-                    className="form-input"
-                    type="text"
-                    name="nik"
-                  />
-                </div>
+              <div style={{ margin: 20 }}>
+                <label className="form-label">Email Aktif</label>
+                <Input
+                  id="outlined-basic"
+                  variant="outlined"
+                  className="form-input"
+                  placeholder="Contoh: johndoe@gmail.com"
+                  type="email"
+                  name="nik"
+                />
+              </div>
+              <div style={{ margin: 20 }}>
+                <label className="form-label">Nomor Handphone Aktif</label>
+                <Input
+                  id="outlined-basic"
+                  variant="outlined"
+                  className="form-input"
+                  placeholder="Contoh: 08977788991"
+                  type="number"
+                  name="nik"
+                />
+              </div>
+              <Grid container>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Nama Bank (Payroll)</label>
+                    <Select
+                      showSearch
+                      className={"form-input"}
+                      placeholder=" Pilih Bank"
+                      filterOption={(input, option) =>
+                        option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      {optionBank}
+                    </Select>
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Nomor Rekening</label>
+                    <Input
+                      id="outlined-basic"
+                      variant="outlined"
+                      className="form-input"
+                      type="number"
+                      name="nik"
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Pendidikan Terakhir</label>
+                    <Select
+                      id="outlined-basic"
+                      variant="outlined"
+                      className="form-input"
+                      placeholder="Pilih Pendidikan Terakhir"
+                      type="text"
+                      name="name"
+                    >
+                      <Option value="SMA/SMK">SMA/SMK</Option>
+                      <Option value="D3">D3</Option>
+                      <Option value="D4/S1">D4/S1</Option>
+                      <Option value="S2">S2</Option>
+                      <Option value="S3">S3</Option>
+                    </Select>
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">
+                      Jurusan Pendidikan Terakhir
+                    </label>
+                    <Select
+                      showSearch
+                      className={"form-input"}
+                      placeholder=" Pilih Jurusan Pendidikan Terakhir"
+                      filterOption={(input, option) =>
+                        option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      {optionJurusan}
+                    </Select>
+                  </div>
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Tanggal Lahir</label>
-                  <DatePicker format={dateFormatList}
-                    className="form-input"
-                    placeholder="Pilih Tanggal"
-                  />
-                </div>
+              <div style={{ margin: 20 }}>
+                <label className="form-label">Pengalaman Kerja</label>
+                <Input
+                  id="outlined-basic"
+                  variant="outlined"
+                  className="form-input"
+                  type="text"
+                  name="experiences"
+                />
+              </div>
+              <Grid container>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Akun T-Money</label>
+                    <Input
+                      id="outlined-basic"
+                      variant="outlined"
+                      className="form-input"
+                      type="text"
+                      name="tmoney_account"
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Akun Trello/Jira</label>
+                    <Input
+                      id="outlined-basic"
+                      variant="outlined"
+                      className="form-input"
+                      type="text"
+                      name="nik"
+                    />
+                  </div>
+                </Grid>
               </Grid>
-            </Grid>
-            <div style={{ margin: 20 }}>
-              <label className="form-label">Alamat Lengkap sesuai KTP</label>
-              <Input
-                id="outlined-basic"
-                variant="outlined"
-                className="form-input"
-                type="text"
-                name="nik"
-              />
-            </div>
-            <Grid container>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Provinsi sesuai TKP</label>
-                  <AutoComplete
-                    options={dataProvinsi}
-                    className={"form-input"}
-                    placeholder=" Pilih Provinsi"
-                    filterOption={(inputValue, option) =>
-                      option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                    }
-                  />
-                </div>
+              <h2
+                style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}
+              >
+                Data Pekerjaan
+              </h2>
+              <Grid container>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Nama Bidang/Tribe</label>
+                    <Select
+                      showSearch
+                      className={"form-input"}
+                      placeholder=" Pilih Bidang/Tribe"
+                      filterOption={(input, option) =>
+                        option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      {optionBidang}
+                    </Select>
+                  </div>
+                </Grid>
+                <Grid item xs={6}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Lokasi Kerja</label>
+                    <Select
+                      showSearch
+                      className={"form-input"}
+                      placeholder=" Pilih Lokasi Kerja"
+                      filterOption={(input, option) =>
+                        option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      {optionLokasi}
+                    </Select>
+                  </div>
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">
-                    Kota/Kabupaten sesuai KTP
-                  </label>
-                  <Autocomplete
-                    id="combo-box-demo"
-                    options={dataProvinsi}
-                    getOptionLabel={(option) => option.name}
-                    renderInput={(params) => (
-                      <Input
-                        variant="outlined"
-                        placeholder=" Pilih Kota/Kabupaten"
-                        className="form-input"
-                        {...params}
-                      />
-                    )}
-                  />
-                </div>
+              <Grid container>
+                <Grid item xs={4}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Job Title Usulan</label>
+                    <Select
+                      showSearch
+                      className={"form-input"}
+                      placeholder=" Pilih Job Title Usulan"
+                      onChange={this._onChangeJobTitle}
+                      filterOption={(input, option) =>
+                        option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      {optionJobTitle}
+                    </Select>
+                  </div>
+                </Grid>
+                <Grid item xs={4}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">
+                      Job Title Levelling Usulan
+                    </label>
+                    <Select
+                      showSearch
+                      className={"form-input"}
+                      placeholder=" Pilih Job Title Level Usulan"
+                      onChange={this._onChangeJobTitleLevelling}
+                      filterOption={(input, option) =>
+                        option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      {optionJTlevel}
+                    </Select>
+                  </div>
+                </Grid>
+                <Grid item xs={4}>
+                  <div style={{ margin: 20 }}>
+                    <label className="form-label">Job Role</label>
+                    <Select
+                      showSearch
+                      className={"form-input"}
+                      placeholder=" Pilih Job Role"
+                      filterOption={(input, option) =>
+                        option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                    >
+                      {optionJobRole}
+                    </Select>
+                  </div>
+                </Grid>
               </Grid>
-            </Grid>
-            <div style={{ margin: 20 }}>
-              <label className="form-label">Email Aktif</label>
-              <Input
-                id="outlined-basic"
-                variant="outlined"
-                className="form-input"
-                placeholder="Contoh: johndoe@gmail.com"
-                type="email"
-                name="nik"
-              />
-            </div>
-            <div style={{ margin: 20 }}>
-              <label className="form-label">Nomor Handphone Aktif</label>
-              <Input
-                id="outlined-basic"
-                variant="outlined"
-                className="form-input"
-                placeholder="Contoh: 08977788991"
-                type="number"
-                name="nik"
-              />
-            </div>
-            <Grid container>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Nama Bank (Payroll)</label>
-                  <Select
-                    id="outlined-basic"
-                    variant="outlined"
-                    className="form-input"
-                    placeholder="Pilih Nama Bank"
-                    type="text"
-                    name="name"
-                  >
-                  <Option value="SMA/SMK">BNI</Option>
-                  <Option value="D3">BRI</Option>
-                  <Option value="D4/S1">BCA</Option>
-                  <Option value="S2">Mandiri</Option>
-                  <Option value="S3">Lainnya</Option>
-                  </Select>
-                </div>
-              </Grid>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Nomor Rekening</label>
-                  <Input
-                    id="outlined-basic"
-                    variant="outlined"
-                    className="form-input"
-                    type="number"
-                    name="nik"
-                  />
-                </div>
-              </Grid>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Pendidikan Terakhir</label>
-                  <Select
-                    id="outlined-basic"
-                    variant="outlined"
-                    className="form-input"
-                    placeholder="Pilih Pendidikan Terakhir"
-                    type="text"
-                    name="name"
-                  >
-                  <Option value="SMA/SMK">SMA/SMK</Option>
-                  <Option value="D3">D3</Option>
-                  <Option value="D4/S1">D4/S1</Option>
-                  <Option value="S2">S2</Option>
-                  <Option value="S3">S3</Option>
-                  </Select>
-                </div>
-              </Grid>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">
-                    Jurusan Pendidikan Terakhir
-                  </label>
-                  <Input
-                    id="outlined-basic"
-                    variant="outlined"
-                    className="form-input"
-                    placeholder="Pilih Jurusan Pendidikan Terakhir"
-                    type="text"
-                    name="nik"
-                  />
-                </div>
-              </Grid>
-            </Grid>
-            <div style={{ margin: 20 }}>
-              <label className="form-label">Pengalaman Kerja</label>
-              <Input
-                id="outlined-basic"
-                variant="outlined"
-                className="form-input"
-                type="text"
-                name="nik"
-              />
-            </div>
-            <Grid container>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Akun T-Money</label>
-                  <Input
-                    id="outlined-basic"
-                    variant="outlined"
-                    className="form-input"
-                    type="text"
-                    name="name"
-                  />
-                </div>
-              </Grid>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Akun Trello/Jira</label>
-                  <Input
-                    id="outlined-basic"
-                    variant="outlined"
-                    className="form-input"
-                    type="text"
-                    name="nik"
-                  />
-                </div>
-              </Grid>
-            </Grid>
-            <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}>
-              Data Pekerjaan
-            </h2>
-            <Grid container>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Nama Bidang/Tribe</label>
-                  <AutoComplete
-                    options={dataBidang}
-                    className={"form-input"}
-                    filterOption={(inputValue, option) =>
-                      option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                    }
-                  />
-                </div>
-              </Grid>
-              <Grid item xs={6}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Lokasi Kerja</label>
-                  <AutoComplete
-                    options={dataLokasiKerja}
-                    className={"form-input"}
-                    
-                    filterOption={(inputValue, option) =>
-                      option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                    }
-                  />
-                </div>
-              </Grid>
-            </Grid>
-            <Grid container>
-              <Grid item xs={4}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Job Title Usulan</label>
-                  <Autocomplete
-                    id="combo-box-demo"
-                    options={dataBidang}
-                    getOptionLabel={(option) => option.code}
-                    renderInput={(params) => (
-                      <Input
-                        variant="outlined"
-                        placeholder=" Pilih Job Title Usulan"
-                        className="form-input"
-                        {...params}
-                      />
-                    )}
-                  />
-                </div>
-              </Grid>
-              <Grid item xs={4}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">
-                    Job Title Levelling Usulan
-                  </label>
-                  <Autocomplete
-                    id="combo-box-demo"
-                    options={dataBidang}
-                    getOptionLabel={(option) => option.code}
-                    renderInput={(params) => (
-                      <Input
-                        variant="outlined"
-                        placeholder=" Pilih Title Levelling Usulan"
-                        className="form-input"
-                        {...params}
-                      />
-                    )}
-                  />
-                </div>
-              </Grid>
-              <Grid item xs={4}>
-                <div style={{ margin: 20 }}>
-                  <label className="form-label">Job Role</label>
-                  <Autocomplete
-                    id="combo-box-demo"
-                    options={dataBidang}
-                    getOptionLabel={(option) => option.code}
-                    renderInput={(params) => (
-                      <Input
-                        variant="outlined"
-                        placeholder=" Pilih Job Role"
-                        className="form-input"
-                        {...params}
-                      />
-                    )}
-                  />
-                </div>
-              </Grid>
-            </Grid>
-            <div style={{ margin: 20 }}>
-              <label className="form-label">Deskripsi Pekerjaan</label>
-              <TextArea
-                id="outlined-basic"
-                variant="outlined"
-                className="form-input"
-                placeholder="Contoh: Administrasi mengerjakan surat menyurat"
-                type="text"
-                name="nik"
-                rows={4}
-              />
-            </div>
-            <div style={{ margin: 20 }}>
-              <label className="form-label">Ekspektasi THP</label>
-              <Input
-                id="outlined-basic"
-                variant="outlined"
-                className="form-input"
-                placeholder="Contoh: Rp. 5.000,000,-"
-                type="text"
-                name="nik"
-              />
-            </div>
-            <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}>
-              Dokumen Penunjang
-            </h2>
-            <div style={{ margin: 20 }}>
-              <label className="form-label">CV</label>
-              <DragAndDrop
-                acceptFiles="application/pdf"
-                uploadType="Creative CV"
-              />
-            </div>
-            <div style={{ margin: 20 }}>
-              <label className="form-label">Scan KTP</label>
-              <DragAndDrop
-                acceptFiles=".jpg,.jpeg,.png"
-                uploadType="KTP"
-              />
-            </div>
-            <div style={{ margin: 20 }}>
-              <label className="form-label">SKCK</label>
-              <DragAndDrop
-                acceptFiles="application/pdf"
-                uploadType="SKCK"
-              />
-            </div>
+              <div style={{ margin: 20 }}>
+                <label className="form-label">Deskripsi Pekerjaan</label>
+                <TextArea
+                  id="outlined-basic"
+                  variant="outlined"
+                  className="form-input"
+                  placeholder="Contoh: Administrasi mengerjakan surat menyurat"
+                  type="text"
+                  name="desc_job"
+                  rows={4}
+                />
+              </div>
+              <div style={{ margin: 20 }}>
+                <label className="form-label">Ekspektasi THP</label>
+                <Input
+                  id="outlined-basic"
+                  variant="outlined"
+                  className="form-input"
+                  placeholder="Contoh: Rp. 5.000,000,-"
+                  type="text"
+                  name="thp"
+                />
+              </div>
+              <h2
+                style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}
+              >
+                Dokumen Penunjang
+              </h2>
+              <div style={{ margin: 20 }}>
+                <label className="form-label">CV</label>
+                <DragAndDrop
+                  acceptFiles="application/pdf"
+                  uploadType="Creative CV"
+                />
+              </div>
+              <div style={{ margin: 20 }}>
+                <label className="form-label">Scan KTP</label>
+                <DragAndDrop acceptFiles=".jpg,.jpeg,.png" uploadType="KTP" />
+              </div>
+              <div style={{ margin: 20 }}>
+                <label className="form-label">SKCK</label>
+                <DragAndDrop acceptFiles="application/pdf" uploadType="SKCK" />
+              </div>
 
-            <Button
-              type="primary"
-              onClick={download}
-              className={classes.submitForm}
-            >
-              <strong>SUBMIT</strong>
-            </Button>
+              <Button type="primary" className={classes.submitForm}>
+                <strong>SUBMIT</strong>
+              </Button>
+            </form>
           </Container>
           <Container maxWidth="lg" className={classes.container}></Container>
         </main>

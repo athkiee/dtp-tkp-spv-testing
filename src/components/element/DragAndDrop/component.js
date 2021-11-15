@@ -9,10 +9,10 @@ const baseStyle = {
   padding: '20px',
   borderWidth: 2,
   borderRadius: 2,
-  borderColor: '#eeeeee',
+  borderColor: '#black',
   borderStyle: 'dashed',
   backgroundColor: '#fafafa',
-  color: '#bdbdbd',
+  color: '#black',
   transition: 'border .3s ease-in-out'
 };
 
@@ -24,9 +24,6 @@ const acceptStyle = {
   borderColor: '#17827B'
 };
 
-const rejectStyle = {
-  borderColor: '#DE1B1B'
-};
 
 export default function DragAndDrop(props) {
   const {
@@ -45,7 +42,6 @@ export default function DragAndDrop(props) {
     getInputProps,
     isDragActive,
     isDragAccept,
-    isDragReject
   } = useDropzone({
     onDrop,
     accept: acceptFiles,
@@ -55,17 +51,15 @@ export default function DragAndDrop(props) {
     ...baseStyle,
     ...(isDragActive ? activeStyle : {}),
     ...(isDragAccept ? acceptStyle : {}),
-    ...(isDragReject ? rejectStyle : {})
   }), [
     isDragActive,
-    isDragReject,
     isDragAccept
   ]);
 
   return (
     <div {...getRootProps({ style })}>
       <input {...getInputProps()} />
-      <div>{file ? file.name : `Seret dan letakkan file ${uploadType} anda disini`}</div>
+      <div><b>{file ? file.name : `+ Tambahkan file ${uploadType} anda disini`}</b></div>
     </div>
   );
 }
