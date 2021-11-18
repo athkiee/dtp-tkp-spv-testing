@@ -118,32 +118,33 @@ class FormPengajuanTKP extends React.Component {
       datajobRole: [],
       dataExperience: [],
       dataPendidikan: [],
-      nama_lengkap: null,
-      no_ktp: null,
-      tempat_lahir: null,
-      tanggal_lahir: null,
-      alamat_ktp: null,
-      provinsi_ktp: null,
-      kabupaten_ktp: null,
-      email: null,
-      no_hp: null,
-      id_bank: null,
-      no_rekening: null,
-      id_jenjang_pendidikan: null,
-      id_jurusan: null,
-      id_pengalaman_kerja: null,
-      akun_tmoney: null,
-      akun_trello: null,
-      id_bidang: null,
-      id_lokasi_kerja: null,
-      id_job_title: null,
-      id_job_title_levelling: null,
-      id_job_role: null,
-      deskripsi_pekerjaan: null,
-      thp: null,
-      cv: null,
-      foto_scanktp: null,
-      file_skck: null,
+      nama_lengkap: '123321',
+      no_ktp: '123321',
+      tempat_lahir: '123321',
+      tanggal_lahir: '01-01-2000',
+      alamat_ktp: '123321',
+      provinsi_ktp: '123321',
+      kabupaten_ktp: '123321',
+      email: '123321',
+      no_hp: '123321',
+      id_bank: '1',
+      no_rekening: '123321',
+      id_jenjang_pendidikan: '1',
+      id_jurusan: '1',
+      id_pengalaman_kerja: '1',
+      akun_tmoney: '123321',
+      akun_trello: '123321',
+      id_bidang: '1',
+      id_lokasi_kerja: '1',
+      id_job_title: '1',
+      id_job_title_levelling: '1',
+      id_job_role: '1',
+      deskripsi_pekerjaan: '123321',
+      thp: '123321',
+      cv: '123321',
+      foto_scanktp: '123321',
+      file_skck: '123321',
+      keyRoles: '123321',
     };
   }
 
@@ -199,6 +200,7 @@ class FormPengajuanTKP extends React.Component {
       const jobTitle = response.data.map((jobTitle) => ({
         key: jobTitle.id_job_title,
         name: jobTitle.nama_job_title,
+        keyRoles: jobTitle.id_kategori_job_title,
       }));
       this.setState({
         datajobTitle: jobTitle,
@@ -224,24 +226,25 @@ class FormPengajuanTKP extends React.Component {
     });
   }
 
-  _onChangeProvinsi = (key) => {
-    axios
-      .get(
-        `http://www.emsifa.com/api-wilayah-indonesia/api/regencies/${key}.json`
-      )
-      .then((response) => {
-        const kota = response.data.map((kota) => ({
-          key: kota.id,
-          name: kota.name,
-        }));
-        this.setState({
-          dataKota: kota,
-          provinsi_ktp: key,
-        });
-      });
+  _onChangeProvinsi = (key, value) => {
+    // axios
+    //   .get(
+    //     `http://www.emsifa.com/api-wilayah-indonesia/api/regencies/${key}.json`
+    //   )
+    //   .then((response) => {
+    //     const kota = response.data.map((kota) => ({
+    //       key: kota.id,
+    //       name: kota.name,
+    //     }));
+    //     this.setState({
+    //       dataKota: kota,
+    //       provinsi_ktp: key,
+    //     });
+    console.log("provinsi", value);
+    // });
   };
 
-  _onChangeJobTitle = (key) => {
+  _onChangeJobTitle = (key, roles) => {
     axios
       .get(`http://localhost:4004/job_title_levelling/${key}`)
       .then((response) => {
@@ -251,33 +254,56 @@ class FormPengajuanTKP extends React.Component {
         }));
         this.setState({
           datajtLevel: jtLevel,
+          id_job_title: key,
+        });
+      });
+    axios
+      .get(`http://localhost:4004/job_role/${roles.roles}`)
+      .then((response) => {
+        const jobRole = response.data.map((jobRole) => ({
+          key: jobRole.id_job_role,
+          name: jobRole.nama_job_role,
+        }));
+        this.setState({
+          datajobRole: jobRole,
         });
       });
   };
 
   _onChangeJobTitleLevelling = (key) => {
-    axios.get(`http://localhost:4004/job_role/${key}`).then((response) => {
-      const jobRole = response.data.map((jobRole) => ({
-        key: jobRole.id_job_role,
-        name: jobRole.nama_job_role,
-      }));
-      this.setState({
-        datajobRole: jobRole,
-      });
-    });
+    // axios.get(`http://localhost:4004/job_role/${key}`).then((response) => {
+    //   const jobRole = response.data.map((jobRole) => ({
+    //     key: jobRole.id_job_role,
+    //     name: jobRole.nama_job_role,
+    //   }));
+    //   this.setState({
+    //     datajobRole: jobRole,
+    //   });
+    // });
+    // axios
+    //   .get(`http://localhost:4004/job_role/${this.state.keyRoles}`)
+    //   .then((response) => {
+    //     const jobRole = response.data.map((jobRole) => ({
+    //       key: jobRole.id_job_role,
+    //       name: jobRole.nama_job_role,
+    //     }));
+    //     this.setState({
+    //       datajobRole: jobRole,
+    //     });
+    //   });
   };
 
   _handleChange = (event) => {
     const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
-  }
+  };
 
-  _handleChangeSelect (e) {
+  _handleChangeSelect(e) {
     var options = e.target.options;
     var value = [];
     for (var i = 0, l = options.length; i < l; i++) {
@@ -285,7 +311,11 @@ class FormPengajuanTKP extends React.Component {
         value.push(options[i].value);
       }
     }
-    this.setState({value: value});
+    this.setState({ value: value });
+  }
+
+  _handleFilesFromDrag = (name, file) => {
+    this.setState({ [name]: file });
   }
 
   _handleSubmit = (event) => {
@@ -312,9 +342,12 @@ class FormPengajuanTKP extends React.Component {
       id_job_title_levelling,
       id_job_role,
       deskripsi_pekerjaan,
-      thp
+      thp,
+      cv,
+      foto_scanktp,
+      file_skck,
     } = this.state;
-    const form = {
+    const body = {
       nama_lengkap,
       no_ktp,
       tempat_lahir,
@@ -337,12 +370,20 @@ class FormPengajuanTKP extends React.Component {
       id_job_title_levelling,
       id_job_role,
       deskripsi_pekerjaan,
-      thp
-    }
-    console.log('test', form);
-    alert(form);
+      thp,
+      cv,
+      foto_scanktp,
+      file_skck,
+    };
+    axios({
+      method: "post",
+      url: "http://localhost:4004/tkp/register",
+      data: body,
+    }).then(function (response) {
+      console.log(response);
+    });
     event.preventDefault();
-  }
+  };
 
   render() {
     const { classes } = this.props;
@@ -357,10 +398,10 @@ class FormPengajuanTKP extends React.Component {
       datajtLevel,
       datajobRole,
       dataExperience,
-      dataPendidikan
+      dataPendidikan,
     } = this.state;
     const optionProvinsi = dataProvinsi.map((d) => (
-      <Option key={d.key}>{d.name}</Option>
+      <Option key={d.key} value={d.name}></Option>
     ));
     const optionBidang = dataBidang.map((d) => (
       <Option key={d.key}>{d.name}</Option>
@@ -378,7 +419,9 @@ class FormPengajuanTKP extends React.Component {
       <Option key={d.key}>{d.name}</Option>
     ));
     const optionJobTitle = datajobTitle.map((d) => (
-      <Option key={d.key}>{d.name}</Option>
+      <Option key={d.key} roles={d.keyRoles}>
+        {d.name}
+      </Option>
     ));
     const optionJTlevel = datajtLevel.map((d) => (
       <Option key={d.key}>{d.name}</Option>
@@ -394,7 +437,8 @@ class FormPengajuanTKP extends React.Component {
     ));
     const namaSpv = sessionStorage.getItem("nama");
     const nikSpv = sessionStorage.getItem("nik");
-    const important = <b style={{ color:'#EE2E24' }}>*</b>;
+    const important = <b style={{ color: "#EE2E24" }}>*</b>;
+    console.log("roles", this.state.keyRoles);
 
     return (
       <div className={classes.root}>
@@ -454,7 +498,7 @@ class FormPengajuanTKP extends React.Component {
                       className="form-input"
                       placeholder="Contoh: John Doe"
                       type="text"
-                      name={'nama_lengkap'}
+                      name={"nama_lengkap"}
                       value={this.state.nama_lengkap}
                       onChange={this._handleChange}
                     />
@@ -468,7 +512,7 @@ class FormPengajuanTKP extends React.Component {
                       className="form-input"
                       placeholder="Contoh: 34673268328239232"
                       type="number"
-                      name={'no_ktp'}
+                      name={"no_ktp"}
                       value={this.state.no_ktp}
                       onChange={this._handleChange}
                     />
@@ -476,12 +520,14 @@ class FormPengajuanTKP extends React.Component {
                 </Grid>
                 <Grid item xs={6}>
                   <div style={{ margin: 20 }}>
-                    <label className="form-label">Tempat Lahir{important}</label>
+                    <label className="form-label">
+                      Tempat Lahir{important}
+                    </label>
                     <Input
                       variant="outlined"
                       className="form-input"
                       type="text"
-                      name={'tempat_lahir'}
+                      name={"tempat_lahir"}
                       value={this.state.tempat_lahir}
                       onChange={this._handleChange}
                     />
@@ -489,25 +535,29 @@ class FormPengajuanTKP extends React.Component {
                 </Grid>
                 <Grid item xs={6}>
                   <div style={{ margin: 20 }}>
-                    <label className="form-label">Tanggal Lahir{important}</label>
-                    <DatePicker
+                    <label className="form-label">
+                      Tanggal Lahir{important}
+                    </label>
+                    {/* <DatePicker
                       format={dateFormatList}
                       className="form-input"
                       placeholder="Pilih Tanggal"
-                      name={'tanggal_lahir'}
+                      name={"tanggal_lahir"}
                       value={this.state.tanggal_lahir}
                       onChange={this._handleChange}
-                    />
+                    /> */}
                   </div>
                 </Grid>
               </Grid>
               <div style={{ margin: 20 }}>
-                <label className="form-label">Alamat Lengkap sesuai KTP{important}</label>
+                <label className="form-label">
+                  Alamat Lengkap sesuai KTP{important}
+                </label>
                 <Input
                   variant="outlined"
                   className="form-input"
                   type="text"
-                  name={'alamat_ktp'}
+                  name={"alamat_ktp"}
                   value={this.state.alamat_ktp}
                   onChange={this._handleChange}
                 />
@@ -515,17 +565,21 @@ class FormPengajuanTKP extends React.Component {
               <Grid container>
                 <Grid item xs={6}>
                   <div style={{ margin: 20 }}>
-                    <label className="form-label">Provinsi sesuai KTP{important}</label>
+                    <label className="form-label">
+                      Provinsi sesuai KTP{important}
+                    </label>
                     <Select
                       showSearch
-                      name={'provinsi_ktp'}
+                      name={"provinsi_ktp"}
                       className={"form-input"}
                       optionFilterProp="children"
                       placeholder=" Pilih Provinsi"
                       value={this.state.provinsi_ktp}
                       onChange={this._onChangeProvinsi}
                       filterOption={(input, option) =>
-                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        option.children
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
                       }
                     >
                       {optionProvinsi}
@@ -539,13 +593,15 @@ class FormPengajuanTKP extends React.Component {
                     </label>
                     <Select
                       showSearch
-                      name={'kabupaten_ktp'}
+                      name={"kabupaten_ktp"}
                       className={"form-input"}
                       optionFilterProp="children"
                       placeholder=" Pilih Kota/Kabupaten"
                       value={this.state.kabupaten_ktp}
                       filterOption={(input, option) =>
-                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        option.children
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
                       }
                     >
                       {optionKota}
@@ -560,19 +616,21 @@ class FormPengajuanTKP extends React.Component {
                   className="form-input"
                   placeholder="Contoh: johndoe@gmail.com"
                   type="email"
-                  name={'email'}
+                  name={"email"}
                   value={this.state.email}
                   onChange={this._handleChange}
                 />
               </div>
               <div style={{ margin: 20 }}>
-                <label className="form-label">Nomor Handphone Aktif{important}</label>
+                <label className="form-label">
+                  Nomor Handphone Aktif{important}
+                </label>
                 <Input
                   variant="outlined"
                   className="form-input"
                   placeholder="Contoh: 08977788991"
                   type="number"
-                  name={'no_hp'}
+                  name={"no_hp"}
                   value={this.state.no_hp}
                   onChange={this._handleChange}
                 />
@@ -580,9 +638,11 @@ class FormPengajuanTKP extends React.Component {
               <Grid container>
                 <Grid item xs={6}>
                   <div style={{ margin: 20 }}>
-                    <label className="form-label">Nama Bank (Payroll){important}</label>
+                    <label className="form-label">
+                      Nama Bank (Payroll){important}
+                    </label>
                     <Select
-                      name={'id_bank'}
+                      name={"id_bank"}
                       className={"form-input"}
                       placeholder=" Pilih Bank"
                     >
@@ -592,12 +652,14 @@ class FormPengajuanTKP extends React.Component {
                 </Grid>
                 <Grid item xs={6}>
                   <div style={{ margin: 20 }}>
-                    <label className="form-label">Nomor Rekening{important}</label>
+                    <label className="form-label">
+                      Nomor Rekening{important}
+                    </label>
                     <Input
                       variant="outlined"
                       className="form-input"
                       type="number"
-                      name={'no_rekening'}
+                      name={"no_rekening"}
                       value={this.state.no_rekening}
                       onChange={this._handleChange}
                     />
@@ -605,9 +667,11 @@ class FormPengajuanTKP extends React.Component {
                 </Grid>
                 <Grid item xs={6}>
                   <div style={{ margin: 20 }}>
-                    <label className="form-label">Pendidikan Terakhir{important}</label>
+                    <label className="form-label">
+                      Pendidikan Terakhir{important}
+                    </label>
                     <Select
-                      name={'id_jenjang_pendidikan'}
+                      name={"id_jenjang_pendidikan"}
                       className={"form-input"}
                       placeholder=" Pilih Pendidikan Terakhir"
                     >
@@ -621,7 +685,7 @@ class FormPengajuanTKP extends React.Component {
                       Jurusan Pendidikan Terakhir{important}
                     </label>
                     <Select
-                      name={'id_jurusan'}
+                      name={"id_jurusan"}
                       className={"form-input"}
                       placeholder=" Pilih Jurusan Pendidikan Terakhir"
                     >
@@ -631,9 +695,11 @@ class FormPengajuanTKP extends React.Component {
                 </Grid>
               </Grid>
               <div style={{ margin: 20 }}>
-                <label className="form-label">Pengalaman Kerja{important}</label>
+                <label className="form-label">
+                  Pengalaman Kerja{important}
+                </label>
                 <Select
-                  name={'id_pengalaman_kerja'}
+                  name={"id_pengalaman_kerja"}
                   className={"form-input"}
                   placeholder=" Pilih Pengalaman Kerja"
                 >
@@ -643,12 +709,14 @@ class FormPengajuanTKP extends React.Component {
               <Grid container>
                 <Grid item xs={6}>
                   <div style={{ margin: 20 }}>
-                    <label className="form-label">Akun T-Money{important}</label>
+                    <label className="form-label">
+                      Akun T-Money{important}
+                    </label>
                     <Input
                       variant="outlined"
                       className="form-input"
                       type="text"
-                      name={'akun_tmoney'}
+                      name={"akun_tmoney"}
                       value={this.state.akun_tmoney}
                       onChange={this._handleChange}
                     />
@@ -656,12 +724,14 @@ class FormPengajuanTKP extends React.Component {
                 </Grid>
                 <Grid item xs={6}>
                   <div style={{ margin: 20 }}>
-                    <label className="form-label">Akun Trello/Jira{important}</label>
+                    <label className="form-label">
+                      Akun Trello/Jira{important}
+                    </label>
                     <Input
                       variant="outlined"
                       className="form-input"
                       type="text"
-                      name={'akun_trello'}
+                      name={"akun_trello"}
                       value={this.state.akun_trello}
                       onChange={this._handleChange}
                     />
@@ -676,11 +746,13 @@ class FormPengajuanTKP extends React.Component {
               <Grid container>
                 <Grid item xs={6}>
                   <div style={{ margin: 20 }}>
-                    <label className="form-label">Nama Bidang/Tribe{important}</label>
+                    <label className="form-label">
+                      Nama Bidang/Tribe{important}
+                    </label>
                     <Select
                       className={"form-input"}
                       placeholder=" Pilih Bidang/Tribe"
-                      name={'id_bidang'}
+                      name={"id_bidang"}
                     >
                       {optionBidang}
                     </Select>
@@ -688,11 +760,13 @@ class FormPengajuanTKP extends React.Component {
                 </Grid>
                 <Grid item xs={6}>
                   <div style={{ margin: 20 }}>
-                    <label className="form-label">Lokasi Kerja{important}</label>
+                    <label className="form-label">
+                      Lokasi Kerja{important}
+                    </label>
                     <Select
                       className={"form-input"}
                       placeholder=" Pilih Lokasi Kerja"
-                      name={'id_lokasi_kerja'}
+                      name={"id_lokasi_kerja"}
                     >
                       {optionLokasi}
                     </Select>
@@ -702,9 +776,11 @@ class FormPengajuanTKP extends React.Component {
               <Grid container>
                 <Grid item xs={4}>
                   <div style={{ margin: 20 }}>
-                    <label className="form-label">Job Title Usulan{important}</label>
+                    <label className="form-label">
+                      Job Title Usulan{important}
+                    </label>
                     <Select
-                      name={'id_job_title'}
+                      name={"id_job_title"}
                       className={"form-input"}
                       placeholder=" Pilih Job Title Usulan"
                       onChange={this._onChangeJobTitle}
@@ -719,7 +795,7 @@ class FormPengajuanTKP extends React.Component {
                       Job Title Levelling Usulan{important}
                     </label>
                     <Select
-                      name={'id_kelompok_pekerjaan'}
+                      name={"id_kelompok_pekerjaan"}
                       className={"form-input"}
                       placeholder=" Pilih Job Title Level Usulan"
                       onChange={this._onChangeJobTitleLevelling}
@@ -732,7 +808,7 @@ class FormPengajuanTKP extends React.Component {
                   <div style={{ margin: 20 }}>
                     <label className="form-label">Job Role{important}</label>
                     <Select
-                      name={'id_job_role'}
+                      name={"id_job_role"}
                       className={"form-input"}
                       placeholder=" Pilih Job Role"
                     >
@@ -742,13 +818,15 @@ class FormPengajuanTKP extends React.Component {
                 </Grid>
               </Grid>
               <div style={{ margin: 20 }}>
-                <label className="form-label">Deskripsi Pekerjaan{important}</label>
+                <label className="form-label">
+                  Deskripsi Pekerjaan{important}
+                </label>
                 <TextArea
                   variant="outlined"
                   className="form-input"
                   placeholder="Contoh: Administrasi mengerjakan surat menyurat"
                   type="text"
-                  name={'deskripsi_pekerjaan'}
+                  name={"deskripsi_pekerjaan"}
                   rows={4}
                   value={this.state.deskripsi_pekerjaan}
                   onChange={this._handleChange}
@@ -761,7 +839,7 @@ class FormPengajuanTKP extends React.Component {
                   className="form-input"
                   placeholder="Contoh: Rp. 5.000,000,-"
                   type="text"
-                  name={'thp'}
+                  name={"thp"}
                   value={this.state.thp}
                   onChange={this._handleChange}
                 />
@@ -776,7 +854,8 @@ class FormPengajuanTKP extends React.Component {
                 <DragAndDrop
                   acceptFiles="application/pdf"
                   uploadType="Creative CV"
-                  name={'cv'}
+                  onChange={this._handleFilesFromDrag.bind(this, 'cv')}
+                  name={"cv"}
                 />
               </div>
               <div style={{ margin: 20 }}>
@@ -784,7 +863,8 @@ class FormPengajuanTKP extends React.Component {
                 <DragAndDrop
                   acceptFiles=".jpg,.jpeg,.png"
                   uploadType="KTP"
-                  name={'foto_scanktp'}
+                  onChange={this._handleFilesFromDrag.bind(this, 'foto_scanktp')}
+                  name={"foto_scanktp"}
                 />
               </div>
               <div style={{ margin: 20 }}>
@@ -792,7 +872,8 @@ class FormPengajuanTKP extends React.Component {
                 <DragAndDrop
                   acceptFiles="application/pdf"
                   uploadType="SKCK"
-                  name={'file_skck'}
+                  onChange={this._handleFilesFromDrag.bind(this, 'file_skck')}
+                  name={"file_skck"}
                 />
               </div>
 
