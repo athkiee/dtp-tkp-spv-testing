@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { List, Collapse } from "@material-ui/core";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+import { ROUTES } from "../../configs";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,14 +46,14 @@ export default function SideMenu() {
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <Link to="/MengajukanTKP" style={{ color: "black" }}>
+        <Link to={ROUTES.PENGAJUAN_TKP} style={{ color: "black" }}>
           <List alignItems="center" component="div">
             <ListItem button className={classes.nested}>
               <ListItemText primary="Mengajukan TKP" />
             </ListItem>
           </List>
         </Link>
-        <Link to="/OnProcessTKP" style={{ color: "black" }}>
+        <Link to={ROUTES.DALAM_PROSES_PENGAJUAN_TKP} style={{ color: "black" }}>
           <List component="div">
             <ListItem button className={classes.nested}>
               <ListItemText primary="Dalam Proses"></ListItemText>

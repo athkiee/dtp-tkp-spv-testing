@@ -125,7 +125,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function HeadBar() {
-  const user = getUser();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleTest = () => {};
@@ -154,6 +153,7 @@ export default function HeadBar() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const nama_user = sessionStorage.getItem("nama");
+  const nik = sessionStorage.getItem("nik");
 
   return (
     <div>
@@ -182,7 +182,6 @@ export default function HeadBar() {
             noWrap
             className={classes.title}
           >
-            {user.nik}
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">

@@ -1,34 +1,31 @@
-import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import PrivateRoute from "../utils/PrivateRoute";
+const routes = {
+  LANDING_PAGE() {
+    return `/`;
+  },
+  LOGIN_SPV() {
+    return `/login/spv`;
+  },
+  LOGIN_SEKRETARIS() {
+    return `/login/sekretaris`;
+  },
+  DASHBOARD() {
+    return `/dashboard`;
+  },
+  PENGAJUAN_TKP() {
+    return `/pengajuan-tkp/supervisor`;
+  },
+  PENGAJUAN_TKP_FORM() {
+    return `/pengajuan-tkp/form`;
+  },
+  PENGAJUAN_TKP_DALAM_PROSES() {
+    return `/pengajuan-tkp/dalam-proses`;
+  },
+  PENGAJUAN_TKP_RIWAYAT() {
+    return `/pengajuan-tkp/riwayat`;
+  },
+  KELOLA_EVALUASI_TKP() {
+    return `/kelola-evaluasi-tkp`;
+  },
+};
 
-import Landing from "../components/pages/LandingPage/App";
-import LoginSpv from "../components/pages/Login/LoginSpv/App";
-import RegisterSpv from "../components/pages/Register/RegisterSpv/App";
-import LoginSekretaris from "../components/pages/Login/LoginSekretaris/App";
-import RegisterSekretaris from "../components/pages/Register/RegisterSekretaris/App";
-import Dashboard from "../components/pages/Dashboard/Dashboard";
-import EvaluasiTKP from "../components/pages/EvaluasiTKP/App";
-import DalamProsesTKP from "../components/pages/PengajuanTKP/DalamProses/App";
-import RiwayatPengajuanTKP from "../components/pages/PengajuanTKP/Riwayat/App";
-import MengajukanTKP from "../components/pages/PengajuanTKP/MengajukanTKP/App";
-import FormMengajukanTKP from "../components/pages/PengajuanTKP/MengajukanTKP/Form/App";
-
-function routes() {
-  return (
-    <Router>
-      <Route exact path="/" component={Landing} />
-      <Route path="/supervisor/login" component={LoginSpv} />
-      <Route path="/sekretaris/login" component={LoginSekretaris} />
-      <Route path="/supervisor/register" component={RegisterSpv} />
-      <Route path="/sekretaris/register" component={RegisterSekretaris} />
-      <PrivateRoute path="/Dashboard" component={Dashboard} />
-      <PrivateRoute path="/EvaluasiTKP" component={EvaluasiTKP} />
-      <PrivateRoute path="/OnProcessTKP" component={DalamProsesTKP} />
-      <PrivateRoute path="/RiwayatTKP" component={RiwayatPengajuanTKP} />
-      <PrivateRoute path="/MengajukanTKP" component={MengajukanTKP} />
-      <PrivateRoute path="/FormMengajukanTKP" component={FormMengajukanTKP} />
-    </Router>
-  );
-}
 export default routes;

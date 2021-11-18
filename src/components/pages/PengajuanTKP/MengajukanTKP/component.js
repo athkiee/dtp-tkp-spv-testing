@@ -1,29 +1,12 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
-import MenuIcon from "@material-ui/icons/Menu";
-import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
-import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SideMenu from "../../../constant/sideMenu";
-import TableDashboard from "./Table";
-import { DownloadOutlined } from "@ant-design/icons";
-import ActiveLastBreadcrumb from "./Breadcumbs";
 import { Button } from "antd";
 import FileSaver from "file-saver";
-import TableDalamProses from "./Table";
+import TextField from "@material-ui/core/TextField";
 import HeadBar from "../../../constant/headBar";
+import { ROUTES } from "../../../../configs";
 
 const drawerWidth = 240;
 
@@ -32,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 24,
   },
   toolbarIcon: {
     display: "flex",
@@ -41,22 +24,22 @@ const useStyles = makeStyles((theme) => ({
     padding: "0 8px",
     ...theme.mixins.toolbar,
   },
-  downloadForm: {
-    color: "#DA1E20",
+  submitForm: {
+    color: "white",
     borderColor: "#DA1E20",
-    marginLeft: 15,
     borderRadius: 10,
-    backgroundColor: "white",
+    backgroundColor: "#DA1E20",
     "&:hover": {
-      backgroundColor: "#DA1E20",
+      color: "#DA1E20",
+      backgroundColor: "white",
       borderColor: "#DA1E20",
     },
   },
   containerTataCara: {
-    width: 550,
-    height: 180,
+    width: "100%",
+    height: 360,
     float: "left",
-    margin: 35,
+    marginLeft: 35,
     backgroundColor: "white",
     borderRadius: 10,
   },
@@ -127,28 +110,59 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DalamProsesTKP() {
+export default function MengajukanTKP() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const namaSpv = sessionStorage.getItem('nama');
+  const nikSpv = sessionStorage.getItem('nik');
 
   return (
     <div className={classes.root}>
       <HeadBar />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <h2>Dalam Proses</h2>
-        <ActiveLastBreadcrumb />
-        Kelola data berstatus Menunggu Konfirmasi dan Wawancara pada tabel dibawah ini.
-        <Container maxWidth="lg" className={classes.container}>
-          <TableDalamProses />
+        <h1 style={{ marginLeft:35, marginTop:35 }}><strong>Mengajukan Formulir TKP</strong></h1>
+        <p style={{ marginLeft:35 }}>Ajukan data diri TKP secara lengkap dengan mengisi kolom di bawah ini.</p>
+        <Container className={classes.containerTataCara}>
+          <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}>
+            Data Supervisor
+          </h2>
+          <p>
+            Silahkan mengisi Data Supervisor di bawah ini untuk membuka formulir
+            TKP
+          </p>
+          <div style={{ marginBottom: 40 }}>
+            <label className="form-label">Nama Supervisor</label>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              className="form-input"
+              type="text"
+              name="name"
+              value={namaSpv}
+              disabled
+            />
+          </div>
+          <div style={{ marginBottom: 40 }}>
+            <label className="form-label">NIK Supervisor</label>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              className="form-input"
+              type="number"
+              name="nik"
+              value={nikSpv}
+              disabled
+            />
+          </div>
+          <Button
+            type="primary"
+            onClick={()=> window.location = ROUTES.PENGAJUAN_TKP_FORM()}
+            className={classes.submitForm}
+          >
+            <strong>SUBMIT</strong>
+          </Button>
         </Container>
+        <Container maxWidth="lg" className={classes.container}></Container>
       </main>
     </div>
   );

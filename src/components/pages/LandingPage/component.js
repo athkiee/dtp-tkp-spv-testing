@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./styles/Landing.css";
 import { Link } from "react-router-dom";
+import { ROUTES } from "../../../configs"
 
 class LandingPage extends React.Component {
   render() {
@@ -20,10 +21,10 @@ class LandingPage extends React.Component {
               <h3><b> Pilih Peran Anda </b></h3>
             </div>
             <div className="form-inputs">
-            <Link className="button-landing" role="button" to="/supervisor/login">
+            <Link className="button-landing" role="button" to={ROUTES.LOGIN_SPV()}>
               Supervisor
             </Link>
-            <Link className="button-landing" role="button" to="/sekretaris/login">
+            <Link className="button-landing" role="button" to={ROUTES.LOGIN_SEKRETARIS()}>
               Sekretaris
             </Link>
             </div>
