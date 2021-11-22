@@ -44,7 +44,7 @@
     "web-vitals": "^1.1.2",
     "yup": "^0.32.9"
   },
-  "homepage": "http://dtptkp.github.io/dtp-tkp-frontend-supervisor",
+  "homepage": "http://dtptkp.github.io/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
