@@ -294,7 +294,12 @@ class FormPengajuanTKP extends React.Component {
   };
 
   _handleFilesFromDrag = (name, file) => {
-    this.setState({ [name]: file });
+    const data = new FormData();
+    data.append([name], file);
+    this.setState({ [name]: data });
+    for (var pair of data.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]); 
+  }
   };
 
   _renderModalInfo = () => {
@@ -417,7 +422,7 @@ class FormPengajuanTKP extends React.Component {
     ));
     const namaSpv = sessionStorage.getItem("nama");
     const important = <b style={{ color: "#EE2E24" }}>*</b>;
-    console.log('testing', tanggal_lahir);
+    console.log('testing', cv);
 
     return (
       <div className={classes.root}>
