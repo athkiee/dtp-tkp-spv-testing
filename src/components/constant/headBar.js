@@ -3,7 +3,6 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
@@ -15,12 +14,12 @@ import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
 import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SideMenu from "./sideMenu";
-import FileSaver from "file-saver";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import { Menu, MenuItem } from "@material-ui/core";
 import { useHistory } from "react-router";
-import { getUser, removeUserSession } from "../../utils/Common";
+import { removeUserSession } from "../../utils/Common";
+import { IMAGES } from "../../configs";
 
 const drawerWidth = 240;
 
@@ -239,7 +238,7 @@ export default function HeadBar() {
         <div className={classes.toolbarIcon}>
           <img
             onClick={handleDrawerClose}
-            src="static/logo.png"
+            src={IMAGES.LOGO}
             className="nav-Logo"
           />
         </div>

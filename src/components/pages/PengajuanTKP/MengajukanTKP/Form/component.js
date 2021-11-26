@@ -5,8 +5,10 @@ import HeadBar from "../../../../constant/headBar";
 import { Grid } from "@material-ui/core";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
-import { Select, Input, DatePicker } from "antd";
+import { Select, Input, DatePicker, Modal } from "antd";
 import { Formik } from "formik";
+import moment from "moment-timezone";
+import { useHistory } from "react-router";
 
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
@@ -55,6 +57,9 @@ const styles = (theme) => ({
   },
   title: {
     flexGrow: 1,
+  },
+  negativeCase: {
+    color: "#EE2E24",
   },
   drawerPaper: {
     position: "relative",
@@ -222,8 +227,8 @@ class FormPengajuanTKP extends React.Component {
       });
     });
     this.setState({
-      nik_spv: sessionStorage.getItem('nik'),
-    })
+      nik_spv: sessionStorage.getItem("nik"),
+    });
   }
 
   _onChangeProvinsi = (key, value) => {
@@ -285,6 +290,13 @@ class FormPengajuanTKP extends React.Component {
 
   _handleFilesFromDrag = (name, file) => {
     this.setState({ [name]: file });
+  };
+
+  _renderModalInfo = () => {
+    Modal.success({
+      content: "Pengajuan TKP Anda telah berhasil",
+      onOk() {},
+    });
   };
 
   render() {
@@ -364,14 +376,10 @@ class FormPengajuanTKP extends React.Component {
       </Option>
     ));
     const optionBidang = dataBidang.map((d) => (
-      <Option key={d.key} value={d.name}>
-        {d.name}
-      </Option>
+      <Option key={d.key}>{d.name}</Option>
     ));
     const optionLokasi = dataLokasiKerja.map((d) => (
-      <Option key={d.key} value={d.name}>
-        {d.name}
-      </Option>
+      <Option key={d.key}>{d.name}</Option>
     ));
     const optionKota = dataKota.map((d) => (
       <Option key={d.key} value={d.name}>
@@ -379,39 +387,27 @@ class FormPengajuanTKP extends React.Component {
       </Option>
     ));
     const optionBank = dataBank.map((d) => (
-      <Option key={d.key} value={d.name}>
-        {d.name}
-      </Option>
+      <Option key={d.key}>{d.name}</Option>
     ));
     const optionJurusan = dataJurusan.map((d) => (
-      <Option key={d.key} value={d.name}>
-        {d.name}
-      </Option>
+      <Option key={d.key}>{d.name}</Option>
     ));
     const optionJobTitle = datajobTitle.map((d) => (
-      <Option key={d.key} value={d.name}>
+      <Option key={d.key} roles={d.keyRoles}>
         {d.name}
       </Option>
     ));
     const optionJTlevel = datajtLevel.map((d) => (
-      <Option key={d.key} value={d.name}>
-        {d.name}
-      </Option>
+      <Option key={d.key}>{d.name}</Option>
     ));
     const optionJobRole = datajobRole.map((d) => (
-      <Option key={d.key} value={d.name}>
-        {d.name}
-      </Option>
+      <Option key={d.key}>{d.name}</Option>
     ));
     const optionExperience = dataExperience.map((d) => (
-      <Option key={d.key} value={d.name}>
-        {d.name}
-      </Option>
+      <Option key={d.key}>{d.name}</Option>
     ));
     const optionJenjang = dataPendidikan.map((d) => (
-      <Option key={d.key} value={d.name}>
-        {d.name}
-      </Option>
+      <Option key={d.key}>{d.name}</Option>
     ));
     const namaSpv = sessionStorage.getItem("nama");
     const important = <b style={{ color: "#EE2E24" }}>*</b>;
@@ -433,36 +429,136 @@ class FormPengajuanTKP extends React.Component {
               initialValues={body}
               validate={(values) => {
                 const errors = {};
+                if (!values.nama_lengkap) {
+                  errors.nama_lengkap =
+                    "Nama Lengkap sesuai KTP tidak boleh kosong";
+                }
+                if (!values.no_ktp) {
+                  errors.no_ktp = "Nomor KTP tidak boleh kosong";
+                }
+                if (!values.tempat_lahir) {
+                  errors.tempat_lahir = "Tempat lahir tidak boleh kosong";
+                }
+                if (!values.alamat_ktp) {
+                  errors.alamat_ktp =
+                    "Alamat Lengkap sesuai KTP tidak boleh kosong";
+                }
+                if (!values.provinsi_ktp) {
+                  errors.provinsi_ktp =
+                    "Provinsi sesuai KTP tidak boleh kosong";
+                }
+                if (!values.kabupaten_ktp) {
+                  errors.kabupaten_ktp =
+                    "Kota/Kabupaten sesuai KTP tidak boleh kosong";
+                }
+                if (!values.kabupaten_ktp) {
+                  errors.kabupaten_ktp =
+                    "Kota/Kabupaten sesuai KTP tidak boleh kosong";
+                }
+                if (!values.no_hp) {
+                  errors.no_hp = "Nomor Handphone tidak boleh kosong";
+                } else if (
+                  !/^(\+62|62|0)8[1-9][0-9]{6,9}$/i.test(values.no_hp)
+                ) {
+                  errors.no_hp = "Nomor Handphone tidak valid";
+                }
+                if (!values.id_bank) {
+                  errors.id_bank = "Nama Bank tidak boleh kosong";
+                }
+                if (!values.no_rekening) {
+                  errors.no_rekening = "Nomor Rekening tidak boleh kosong";
+                }
+                if (!values.id_jenjang_pendidikan) {
+                  errors.id_jenjang_pendidikan =
+                    "Pendidikan Terakhir tidak boleh kosong";
+                }
+                if (!values.id_jurusan) {
+                  errors.id_jurusan =
+                    "Jurusan Pendidikan Terakhir tidak boleh kosong";
+                }
+                if (!values.id_pengalaman_kerja) {
+                  errors.id_pengalaman_kerja =
+                    "Pengalaman Kerja tidak boleh kosong";
+                }
+                if (!values.kabupaten_ktp) {
+                  errors.kabupaten_ktp =
+                    "Kota/Kabupaten sesuai KTP tidak boleh kosong";
+                }
+                if (!values.id_bidang) {
+                  errors.id_bidang = "Nama Bidang/Tribe tidak boleh kosong";
+                }
+                if (!values.id_lokasi_kerja) {
+                  errors.id_lokasi_kerja = "Lokasi Kerja tidak boleh kosong";
+                }
+                if (!values.id_job_title) {
+                  errors.id_job_title = "Job Title Usulan tidak boleh kosong";
+                }
+                if (!values.id_kelompok_pekerjaan) {
+                  errors.id_job_title_levelling =
+                    "Job Title Level Usulan tidak boleh kosong";
+                }
+                if (!values.id_job_role) {
+                  errors.id_kategori_job_title = "Job Role tidak boleh kosong";
+                }
+                if (!values.deskripsi_pekerjaan) {
+                  errors.deskripsi_pekerjaan =
+                    "Deskripsi Pekerjaan tidak boleh kosong";
+                }
+                if (!values.thp) {
+                  errors.thp = "Ekspektasi THP tidak boleh kosong";
+                }
+                if (!values.cv) {
+                  errors.cv = "CV tidak boleh kosong";
+                }
+                if (!values.foto_scanktp) {
+                  errors.foto_scanktp = "Scan KTP tidak boleh kosong";
+                }
                 if (!values.email) {
-                  errors.email = "Required";
+                  errors.email = "Email Aktif tidak boleh kosong";
                 } else if (
                   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
                 ) {
-                  errors.email = "Invalid email address";
+                  errors.email = "Email Aktif tidak valid";
+                }
+                if (!values.akun_tmoney) {
+                  errors.akun_tmoney = "Akun T-Money tidak boleh kosong";
+                } else if (
+                  !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.akun_tmoney)
+                ) {
+                  errors.akun_tmoney = "Akun T-Money tidak valid";
+                }
+                if (!values.akun_trello) {
+                  errors.akun_trello = "Akun Trello/Jira tidak boleh kosong";
+                } else if (
+                  !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.akun_trello)
+                ) {
+                  errors.akun_trello = "Akun Trello/Jira tidak valid";
                 }
                 return errors;
               }}
               onSubmit={(values, { setSubmitting }) => {
-                // setTimeout(() => {
-                //   axios({
-                //     method: "post",
-                //     url: "http://localhost:4004/tkp/register",
-                //     data: values,
-                //   }).then(function (response) {
-                //     console.log(response);
-                //   });
-                //   setSubmitting(false);
-                // }, 400);
-                console.log('test', values);
+                setTimeout(() => {
+                  axios({
+                    method: "post",
+                    url: "http://localhost:4004/tkp/register",
+                    data: values,
+                  }).then((response) => {
+                    if (response.status === 200) {
+                      Modal.success({
+                        content: "Pengajuan TKP Anda telah berhasil",
+                        onOk() {},
+                      });
+                      console.log('body', values);
+                    }
+                  });
+                  setSubmitting(false);
+                }, 400);
               }}
             >
-              {
-                this._handleChange,
-              ({
+              {({
                 values,
                 errors,
                 touched,
-                handleChange,
                 handleBlur,
                 handleSubmit,
                 isSubmitting,
@@ -522,10 +618,15 @@ class FormPengajuanTKP extends React.Component {
                           placeholder="Contoh: John Doe"
                           type="text"
                           name={"nama_lengkap"}
-                          onChange={handleChange}
+                          onChange={this._handleChange}
                           onBlur={handleBlur}
                           value={values.nama_lengkap}
                         />
+                        <p className={classes.negativeCase}>
+                          {errors.nama_lengkap &&
+                            touched.nama_lengkap &&
+                            errors.nama_lengkap}
+                        </p>
                       </div>
                     </Grid>
                     <Grid item xs={6}>
@@ -539,10 +640,13 @@ class FormPengajuanTKP extends React.Component {
                           placeholder="Contoh: 34673268328239232"
                           type="number"
                           name={"no_ktp"}
-                          onChange={handleChange}
+                          onChange={this._handleChange}
                           onBlur={handleBlur}
                           value={values.no_ktp}
                         />
+                        <p className={classes.negativeCase}>
+                          {errors.no_ktp && touched.no_ktp && errors.no_ktp}
+                        </p>
                       </div>
                     </Grid>
                     <Grid item xs={6}>
@@ -555,10 +659,15 @@ class FormPengajuanTKP extends React.Component {
                           className="form-input"
                           type="text"
                           name={"tempat_lahir"}
-                          onChange={handleChange}
+                          onChange={this._handleChange}
                           onBlur={handleBlur}
                           value={values.tempat_lahir}
                         />
+                        <p className={classes.negativeCase}>
+                          {errors.tempat_lahir &&
+                            touched.tempat_lahir &&
+                            errors.tempat_lahir}
+                        </p>
                       </div>
                     </Grid>
                     <Grid item xs={6}>
@@ -566,15 +675,20 @@ class FormPengajuanTKP extends React.Component {
                         <label className="form-label">
                           Tanggal Lahir{important}
                         </label>
-                        {/* <DatePicker
+                        <DatePicker
                           format={dateFormatList}
                           className="form-input"
                           placeholder="Pilih Tanggal"
                           name={"tanggal_lahir"}
-                          onChange={this._handleSelect.bind(this, 'tanggal_lahir')}
+                          onChange={this._handleSelect.bind(
+                            this,
+                            "tanggal_lahir"
+                          )}
                           onBlur={handleBlur}
-                          value={values.tanggal_lahir}
-                        /> */}
+                          value={
+                            values.tanggal_lahir && moment(values.tanggal_lahir)
+                          }
+                        />
                       </div>
                     </Grid>
                   </Grid>
@@ -588,10 +702,15 @@ class FormPengajuanTKP extends React.Component {
                       placeholder="Contoh: Jalan ABC No 123"
                       type="text"
                       name={"alamat_ktp"}
-                      onChange={handleChange}
+                      onChange={this._handleChange}
                       onBlur={handleBlur}
                       value={values.alamat_ktp}
                     />
+                    <p className={classes.negativeCase}>
+                      {errors.alamat_ktp &&
+                        touched.alamat_ktp &&
+                        errors.alamat_ktp}
+                    </p>
                   </div>
                   <Grid container>
                     <Grid item xs={6}>
@@ -614,6 +733,11 @@ class FormPengajuanTKP extends React.Component {
                         >
                           {optionProvinsi}
                         </Select>
+                        <p className={classes.negativeCase}>
+                          {errors.provinsi_ktp &&
+                            touched.provinsi_ktp &&
+                            errors.provinsi_ktp}
+                        </p>
                       </div>
                     </Grid>
                     <Grid item xs={6}>
@@ -639,6 +763,11 @@ class FormPengajuanTKP extends React.Component {
                         >
                           {optionKota}
                         </Select>
+                        <p className={classes.negativeCase}>
+                          {errors.kabupaten_ktp &&
+                            touched.kabupaten_ktp &&
+                            errors.kabupaten_ktp}
+                        </p>
                       </div>
                     </Grid>
                   </Grid>
@@ -651,11 +780,13 @@ class FormPengajuanTKP extends React.Component {
                       type="email"
                       name={"email"}
                       label={"email aktif"}
-                      onChange={handleChange}
+                      onChange={this._handleChange}
                       onBlur={handleBlur}
                       value={values.email}
                     />
-                    {errors.email && touched.email && errors.email}
+                    <p className={classes.negativeCase}>
+                      {errors.email && touched.email && errors.email}
+                    </p>
                   </div>
                   <div style={{ margin: 20 }}>
                     <label className="form-label">
@@ -667,10 +798,13 @@ class FormPengajuanTKP extends React.Component {
                       placeholder="Contoh: 08977788991"
                       type="number"
                       name={"no_hp"}
-                      onChange={handleChange}
+                      onChange={this._handleChange}
                       onBlur={handleBlur}
                       value={values.no_hp}
                     />
+                    <p className={classes.negativeCase}>
+                      {errors.no_hp && touched.no_hp && errors.no_hp}
+                    </p>
                   </div>
                   <Grid container>
                     <Grid item xs={6}>
@@ -682,11 +816,14 @@ class FormPengajuanTKP extends React.Component {
                           name={"id_bank"}
                           className={"form-input"}
                           placeholder=" Pilih Bank"
-                          onChange={this._handleSelect.bind(this, 'id_bank')}
+                          onChange={this._handleSelect.bind(this, "id_bank")}
                           onBlur={handleBlur}
                         >
                           {optionBank}
                         </Select>
+                        <p className={classes.negativeCase}>
+                          {errors.id_bank && touched.id_bank && errors.id_bank}
+                        </p>
                       </div>
                     </Grid>
                     <Grid item xs={6}>
@@ -700,10 +837,15 @@ class FormPengajuanTKP extends React.Component {
                           type="number"
                           placeholder="Contoh: 1234567899876"
                           name={"no_rekening"}
-                          onChange={handleChange}
+                          onChange={this._handleChange}
                           onBlur={handleBlur}
                           value={values.no_rekening}
                         />
+                        <p className={classes.negativeCase}>
+                          {errors.no_rekening &&
+                            touched.no_rekening &&
+                            errors.no_rekening}
+                        </p>
                       </div>
                     </Grid>
                     <Grid item xs={6}>
@@ -715,11 +857,19 @@ class FormPengajuanTKP extends React.Component {
                           name={"id_jenjang_pendidikan"}
                           className={"form-input"}
                           placeholder=" Pilih Pendidikan Terakhir"
-                          onChange={this._handleSelect.bind(this, 'id_jenjang_pendidikan')}
+                          onChange={this._handleSelect.bind(
+                            this,
+                            "id_jenjang_pendidikan"
+                          )}
                           onBlur={handleBlur}
                         >
                           {optionJenjang}
                         </Select>
+                        <p className={classes.negativeCase}>
+                          {errors.id_jenjang_pendidikan &&
+                            touched.id_jenjang_pendidikan &&
+                            errors.id_jenjang_pendidikan}
+                        </p>
                       </div>
                     </Grid>
                     <Grid item xs={6}>
@@ -731,11 +881,16 @@ class FormPengajuanTKP extends React.Component {
                           name={"id_jurusan"}
                           className={"form-input"}
                           placeholder=" Pilih Jurusan Pendidikan Terakhir"
-                          onChange={this._handleSelect.bind(this, 'id_jurusan')}
+                          onChange={this._handleSelect.bind(this, "id_jurusan")}
                           onBlur={handleBlur}
                         >
                           {optionJurusan}
                         </Select>
+                        <p className={classes.negativeCase}>
+                          {errors.id_jurusan &&
+                            touched.id_jurusan &&
+                            errors.id_jurusan}
+                        </p>
                       </div>
                     </Grid>
                   </Grid>
@@ -747,11 +902,19 @@ class FormPengajuanTKP extends React.Component {
                       name={"id_pengalaman_kerja"}
                       className={"form-input"}
                       placeholder=" Pilih Pengalaman Kerja"
-                      onChange={this._handleSelect.bind(this, 'id_pengalaman_kerja')}
+                      onChange={this._handleSelect.bind(
+                        this,
+                        "id_pengalaman_kerja"
+                      )}
                       onBlur={handleBlur}
                     >
                       {optionExperience}
                     </Select>
+                    <p className={classes.negativeCase}>
+                      {errors.id_pengalaman_kerja &&
+                        touched.id_pengalaman_kerja &&
+                        errors.id_pengalaman_kerja}
+                    </p>
                   </div>
                   <Grid container>
                     <Grid item xs={6}>
@@ -764,10 +927,15 @@ class FormPengajuanTKP extends React.Component {
                           className="form-input"
                           type="text"
                           name={"akun_tmoney"}
-                          onChange={handleChange}
+                          onChange={this._handleChange}
                           onBlur={handleBlur}
                           value={values.akun_tmoney}
                         />
+                        <p className={classes.negativeCase}>
+                          {errors.akun_tmoney &&
+                            touched.akun_tmoney &&
+                            errors.akun_tmoney}
+                        </p>
                       </div>
                     </Grid>
                     <Grid item xs={6}>
@@ -780,10 +948,15 @@ class FormPengajuanTKP extends React.Component {
                           className="form-input"
                           type="text"
                           name={"akun_trello"}
-                          onChange={handleChange}
+                          onChange={this._handleChange}
                           onBlur={handleBlur}
                           value={values.akun_trello}
                         />
+                        <p className={classes.negativeCase}>
+                          {errors.akun_trello &&
+                            touched.akun_trello &&
+                            errors.akun_trello}
+                        </p>
                       </div>
                     </Grid>
                   </Grid>
@@ -806,11 +979,16 @@ class FormPengajuanTKP extends React.Component {
                           className={"form-input"}
                           placeholder=" Pilih Bidang/Tribe"
                           name={"id_bidang"}
-                          onChange={this._handleSelect.bind(this, 'id_bidang')}
+                          onChange={this._handleSelect.bind(this, "id_bidang")}
                           onBlur={handleBlur}
                         >
                           {optionBidang}
                         </Select>
+                        <p className={classes.negativeCase}>
+                          {errors.id_bidang &&
+                            touched.id_bidang &&
+                            errors.id_bidang}
+                        </p>
                       </div>
                     </Grid>
                     <Grid item xs={6}>
@@ -822,11 +1000,19 @@ class FormPengajuanTKP extends React.Component {
                           className={"form-input"}
                           placeholder=" Pilih Lokasi Kerja"
                           name={"id_lokasi_kerja"}
-                          onChange={this._handleSelect.bind(this, 'id_lokasi_kerja')}
+                          onChange={this._handleSelect.bind(
+                            this,
+                            "id_lokasi_kerja"
+                          )}
                           onBlur={handleBlur}
                         >
                           {optionLokasi}
                         </Select>
+                        <p className={classes.negativeCase}>
+                          {errors.id_lokasi_kerja &&
+                            touched.id_lokasi_kerja &&
+                            errors.id_lokasi_kerja}
+                        </p>
                       </div>
                     </Grid>
                   </Grid>
@@ -844,6 +1030,11 @@ class FormPengajuanTKP extends React.Component {
                         >
                           {optionJobTitle}
                         </Select>
+                        <p className={classes.negativeCase}>
+                          {errors.id_job_title &&
+                            touched.id_job_title &&
+                            errors.id_job_title}
+                        </p>
                       </div>
                     </Grid>
                     <Grid item xs={4}>
@@ -855,11 +1046,19 @@ class FormPengajuanTKP extends React.Component {
                           name={"id_kelompok_pekerjaan"}
                           className={"form-input"}
                           placeholder=" Pilih Job Title Level Usulan"
-                          onChange={this._handleSelect.bind(this, 'id_kelompok_pekerjaan')}
+                          onChange={this._handleSelect.bind(
+                            this,
+                            "id_kelompok_pekerjaan"
+                          )}
                           onBlur={handleBlur}
                         >
                           {optionJTlevel}
                         </Select>
+                        <p className={classes.negativeCase}>
+                          {errors.id_kelompok_pekerjaan &&
+                            touched.id_kelompok_pekerjaan &&
+                            errors.id_kelompok_pekerjaan}
+                        </p>
                       </div>
                     </Grid>
                     <Grid item xs={4}>
@@ -871,11 +1070,19 @@ class FormPengajuanTKP extends React.Component {
                           name={"id_job_role"}
                           className={"form-input"}
                           placeholder=" Pilih Job Role"
-                          onChange={this._handleSelect.bind(this, 'id_job_role')}
+                          onChange={this._handleSelect.bind(
+                            this,
+                            "id_job_role"
+                          )}
                           onBlur={handleBlur}
                         >
                           {optionJobRole}
                         </Select>
+                        <p className={classes.negativeCase}>
+                          {errors.id_job_role &&
+                            touched.id_job_role &&
+                            errors.id_job_role}
+                        </p>
                       </div>
                     </Grid>
                   </Grid>
@@ -890,10 +1097,15 @@ class FormPengajuanTKP extends React.Component {
                       type="text"
                       name={"deskripsi_pekerjaan"}
                       rows={4}
-                      onChange={handleChange}
+                      onChange={this._handleChange}
                       onBlur={handleBlur}
                       value={values.deskripsi_pekerjaan}
                     />
+                    <p className={classes.negativeCase}>
+                      {errors.deskripsi_pekerjaan &&
+                        touched.deskripsi_pekerjaan &&
+                        errors.deskripsi_pekerjaan}
+                    </p>
                   </div>
                   <div style={{ margin: 20 }}>
                     <label className="form-label">
@@ -905,10 +1117,13 @@ class FormPengajuanTKP extends React.Component {
                       placeholder="Contoh: Rp. 5.000,000,-"
                       type="text"
                       name={"thp"}
-                      onChange={handleChange}
+                      onChange={this._handleChange}
                       onBlur={handleBlur}
                       value={values.thp}
                     />
+                    <p className={classes.negativeCase}>
+                      {errors.thp && touched.thp && errors.thp}
+                    </p>
                   </div>
                   <h2
                     style={{
@@ -929,6 +1144,9 @@ class FormPengajuanTKP extends React.Component {
                       value={this.state.cv}
                       name={"cv"}
                     />
+                    <p className={classes.negativeCase}>
+                      {errors.cv && touched.cv && errors.cv}
+                    </p>
                   </div>
                   <div style={{ margin: 20 }}>
                     <label className="form-label">Scan KTP{important}</label>
@@ -943,6 +1161,11 @@ class FormPengajuanTKP extends React.Component {
                       value={this.state.foto_scanktp}
                       name={"foto_scanktp"}
                     />
+                    <p className={classes.negativeCase}>
+                      {errors.foto_scanktp &&
+                        touched.foto_scanktp &&
+                        errors.foto_scanktp}
+                    </p>
                   </div>
                   <div style={{ margin: 20 }}>
                     <label className="form-label">SKCK</label>
