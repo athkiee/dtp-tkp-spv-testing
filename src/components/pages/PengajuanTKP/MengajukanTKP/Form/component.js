@@ -7,8 +7,7 @@ import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import { Select, Input, DatePicker, Modal } from "antd";
 import { Formik } from "formik";
-import moment from "moment-timezone";
-import { useHistory } from "react-router";
+import moment from "moment";
 
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
@@ -284,6 +283,12 @@ class FormPengajuanTKP extends React.Component {
     });
   };
 
+  _handleChangeDate = (date, dateString) => {
+    this.setState({
+      tanggal_lahir: dateString,
+    })
+  }
+
   _handleSelect = (name, value) => {
     this.setState({ [name]: value });
   };
@@ -341,6 +346,7 @@ class FormPengajuanTKP extends React.Component {
       dataExperience,
       dataPendidikan,
     } = this.state;
+
     const body = {
       nik_spv,
       nama_lengkap,
@@ -411,6 +417,7 @@ class FormPengajuanTKP extends React.Component {
     ));
     const namaSpv = sessionStorage.getItem("nama");
     const important = <b style={{ color: "#EE2E24" }}>*</b>;
+    console.log('testing', tanggal_lahir);
 
     return (
       <div className={classes.root}>
@@ -680,13 +687,10 @@ class FormPengajuanTKP extends React.Component {
                           className="form-input"
                           placeholder="Pilih Tanggal"
                           name={"tanggal_lahir"}
-                          onChange={this._handleSelect.bind(
-                            this,
-                            "tanggal_lahir"
-                          )}
+                          onChange={this._handleChangeDate}
                           onBlur={handleBlur}
                           value={
-                            values.tanggal_lahir && moment(values.tanggal_lahir)
+                            values.tanggal_lahir && moment(tanggal_lahir, 'DD/MM/YYYY')
                           }
                         />
                       </div>
