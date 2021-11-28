@@ -149,6 +149,7 @@ class FormPengajuanTKP extends React.Component {
     };
   }
 
+
   componentDidMount() {
     axios
       .get("http://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
@@ -294,18 +295,17 @@ class FormPengajuanTKP extends React.Component {
   };
 
   _handleFilesFromDrag = (name, file) => {
-    const data = new FormData();
-    data.append([name], file);
-    this.setState({ [name]: data });
-    for (var pair of data.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]); 
-  }
+    // formData.append([name], file);
+    this.setState({ [name]: file });
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ', ' + pair[1]);
+    // }
   };
 
   _renderModalInfo = () => {
     Modal.success({
       content: "Pengajuan TKP Anda telah berhasil",
-      onOk() {},
+      onOk() { },
     });
   };
 
@@ -422,7 +422,7 @@ class FormPengajuanTKP extends React.Component {
     ));
     const namaSpv = sessionStorage.getItem("nama");
     const important = <b style={{ color: "#EE2E24" }}>*</b>;
-    console.log('testing', cv);
+    // console.log('testing', cv);
 
     return (
       <div className={classes.root}>
@@ -548,23 +548,43 @@ class FormPengajuanTKP extends React.Component {
                 }
                 return errors;
               }}
-              onSubmit={(values, { setSubmitting }) => {
-                setTimeout(() => {
-                  axios({
-                    method: "post",
-                    url: "http://localhost:4004/tkp/register",
-                    data: values,
-                  }).then((response) => {
-                    if (response.status === 200) {
-                      Modal.success({
-                        content: "Pengajuan TKP Anda telah berhasil",
-                        onOk() {},
-                      });
-                      console.log('body', values);
-                    }
-                  });
-                  setSubmitting(false);
-                }, 400);
+              onSubmit={async (values, { setSubmitting }) => {
+                var formData = new FormData();
+                formData.append('cv', this.state.cv);
+                formData.append('foto_scanktp', this.state.foto_scanktp);
+                formData.append('file_skck', this.state.file_skck);
+
+                // Display the key/value pairs
+                for (var pair of formData.entries()) {
+                  console.log(pair[0] + ', ' + pair[1]);
+                }
+
+                await axios({
+                  method: "post",
+                  url: "http://localhost:4004/tkp/register",
+                  data: values
+                }).then((response) => {
+                  if (response.status === 200) {
+                    axios.post("http://localhost:4004/register-file-upload", formData, {
+                      headers: { 'Content-Type': 'multipart/form-data; boundary=--------------------------somestring123abcdefg' }
+                    }).then((res) => {
+                      if (res.status == 200) {
+                        Modal.success({
+                          content: "Pengajuan TKP Anda telah berhasil",
+                          onOk() { },
+                        });
+                        console.log('OK!', values);
+                      }
+                      else {
+                        console.log('File upload gagal!', values);
+                      }
+                    })
+
+
+                  }
+                });
+                setSubmitting(false);
+
               }}
             >
               {({
@@ -575,7 +595,7 @@ class FormPengajuanTKP extends React.Component {
                 handleSubmit,
                 isSubmitting,
               }) => (
-                <form onSubmit={handleSubmit}>
+                <form encType="multipart/form-data" onSubmit={handleSubmit}>
                   <h2
                     style={{
                       color: "#DA1E20",
@@ -1148,7 +1168,7 @@ class FormPengajuanTKP extends React.Component {
                     <DragAndDrop
                       acceptFiles="application/pdf"
                       uploadType="Creative CV"
-                      onChange={this._handleFilesFromDrag.bind(this, "cv")}
+                      onChange={this._handleFilesFromDrag.bind(this.file, "cv")}
                       onBlur={handleBlur}
                       value={this.state.cv}
                       name={"cv"}
