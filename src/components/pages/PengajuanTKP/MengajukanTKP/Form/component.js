@@ -146,6 +146,10 @@ class FormPengajuanTKP extends React.Component {
       cv: "",
       foto_scanktp: "",
       file_skck: "",
+      id_mitra: "1",
+      id_paket: "1",
+      id_status_tkp: "1",
+      status_tkp: "Menunggu Konfirmasi"
     };
   }
 
@@ -350,6 +354,10 @@ class FormPengajuanTKP extends React.Component {
       datajobRole,
       dataExperience,
       dataPendidikan,
+      id_mitra,
+      id_paket,
+      id_status_tkp,
+      status_tkp
     } = this.state;
 
     const body = {
@@ -550,6 +558,43 @@ class FormPengajuanTKP extends React.Component {
               }}
               onSubmit={async (values, { setSubmitting }) => {
                 var formData = new FormData();
+                formData.append('nama_lengkap', this.state.nama_lengkap);
+                formData.append('email', this.state.email);
+                formData.append('password', this.state.password);
+                formData.append('id_status_tkp', this.state.id_status_tkp);
+                formData.append('id_bidang', this.state.id_bidang);
+                formData.append('id_job_title', this.state.id_job_title);
+                formData.append('id_job_role', this.state.id_job_role);
+                formData.append('id_mitra', this.state.id_mitra);
+                formData.append('id_paket', this.state.id_paket);
+                formData.append('no_sp', this.state.no_sp);
+                formData.append('tempat_lahir', this.state.tempat_lahir);
+                formData.append('jenis_kelamin', this.state.jenis_kelamin);
+                formData.append('alamat_ktp', this.state.alamat_ktp);
+                formData.append('id_bank', this.state.id_bank);
+                formData.append('no_rekening', this.state.no_rekening);
+                formData.append('id_jenjang_pendidikan', this.state.id_jenjang_pendidikan);
+                formData.append('provinsi_ktp', this.state.provinsi_ktp);
+                formData.append('kabupaten_ktp', this.state.kabupaten_ktp);
+                formData.append('id_jurusan', this.state.id_jurusan);
+                formData.append('lembaga_pendidikan', this.state.lembaga_pendidikan);
+                formData.append('akun_tmoney', this.state.akun_tmoney);
+                formData.append('akun_trello', this.state.akun_trello);
+                formData.append('deskripsi_pekerjaan', this.state.deskripsi_pekerjaan);
+                formData.append('thp', this.state.thp);
+                formData.append('nota_dinas', this.state.nota_dinas);
+                formData.append('bulan_onboard', this.state.bulan_onboard);
+                formData.append('no_hp', this.state.no_hp);
+                formData.append('id_lokasi_kerja', this.state.id_lokasi_kerja);
+                formData.append('id_pengalaman_kerja', this.state.id_pengalaman_kerja);
+                formData.append('no_ktp', this.state.no_ktp);
+                formData.append('nik_spv', this.state.nik_spv);
+                formData.append('tahun_onboard', this.state.tahun_onboard);
+                formData.append('status_tkp', this.state.status_tkp);
+                formData.append('tanggal_lahir', this.state.tanggal_lahir);
+                formData.append('id_mitra', this.state.id_mitra);
+                formData.append('id_paket', this.state.id_paket);
+
                 formData.append('cv', this.state.cv);
                 formData.append('foto_scanktp', this.state.foto_scanktp);
                 formData.append('file_skck', this.state.file_skck);
@@ -559,13 +604,11 @@ class FormPengajuanTKP extends React.Component {
                   console.log(pair[0] + ', ' + pair[1]);
                 }
 
-                await axios({
-                  method: "post",
-                  url: "http://localhost:4004/tkp/register",
-                  data: values
+                await axios.post("http://localhost:4004/tkp/register", formData, {
+                  headers: { 'Content-Type': 'multipart/form-data; boundary=--------------------------somestring123abcdefg' }
                 }).then((response) => {
                   if (response.status === 200) {
-                    axios.post("http://localhost:4004/register-file-upload", formData, {
+                    axios.post("http://localhost:4004/register-file-upload", 'lol', {
                       headers: { 'Content-Type': 'multipart/form-data; boundary=--------------------------somestring123abcdefg' }
                     }).then((res) => {
                       if (res.status == 200) {
