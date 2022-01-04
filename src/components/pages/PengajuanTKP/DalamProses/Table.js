@@ -1,20 +1,10 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Table, Input, Button, Space } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
+import { SearchOutlined, EyeTwoTone } from '@ant-design/icons';
 import axios from 'axios';
+import clsx from 'clsx';
 
-const data = [
-  {
-    key: '1',
-    name: 'Tono',
-    jobTitle: 'Administration',
-    roles: 'Digital Business Partnership',
-    mitra: 'SKI',
-  }
-];
 const nik_spv = sessionStorage.getItem('nik');
 
 export default class TableDashboard extends React.Component {
@@ -23,33 +13,24 @@ export default class TableDashboard extends React.Component {
     this.state = {
       searchText: '',
       searchedColumn: '',
-      dataTKP: [{
-        key: '1',
-        name: 'Tono',
-        jobTitle: 'Administration',
-        roles: 'Digital Business Partnership',
-        mitra: 'SKI',
-      }]
-
+      dataDP: []
     }
   }
 
   componentDidMount() {
-    axios.get('http://localhost:4004/tkp?nik_spv=' + nik_spv)
+    axios.get('http://localhost:4004/tkp?nik_spv='+ nik_spv +'&id_kategori_status_tkp=1')
       .then((response) => {
-        const tkp = response.data.map(tkp => ({
-          key: tkp.id_tkp,
-          name: tkp.nama_lengkap,
-          jobTitle: tkp.t_job_title.nama_job_title,
-          roles: tkp.t_job_role.nama_job_role,
-          mitra: tkp.t_mitra.nama_mitra
+        const dalamProses = response.data.map(dalamProses => ({
+          key: dalamProses.id_tkp,
+          name: dalamProses.nama_lengkap,
+          status: dalamProses.t_status_tkp.nama_status_tkp,
+          roles: dalamProses.t_job_role.nama_job_role,
         }))
         this.setState({
-          dataTKP: tkp
+          dataDP: dalamProses
         })
       })
   }
-
 
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -122,34 +103,32 @@ export default class TableDashboard extends React.Component {
 
     const columns = [
       {
-        title: 'Nama TKP',
-        dataIndex: 'name',
-        key: 'name',
+        title: 'Tanggal',
+        dataIndex: 'tanggal_pengajuan',
+        key: 'tanggal_pengajuan',
         width: '30%',
-        sorter: (a, b) => a.name.localeCompare(b.name),
-        ...this.getColumnSearchProps('name'),
+        sorter: (a, b) => a.tanggal_pengajuan.localeCompare(b.tanggal_pengajuan),
+        ...this.getColumnSearchProps('tanggal_pengajuan'),
       },
       {
-        title: 'Job Title',
-        dataIndex: 'jobTitle',
-        key: 'jobTitle',
+        title: 'Nama Calon TKP',
+        dataIndex: 'name',
+        key: 'name',
         width: '20%',
-        sorter: true,
-        sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
-        ...this.getColumnSearchProps('jobTitle'),
+        sorter: (a, b) => a.name.localeCompare(b.name),
+        ...this.getColumnSearchProps('name'),
       },
       {
         title: 'Job Role',
         dataIndex: 'roles',
         key: 'roles',
-        sorter: true,
         ...this.getColumnSearchProps('roles'),
       },
       {
-        title: 'Mitra',
-        dataIndex: 'mitra',
-        key: 'mitra',
-        ...this.getColumnSearchProps('mitra'),
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        ...this.getColumnSearchProps('status'),
       },
       {
         width: 125,
@@ -158,13 +137,12 @@ export default class TableDashboard extends React.Component {
         fixed: 'right',
         render: () => (
           <div>
-            <VisibilityOutlinedIcon></VisibilityOutlinedIcon>
+            <EyeTwoTone />
             <span> </span>
-            <GetAppOutlinedIcon></GetAppOutlinedIcon>
           </div>
         )
       },
     ];
-    return <Table columns={columns} dataSource={this.state.dataTKP} pagination={true} />;
+    return <Table columns={columns} dataSource={this.state.dataDP} pagination={true} />;
   }
 }

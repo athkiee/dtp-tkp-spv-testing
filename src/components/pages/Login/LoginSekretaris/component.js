@@ -4,6 +4,7 @@ import useForm from "./useForm";
 import "../styles/Login.css";
 import TextField from "@material-ui/core/TextField";
 import { Link } from "react-router-dom";
+import { IMAGES } from "../../../../configs"
 
 const LoginSekre = ({ submitForm }) => {
   const { handleChange, handleSubmit, values, errors } = useForm(
@@ -15,7 +16,7 @@ const LoginSekre = ({ submitForm }) => {
     <div className="form-container">
       <span className="close-btn">×</span>
       <div className="form-content-left">
-        <img className="login-img" src="static/landing/login.png" alt="" />
+        <img className="login-img" src={IMAGES.LANDING} alt="" />
       </div>
       <div className="form-content-right">
         <form onSubmit={handleSubmit} className="login-form" noValidate>

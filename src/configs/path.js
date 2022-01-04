@@ -19,8 +19,9 @@ function Path() {
       <Route path={ROUTES.KELOLA_EVALUASI_TKP()} component={EvaluasiTKP} />
       <Route path={ROUTES.PENGAJUAN_TKP()} component={pages.MengajukanTKP} />
       <Route path={ROUTES.PENGAJUAN_TKP_FORM()} component={pages.FormPengajuanTKP} />
-      <Route path={ROUTES.PENGAJUAN_TKP_DALAM_PROSES()} component={RiwayatPengajuanTKP} />
+      <Route path={ROUTES.PENGAJUAN_TKP_DALAM_PROSES()} component={pages.DalamProsesPengajuanTKP} />
       <Route path={ROUTES.PENGAJUAN_TKP_RIWAYAT()} component={RiwayatPengajuanTKP} />
+      <Route path={ROUTES.DETAIL_TKP()} component={pages.DetailTKP} />
     </Router>
   );
 }

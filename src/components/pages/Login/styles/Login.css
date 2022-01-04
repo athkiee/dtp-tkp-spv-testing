@@ -55,7 +55,7 @@
 }
 
 .form-content-right {
-  border-radius: 50px 0px 0px 50px;
+  border-radius: 10px 0 0 10px;
   position: relative;
   background: white;
 }

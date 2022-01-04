@@ -53,7 +53,7 @@ export default function SideMenu() {
             </ListItem>
           </List>
         </Link>
-        <Link to={ROUTES.DALAM_PROSES_PENGAJUAN_TKP} style={{ color: "black" }}>
+        <Link to={ROUTES.PENGAJUAN_TKP_DALAM_PROSES} style={{ color: "black" }}>
           <List component="div">
             <ListItem button className={classes.nested}>
               <ListItemText primary="Dalam Proses"></ListItemText>

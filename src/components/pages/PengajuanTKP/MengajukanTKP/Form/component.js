@@ -60,6 +60,15 @@ const styles = (theme) => ({
   negativeCase: {
     color: "#EE2E24",
   },
+  inputForm: {
+    display: "block",
+    paddingLeft: 10,
+    // outline: none,
+    borderRadius: 2,
+    height: 40,
+    width: "100%",
+    // border: none,
+  },
   drawerPaper: {
     position: "relative",
     whiteSpace: "nowrap",
@@ -653,7 +662,7 @@ class FormPengajuanTKP extends React.Component {
                     <Input
                       id="outlined-basic"
                       variant="outlined"
-                      className="form-input"
+                      className={classes.inputForm}
                       type="text"
                       name="name"
                       value={namaSpv}
@@ -665,7 +674,7 @@ class FormPengajuanTKP extends React.Component {
                     <Input
                       id="outlined-basic"
                       variant="outlined"
-                      className="form-input"
+                      className={classes.inputForm}
                       type="number"
                       name="nik_spv"
                       value={values.nik_spv}
@@ -689,7 +698,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Input
                           variant="outlined"
-                          className="form-input"
+                          className={classes.inputForm}
                           placeholder="Contoh: John Doe"
                           type="text"
                           name={"nama_lengkap"}
@@ -711,7 +720,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Input
                           variant="outlined"
-                          className="form-input"
+                          className={classes.inputForm}
                           placeholder="Contoh: 34673268328239232"
                           type="number"
                           name={"no_ktp"}
@@ -731,7 +740,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Input
                           variant="outlined"
-                          className="form-input"
+                          className={classes.inputForm}
                           type="text"
                           name={"tempat_lahir"}
                           onChange={this._handleChange}
@@ -752,7 +761,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <DatePicker
                           format={dateFormatList}
-                          className="form-input"
+                          className={classes.inputForm}
                           placeholder="Pilih Tanggal"
                           name={"tanggal_lahir"}
                           onChange={this._handleChangeDate}
@@ -770,7 +779,7 @@ class FormPengajuanTKP extends React.Component {
                     </label>
                     <Input
                       variant="outlined"
-                      className="form-input"
+                      className={classes.inputForm}
                       placeholder="Contoh: Jalan ABC No 123"
                       type="text"
                       name={"alamat_ktp"}
@@ -793,7 +802,7 @@ class FormPengajuanTKP extends React.Component {
                         <Select
                           showSearch
                           name={"provinsi_ktp"}
-                          className={"form-input"}
+                          className={classes.inputForm}
                           optionFilterProp="children"
                           placeholder=" Pilih Provinsi"
                           onChange={this._onChangeProvinsi}
@@ -820,7 +829,7 @@ class FormPengajuanTKP extends React.Component {
                         <Select
                           showSearch
                           name={"kabupaten_ktp"}
-                          className={"form-input"}
+                          className={classes.inputForm}
                           optionFilterProp="children"
                           placeholder=" Pilih Kota/Kabupaten"
                           onChange={this._handleSelect.bind(
@@ -847,7 +856,7 @@ class FormPengajuanTKP extends React.Component {
                     <label className="form-label">Email Aktif{important}</label>
                     <Input
                       variant="outlined"
-                      className="form-input"
+                      className={classes.inputForm}
                       placeholder="Contoh: johndoe@gmail.com"
                       type="email"
                       name={"email"}
@@ -866,7 +875,7 @@ class FormPengajuanTKP extends React.Component {
                     </label>
                     <Input
                       variant="outlined"
-                      className="form-input"
+                      className={classes.inputForm}
                       placeholder="Contoh: 08977788991"
                       type="number"
                       name={"no_hp"}
@@ -886,7 +895,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Select
                           name={"id_bank"}
-                          className={"form-input"}
+                          className={classes.inputForm}
                           placeholder=" Pilih Bank"
                           onChange={this._handleSelect.bind(this, "id_bank")}
                           onBlur={handleBlur}
@@ -905,7 +914,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Input
                           variant="outlined"
-                          className="form-input"
+                          className={classes.inputForm}
                           type="number"
                           placeholder="Contoh: 1234567899876"
                           name={"no_rekening"}
@@ -927,7 +936,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Select
                           name={"id_jenjang_pendidikan"}
-                          className={"form-input"}
+                          className={classes.inputForm}
                           placeholder=" Pilih Pendidikan Terakhir"
                           onChange={this._handleSelect.bind(
                             this,
@@ -951,7 +960,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Select
                           name={"id_jurusan"}
-                          className={"form-input"}
+                          className={classes.inputForm}
                           placeholder=" Pilih Jurusan Pendidikan Terakhir"
                           onChange={this._handleSelect.bind(this, "id_jurusan")}
                           onBlur={handleBlur}
@@ -972,7 +981,7 @@ class FormPengajuanTKP extends React.Component {
                     </label>
                     <Select
                       name={"id_pengalaman_kerja"}
-                      className={"form-input"}
+                      className={classes.inputForm}
                       placeholder=" Pilih Pengalaman Kerja"
                       onChange={this._handleSelect.bind(
                         this,
@@ -996,7 +1005,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Input
                           variant="outlined"
-                          className="form-input"
+                          className={classes.inputForm}
                           type="text"
                           name={"akun_tmoney"}
                           onChange={this._handleChange}
@@ -1017,7 +1026,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Input
                           variant="outlined"
-                          className="form-input"
+                          className={classes.inputForm}
                           type="text"
                           name={"akun_trello"}
                           onChange={this._handleChange}
@@ -1048,7 +1057,7 @@ class FormPengajuanTKP extends React.Component {
                           Nama Bidang/Tribe{important}
                         </label>
                         <Select
-                          className={"form-input"}
+                          className={classes.inputForm}
                           placeholder=" Pilih Bidang/Tribe"
                           name={"id_bidang"}
                           onChange={this._handleSelect.bind(this, "id_bidang")}
@@ -1069,7 +1078,7 @@ class FormPengajuanTKP extends React.Component {
                           Lokasi Kerja{important}
                         </label>
                         <Select
-                          className={"form-input"}
+                          className={classes.inputForm}
                           placeholder=" Pilih Lokasi Kerja"
                           name={"id_lokasi_kerja"}
                           onChange={this._handleSelect.bind(
@@ -1096,7 +1105,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Select
                           name={"id_job_title"}
-                          className={"form-input"}
+                          className={classes.inputForm}
                           placeholder=" Pilih Job Title Usulan"
                           onChange={this._onChangeJobTitle}
                         >
@@ -1116,7 +1125,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Select
                           name={"id_kelompok_pekerjaan"}
-                          className={"form-input"}
+                          className={classes.inputForm}
                           placeholder=" Pilih Job Title Level Usulan"
                           onChange={this._handleSelect.bind(
                             this,
@@ -1140,7 +1149,7 @@ class FormPengajuanTKP extends React.Component {
                         </label>
                         <Select
                           name={"id_job_role"}
-                          className={"form-input"}
+                          className={classes.inputForm}
                           placeholder=" Pilih Job Role"
                           onChange={this._handleSelect.bind(
                             this,
@@ -1164,7 +1173,7 @@ class FormPengajuanTKP extends React.Component {
                     </label>
                     <TextArea
                       variant="outlined"
-                      className="form-input"
+                      className={classes.inputForm}
                       placeholder="Contoh: Administrasi mengerjakan surat menyurat"
                       type="text"
                       name={"deskripsi_pekerjaan"}
@@ -1185,7 +1194,7 @@ class FormPengajuanTKP extends React.Component {
                     </label>
                     <Input
                       variant="outlined"
-                      className="form-input"
+                      className={classes.inputForm}
                       placeholder="Contoh: Rp. 5.000,000,-"
                       type="text"
                       name={"thp"}

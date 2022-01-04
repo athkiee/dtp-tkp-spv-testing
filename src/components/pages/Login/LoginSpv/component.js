@@ -5,6 +5,7 @@ import "../styles/Login.css";
 import TextField from "@material-ui/core/TextField";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
+import { IMAGES } from "../../../../configs"
 
 function LoginSupervisor(props) {
   const [loading, setLoading] = useState(false);
@@ -53,7 +54,7 @@ function LoginSupervisor(props) {
     <div className="form-container">
       <span className="close-btn">×</span>
       <div className="form-content-left">
-        <img className="login-img" src="static/landing/login.png" alt="" />
+        <img className="login-img" src={IMAGES.LANDING} alt="" />
       </div>
       <div className="form-content-right">
         <form className="login-form" noValidate>

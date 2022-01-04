@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import "./styles/Landing.css";
 import { Link } from "react-router-dom";
-import { ROUTES } from "../../../configs"
+import { ROUTES } from "../../../configs";
+import { IMAGES } from "../../../configs";
 
 class LandingPage extends React.Component {
   render() {
     return (
       <div className="container-landing">
         <div className="form-content-left">
-          <img className="landing-img" src="static/landing/login.png" alt="" />
+          <img className="landing-img" src={IMAGES.LANDING} alt="" />
         </div>
         <div className="form-content-right">
           <form className="landing">

@@ -26,6 +26,9 @@ const routes = {
   KELOLA_EVALUASI_TKP() {
     return `/kelola-evaluasi-tkp`;
   },
+  DETAIL_TKP() {
+    return `/detail-tkp`
+  }
 };
 
 export default routes;
