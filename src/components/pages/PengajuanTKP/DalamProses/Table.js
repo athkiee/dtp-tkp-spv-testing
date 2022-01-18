@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import { Table, Input, Button, Space } from 'antd';
 import { SearchOutlined, EyeTwoTone } from '@ant-design/icons';
 import axios from 'axios';
-import clsx from 'clsx';
+import { ROUTES } from '../../../../configs';
 
 const nik_spv = sessionStorage.getItem('nik');
 
@@ -99,7 +99,12 @@ export default class TableDashboard extends React.Component {
     this.setState({ searchText: '' });
   };
 
+  _handleOpenDetail = (key) => {
+    window.location = ROUTES.DETAIL_TKP(key);
+  }
+
   render() {
+    console.log('coba', this.state.dataDP);
 
     const columns = [
       {
@@ -133,12 +138,13 @@ export default class TableDashboard extends React.Component {
       {
         width: 125,
         title: 'Aksi',
-        dataIndex: 'aksi',
+        dataIndex: 'key',
         fixed: 'right',
-        render: () => (
+        render: (key) => (
           <div>
-            <EyeTwoTone />
-            <span> </span>
+            <span onClick={this._handleOpenDetail.bind(this, key)}>
+              <EyeTwoTone />
+            </span>
           </div>
         )
       },

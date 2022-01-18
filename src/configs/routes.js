@@ -27,7 +27,7 @@ const routes = {
     return `/kelola-evaluasi-tkp`;
   },
   DETAIL_TKP() {
-    return `/detail-tkp`
+    return `/detail-tkp/`;
   }
 };
 

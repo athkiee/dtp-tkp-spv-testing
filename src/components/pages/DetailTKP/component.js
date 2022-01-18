@@ -2,10 +2,11 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import HeadBar from "../../constant/headBar";
-import { Tabs } from "antd";
+import { Tabs, Modal } from "antd";
 import { Grid } from "@material-ui/core";
 import axios from "axios";
 import { get } from "lodash";
+import PDFViewer from "pdf-viewer-reactjs";
 
 const { TabPane } = Tabs;
 const drawerWidth = 240;
@@ -13,6 +14,9 @@ const drawerWidth = 240;
 const styles = (theme) => ({
   root: {
     display: "flex",
+    ".ant-modal-content": {
+      width: 760,
+    },
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
@@ -50,6 +54,19 @@ const styles = (theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+  },
+  buttonUnduh: {
+    width: 216,
+    height: 56,
+    marginTop: 10,
+    borderRadius: 15,
+    background: '#D51100',
+    outline: 'none',
+    border: 'none',
+    color: '#fff',
+    fontWeight: 700,
+    fontSize: 24,
+    float: 'center'
   },
   detailWrapper: {
     maxWidth: 1100,
@@ -121,6 +138,9 @@ const styles = (theme) => ({
   fixedHeight: {
     height: 240,
   },
+  modalPreview: {
+    width: '760px !important',
+  }
 });
 
 class DetailTKP extends React.Component {
@@ -128,6 +148,8 @@ class DetailTKP extends React.Component {
     super(props);
     this.state = {
       data: [],
+      modalPreview: null,
+      preview: "",
     };
   }
 
@@ -142,23 +164,63 @@ class DetailTKP extends React.Component {
 
   _handleDokumenPenunjang = async (value) => {
     await axios
-      .get("http://localhost:4004/tkp/get_file/" + value)
+      .get("http://localhost:4004/tkp/get_file/" + value.desc)
       .then((response) => {
         const urlDokumen = response.data;
         this.setState({
-          preview: urlDokumen
-        })
-        this._renderCV()
+          preview: urlDokumen,
+          modalPreview: true,
+          modalTitle: value.title
+        });
+        this._renderDokumenPenunjang();
       });
+      console.log('coba', value);
   };
 
-  _renderCV = () => {
-    const { preview } = this.state;
-    console.log('pre', preview);
+  _renderDokumenPenunjang = (value) => {
+    const { preview, modalPreview, modalTitle } = this.state;
+    const { classes } = this.props;
     return (
       <div>
+        <Modal
+          visible={modalPreview}
+          onOk={this._handleCloseModal}
+          onCancel={this._handleCloseModal}
+          className={classes.modalPreview}
+        >
+          <h2
+            style={{
+              fontSize: 40,
+              color: "#DA1E20",
+              fontWeight: "bold",
+              marginTop: 15,
+              textAlign: "center"
+            }}
+          >
+            {modalTitle}
+          </h2>
+          <PDFViewer
+            document={{
+              url: preview,
+            }}
+            hideNavbar={true}
+          />
+          <button
+            className={classes.buttonUnduh}
+            onClick={() => window.open(preview)}
+          >
+            Unduh
+          </button>
+        </Modal>
       </div>
     );
+  };
+
+  _handleCloseModal = () => {
+    this.setState({
+      modalPreview: false,
+      preview: "",
+    });
   };
 
   render() {
@@ -199,7 +261,7 @@ class DetailTKP extends React.Component {
       },
       {
         title: "Nama Bank (Payroll)",
-        desc: get(dataDetail, "nama_lengkap") || "-",
+        desc: (dataDetail && dataDetail.t_bank.nama_bank) || "-",
       },
       {
         title: "Nomor Rekening",
@@ -229,7 +291,7 @@ class DetailTKP extends React.Component {
     const listTab2 = [
       {
         title: "Nama Bidang/Tribe",
-        desc: "Test",
+        desc: (dataDetail && dataDetail.t_bidang.nama_bidang) || "-",
       },
       {
         title: "Lokasi Kerja",
@@ -242,7 +304,10 @@ class DetailTKP extends React.Component {
       },
       {
         title: "Job Title Levelling Usulan",
-        desc: "Test",
+        desc:
+          (dataDetail &&
+            dataDetail.t_job_title_levelling.nama_job_title_levelling) ||
+          "-",
       },
       {
         title: "Job Role",
@@ -271,7 +336,40 @@ class DetailTKP extends React.Component {
         desc: get(dataDetail, "file_skck") || "-",
       },
     ];
-    console.log("vv", dataDetail);
+    const listTab4 = [
+      {
+        title: "Status",
+        desc:
+          (dataDetail &&
+            dataDetail.t_kategori_status_tkp.nama_kategori_status_tkp) ||
+          "-",
+      },
+      {
+        title: "Onboard",
+        desc: get(dataDetail, "tanggal_onboard") || "-",
+      },
+      {
+        title: "Job Title Ketetapan Wawancara",
+        desc: "-",
+      },
+      {
+        title: "Mitra",
+        desc: (dataDetail && dataDetail.t_mitra.nama_mitra) || "-",
+      },
+      {
+        title: "Paket",
+        desc: "-",
+      },
+      {
+        title: "No. SP",
+        desc: get(dataDetail, "no_sp") || "-",
+      },
+      {
+        title: "Berita Acara",
+        desc: "-",
+      },
+    ];
+    console.log("rev", this.state.preview);
 
     return (
       <div className={classes.root}>
@@ -390,7 +488,7 @@ class DetailTKP extends React.Component {
                           className="desc"
                           onClick={this._handleDokumenPenunjang.bind(
                             this,
-                            item.desc
+                            item
                           )}
                         >
                           Lihat
@@ -399,7 +497,7 @@ class DetailTKP extends React.Component {
                     </Grid>
                   ))}
                 </div>
-                {this._renderCV()}
+                {this._renderDokumenPenunjang()}
               </TabPane>
               <TabPane tab="Data Ketetapan Wawancara" key="4">
                 <h2
@@ -411,6 +509,21 @@ class DetailTKP extends React.Component {
                 >
                   Data Ketetapan Wawancara
                 </h2>
+                <div className={classes.detailWrapper}>
+                  {listTab4.map((item, idx) => (
+                    <Grid container key={idx}>
+                      <Grid item xs={4}>
+                        <p>{item.title}</p>
+                      </Grid>
+                      <Grid item xs={0}>
+                        <p>:</p>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <p className="desc">{item.desc}</p>
+                      </Grid>
+                    </Grid>
+                  ))}
+                </div>
               </TabPane>
               <TabPane tab="Status Terakhir" key="5">
                 <h2
