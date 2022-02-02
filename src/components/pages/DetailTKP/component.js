@@ -7,9 +7,16 @@ import { Grid } from "@material-ui/core";
 import axios from "axios";
 import { get } from "lodash";
 import PDFViewer from "pdf-viewer-reactjs";
+import { Collapse } from "antd";
+import { CaretRightOutlined } from "@ant-design/icons";
+import { Row, Col } from "antd";
+import { Avatar } from "antd";
 
+const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const drawerWidth = 240;
+const borderStyle = { borderRight: "4px solid #DA1E20" };
+const rowStyle = { ...borderStyle, width: "100%", padding: 10 };
 
 const styles = (theme) => ({
   root: {
@@ -55,24 +62,29 @@ const styles = (theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
+  modal: {
+    display: "flex",
+    justifyContent: "center",
+  },
   buttonUnduh: {
     width: 216,
     height: 56,
     marginTop: 10,
     borderRadius: 15,
-    background: '#D51100',
-    outline: 'none',
-    border: 'none',
-    color: '#fff',
+    background: "#D51100",
+    outline: "none",
+    border: "none",
+    color: "#fff",
     fontWeight: 700,
     fontSize: 24,
-    float: 'center'
+    display: "flex",
+    justifyContent: "center",
   },
   detailWrapper: {
     maxWidth: 1100,
     "& .desc": {
       paddingLeft: 16,
-      marginBottom: 24,
+      marginBottom: 15,
     },
   },
   appBarShift: {
@@ -139,8 +151,8 @@ const styles = (theme) => ({
     height: 240,
   },
   modalPreview: {
-    width: '760px !important',
-  }
+    width: "760px !important",
+  },
 });
 
 class DetailTKP extends React.Component {
@@ -149,15 +161,23 @@ class DetailTKP extends React.Component {
     this.state = {
       data: [],
       modalPreview: null,
+      modalPhoto: null,
       preview: "",
     };
   }
 
   componentDidMount() {
+    let id_tkp = localStorage.getItem("detail");
     axios.get("http://localhost:4004/tkp/216").then((response) => {
       const detail = response.data;
       this.setState({
         dataDetail: detail[0],
+      });
+    });
+    axios.get("http://localhost:4004/tkp/216riwayat").then((response) => {
+      const detail = response.data;
+      this.setState({
+        dataRiwayat: detail[0],
       });
     });
   }
@@ -170,11 +190,24 @@ class DetailTKP extends React.Component {
         this.setState({
           preview: urlDokumen,
           modalPreview: true,
-          modalTitle: value.title
+          modalTitle: value.title,
         });
         this._renderDokumenPenunjang();
       });
-      console.log('coba', value);
+  };
+
+  _handleDokumenFoto = async (value) => {
+    await axios
+      .get("http://localhost:4004/tkp/get_file/" + value.desc)
+      .then((response) => {
+        const urlDokumen = response.data;
+        this.setState({
+          preview: urlDokumen,
+          modalPhoto: true,
+          modalTitle: value.title,
+        });
+        this._renderDokumenFoto();
+      });
   };
 
   _renderDokumenPenunjang = (value) => {
@@ -184,8 +217,8 @@ class DetailTKP extends React.Component {
       <div>
         <Modal
           visible={modalPreview}
-          onOk={this._handleCloseModal}
           onCancel={this._handleCloseModal}
+          footer={null}
           className={classes.modalPreview}
         >
           <h2
@@ -194,7 +227,7 @@ class DetailTKP extends React.Component {
               color: "#DA1E20",
               fontWeight: "bold",
               marginTop: 15,
-              textAlign: "center"
+              textAlign: "center",
             }}
           >
             {modalTitle}
@@ -216,16 +249,51 @@ class DetailTKP extends React.Component {
     );
   };
 
+  _renderDokumenFoto = (value) => {
+    const { preview, modalPhoto, modalTitle } = this.state;
+    const { classes } = this.props;
+    return (
+      <div className={classes.modal}>
+        <Modal
+          visible={modalPhoto}
+          footer={null}
+          onCancel={this._handleCloseModal}
+          className={classes.modalPreview}
+        >
+          <h2
+            style={{
+              fontSize: 40,
+              color: "#DA1E20",
+              fontWeight: "bold",
+              marginTop: 15,
+              textAlign: "center",
+            }}
+          >
+            {modalTitle}
+          </h2>
+          <img src={preview} />
+          <button
+            className={classes.buttonUnduh}
+            onClick={() => window.open(preview)}
+          >
+            Unduh
+          </button>
+        </Modal>
+      </div>
+    );
+  };
+
   _handleCloseModal = () => {
     this.setState({
       modalPreview: false,
+      modalPhoto: false,
       preview: "",
     });
   };
 
   render() {
     const { classes } = this.props;
-    const { dataDetail } = this.state;
+    const { dataDetail, dataRiwayat } = this.state;
     const listTab1 = [
       {
         title: "Nama lengkap sesuai TKP",
@@ -269,15 +337,21 @@ class DetailTKP extends React.Component {
       },
       {
         title: "Pendidikan Terakhir",
-        desc: get(dataDetail, "nama_lengkap") || "-",
+        desc:
+          (dataDetail &&
+            dataDetail.t_jenjang_pendidikan.nama_jenjang_pendidikan) ||
+          "-",
       },
       {
         title: "Jurusan Pendidikan Terakhir",
-        desc: get(dataDetail, "nama_lengkap") || "-",
+        desc: (dataDetail && dataDetail.t_jurusan.nama_jurusan) || "-",
       },
       {
         title: "Pengalaman Kerja",
-        desc: get(dataDetail, "nama_lengkap") || "-",
+        desc:
+          (dataDetail &&
+            dataDetail.t_pengalaman_kerja.keterangan_pengalaman_kerja) ||
+          "-",
       },
       {
         title: "Akun T-Money",
@@ -350,7 +424,7 @@ class DetailTKP extends React.Component {
       },
       {
         title: "Job Title Ketetapan Wawancara",
-        desc: "-",
+        desc: (dataDetail && dataDetail.t_job_title.nama_job_title) || "-",
       },
       {
         title: "Mitra",
@@ -358,7 +432,7 @@ class DetailTKP extends React.Component {
       },
       {
         title: "Paket",
-        desc: "-",
+        desc: (dataDetail && dataDetail.t_paket.keterangan_paket) || "-",
       },
       {
         title: "No. SP",
@@ -366,10 +440,83 @@ class DetailTKP extends React.Component {
       },
       {
         title: "Berita Acara",
-        desc: "-",
+        desc: get(dataDetail, "file_berita_acara_wawancara") || "-",
       },
     ];
-    console.log("rev", this.state.preview);
+    const listProfiler = [
+      {
+        title: "Status",
+        desc:
+          (dataDetail &&
+            dataDetail.t_kategori_status_tkp.nama_kategori_status_tkp) ||
+          "-",
+      },
+      {
+        title: "Mulai Onboard",
+        desc: get(dataDetail, "tanggal_onboard") || "-",
+      },
+      {
+        title: "Mitra",
+        desc: (dataDetail && dataDetail.t_mitra.nama_mitra) || "-",
+      },
+    ];
+    const listStatusTerakhir1 = [
+      {
+        title: "Status",
+        desc:
+          (dataRiwayat &&
+            dataRiwayat.t_kategori_status_tkp.nama_kategori_status_tkp) ||
+          "-",
+      },
+      {
+        title: "Onboard",
+        desc: get(dataRiwayat, "tanggal_onboard") || "-",
+      },
+      {
+        title: "Job Title",
+        desc: (dataRiwayat && dataRiwayat.t_job_title.nama_job_title) || "-",
+      },
+      {
+        title: "Mitra",
+        desc: (dataRiwayat && dataRiwayat.t_mitra.nama_mitra) || "-",
+      },
+      {
+        title: "Paket",
+        desc: (dataRiwayat && dataRiwayat.t_paket.keterangan_paket) || "-",
+      },
+      {
+        title: "No. SP",
+        desc: get(dataRiwayat, "no_sp") || "-",
+      },
+    ];
+    const listStatusTerakhir2 = [
+      {
+        title: "Berita Acara Wawancara",
+        desc: get(dataRiwayat, "file_berita_acara_wawancara") || "-",
+      },
+      {
+        title: "Tanggal Habis Kontrak",
+        desc: get(dataRiwayat, "tanggal_habis_kontrak") || "-",
+      },
+      {
+        title: "Keterangan",
+        desc: "-",
+      },
+      {
+        title: "Form Evaluasi",
+        desc: get(dataRiwayat, "file_form_evaluasi") || "-",
+      },
+      {
+        title: "Tanggal Resign",
+        desc: get(dataRiwayat, "tanggal_resign") || "-",
+      },
+      {
+        title: "Surat Resign",
+        desc: get(dataRiwayat, "file_surat_resign") || "-",
+      },
+    ];
+    console.log("rev", dataDetail);
+    console.log("riwayat", dataRiwayat);
 
     return (
       <div className={classes.root}>
@@ -381,7 +528,14 @@ class DetailTKP extends React.Component {
           </h1>
           <p style={{ marginLeft: 35 }}>Kelola data TKP pada halaman ini.</p>
           <Container maxWidth="lg" className={classes.container}>
-            <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}>
+            <h2
+              style={{
+                color: "#DA1E20",
+                fontWeight: "bold",
+                marginTop: 15,
+                marginBottom: 15,
+              }}
+            >
               Data Supervisor
             </h2>
             <div className={classes.detailWrapper}>
@@ -407,10 +561,82 @@ class DetailTKP extends React.Component {
                   <p className="desc">1234567</p>
                 </Grid>
               </Grid>
+              <h2
+                style={{
+                  color: "#DA1E20",
+                  fontWeight: "bold",
+                  marginTop: 15,
+                  marginBottom: 15,
+                }}
+              >
+                Data Tenaga Kerja Penunjang
+              </h2>
+              <Row>
+                <Col
+                  span={12}
+                  style={{
+                    borderRight: "4px solid #DA1E20",
+                    marginLeft: 30,
+                  }}
+                >
+                  <Row>
+                    <Col
+                      span={6}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Avatar
+                        size={96}
+                        style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
+                      >
+                        <b>U</b>
+                      </Avatar>
+                    </Col>
+                    <Col span={6}>
+                      <h2
+                        style={{
+                          color: "#DA1E20",
+                          fontWeight: "bold",
+                          marginTop: 15,
+                        }}
+                      >
+                        {get(dataDetail, "nama_lengkap")}
+                      </h2>
+                      <p>
+                        {dataDetail && dataDetail.t_bidang.kode_bidang} /
+                        {dataDetail && dataDetail.t_job_role.nama_job_role}
+                      </p>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col
+                  span={10}
+                  style={{
+                    marginLeft: 30,
+                  }}
+                >
+                  <div className={classes.detailWrapper}>
+                    {listProfiler.map((item, idx) => (
+                      <Grid container key={idx}>
+                        <Grid item xs={4}>
+                          <p>{item.title}</p>
+                        </Grid>
+                        <Grid item xs={0}>
+                          <p>:</p>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <p className="desc">{item.desc}</p>
+                        </Grid>
+                      </Grid>
+                    ))}
+                  </div>
+                </Col>
+              </Row>
             </div>
-            <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}>
-              Data Tenaga Kerja Penunjang
-            </h2>
             <Tabs defaultActiveKey="1">
               <TabPane tab="Data Diri" key="1">
                 <h2
@@ -418,6 +644,7 @@ class DetailTKP extends React.Component {
                     color: "#DA1E20",
                     fontWeight: "bold",
                     marginTop: 15,
+                    marginBottom: 15,
                   }}
                 >
                   Data Diri TKP
@@ -444,6 +671,7 @@ class DetailTKP extends React.Component {
                     color: "#DA1E20",
                     fontWeight: "bold",
                     marginTop: 15,
+                    marginBottom: 15,
                   }}
                 >
                   Data Pekerjaan
@@ -470,6 +698,7 @@ class DetailTKP extends React.Component {
                     color: "#DA1E20",
                     fontWeight: "bold",
                     marginTop: 15,
+                    marginBottom: 15,
                   }}
                 >
                   Dokumen Penunjang
@@ -486,10 +715,11 @@ class DetailTKP extends React.Component {
                       <Grid item xs={6}>
                         <a
                           className="desc"
-                          onClick={this._handleDokumenPenunjang.bind(
-                            this,
-                            item
-                          )}
+                          onClick={
+                            item.title === "Foto/Scan KTP"
+                              ? this._handleDokumenFoto.bind(this, item)
+                              : this._handleDokumenPenunjang.bind(this, item)
+                          }
                         >
                           Lihat
                         </a>
@@ -498,6 +728,7 @@ class DetailTKP extends React.Component {
                   ))}
                 </div>
                 {this._renderDokumenPenunjang()}
+                {this._renderDokumenFoto()}
               </TabPane>
               <TabPane tab="Data Ketetapan Wawancara" key="4">
                 <h2
@@ -505,6 +736,7 @@ class DetailTKP extends React.Component {
                     color: "#DA1E20",
                     fontWeight: "bold",
                     marginTop: 15,
+                    marginBottom: 15,
                   }}
                 >
                   Data Ketetapan Wawancara
@@ -531,10 +763,69 @@ class DetailTKP extends React.Component {
                     color: "#DA1E20",
                     fontWeight: "bold",
                     marginTop: 15,
+                    marginBottom: 15,
                   }}
                 >
                   Status Terakhir
                 </h2>
+                <div>
+                  <Collapse
+                    bordered={false}
+                    defaultActiveKey={["1"]}
+                    expandIcon={({ isActive }) => (
+                      <CaretRightOutlined rotate={isActive ? 90 : 0} />
+                    )}
+                    className="site-collapse-custom-collapse"
+                    ghost
+                  >
+                    <Panel
+                      header={
+                        dataDetail &&
+                        dataDetail.t_job_title_levelling
+                          .nama_job_title_levelling
+                      }
+                      key="1"
+                      className="site-collapse-custom-panel"
+                    >
+                      <Row>
+                        <Col span={12}>
+                          <div className={classes.detailWrapper}>
+                            {listStatusTerakhir1.map((item, idx) => (
+                              <Grid container key={idx}>
+                                <Grid item xs={4}>
+                                  <p>{item.title}</p>
+                                </Grid>
+                                <Grid item xs={0}>
+                                  <p>:</p>
+                                </Grid>
+                                <Grid item xs={6}>
+                                  <p className="desc">{item.desc}</p>
+                                </Grid>
+                              </Grid>
+                            ))}
+                          </div>
+                        </Col>
+                        <Col span={12}>
+                          <div className={classes.detailWrapper}>
+                            {listStatusTerakhir2.map((item, idx) => (
+                              <Grid container key={idx}>
+                                <Grid item xs={4}>
+                                  <p>{item.title}</p>
+                                </Grid>
+                                <Grid item xs={0}>
+                                  <p>:</p>
+                                </Grid>
+                                <Grid item xs={6}>
+                                  <p className="desc">{item.desc}</p>
+                                </Grid>
+                              </Grid>
+                            ))}
+                          </div>
+                        </Col>
+                      </Row>
+                    </Panel>
+                  </Collapse>
+                </div>
               </TabPane>
             </Tabs>
           </Container>
