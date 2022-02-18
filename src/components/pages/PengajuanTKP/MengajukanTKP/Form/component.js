@@ -5,9 +5,10 @@ import HeadBar from "../../../../constant/headBar";
 import { Grid } from "@material-ui/core";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
-import { Select, Input, DatePicker, Modal } from "antd";
+import { Select, Input, DatePicker, Modal, Breadcrumb } from "antd";
 import { Formik } from "formik";
 import moment from "moment";
+import { ROUTES } from "../../../../../configs";
 
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
@@ -158,10 +159,9 @@ class FormPengajuanTKP extends React.Component {
       id_mitra: "1",
       id_paket: "1",
       id_status_tkp: "1",
-      status_tkp: "Menunggu Konfirmasi"
+      status_tkp: "Menunggu Konfirmasi",
     };
   }
-
 
   componentDidMount() {
     axios
@@ -300,25 +300,25 @@ class FormPengajuanTKP extends React.Component {
   _handleChangeDate = (date, dateString) => {
     this.setState({
       tanggal_lahir: dateString,
-    })
-  }
+    });
+  };
+
+  _handleBreadcumbs = () => {
+    window.location = ROUTES.DASHBOARD();
+  };
 
   _handleSelect = (name, value) => {
     this.setState({ [name]: value });
   };
 
   _handleFilesFromDrag = (name, file) => {
-    // formData.append([name], file);
     this.setState({ [name]: file });
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ', ' + pair[1]);
-    // }
   };
 
   _renderModalInfo = () => {
     Modal.success({
       content: "Pengajuan TKP Anda telah berhasil",
-      onOk() { },
+      onOk() {},
     });
   };
 
@@ -366,7 +366,7 @@ class FormPengajuanTKP extends React.Component {
       id_mitra,
       id_paket,
       id_status_tkp,
-      status_tkp
+      status_tkp,
     } = this.state;
 
     const body = {
@@ -446,10 +446,27 @@ class FormPengajuanTKP extends React.Component {
         <HeadBar />
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <h1 style={{ marginLeft: 35, marginTop: 35 }}>
+          <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
+            <Breadcrumb.Item style={{ cursor: "pointer" }}>
+              <a onClick={this._handleBreadcumbs}>Beranda</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item style={{ cursor: "pointer" }}>
+              <a>Pengajuan TKP</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item
+              style={{
+                cursor: "pointer",
+                fontColor: "#DA1E20 !important",
+                fontWeight: "bold",
+              }}
+            >
+              <a>Ajukan TKP</a>
+            </Breadcrumb.Item>
+          </Breadcrumb>
+          <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
             <strong>Mengajukan Formulir TKP</strong>
           </h1>
-          <p style={{ marginLeft: 35 }}>
+          <p style={{ marginLeft: 35, marginBottom: 10 }}>
             Ajukan data diri lengkap TKP dibawah ini.
           </p>
           <Container className={classes.containerTataCara}>
@@ -552,14 +569,18 @@ class FormPengajuanTKP extends React.Component {
                 if (!values.akun_tmoney) {
                   errors.akun_tmoney = "Akun T-Money tidak boleh kosong";
                 } else if (
-                  !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.akun_tmoney)
+                  !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
+                    values.akun_tmoney
+                  )
                 ) {
                   errors.akun_tmoney = "Akun T-Money tidak valid";
                 }
                 if (!values.akun_trello) {
                   errors.akun_trello = "Akun Trello/Jira tidak boleh kosong";
                 } else if (
-                  !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.akun_trello)
+                  !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
+                    values.akun_trello
+                  )
                 ) {
                   errors.akun_trello = "Akun Trello/Jira tidak valid";
                 }
@@ -567,76 +588,98 @@ class FormPengajuanTKP extends React.Component {
               }}
               onSubmit={async (values, { setSubmitting }) => {
                 var formData = new FormData();
-                formData.append('nama_lengkap', this.state.nama_lengkap);
-                formData.append('email', this.state.email);
-                formData.append('password', this.state.password);
-                formData.append('id_status_tkp', this.state.id_status_tkp);
-                formData.append('id_bidang', this.state.id_bidang);
-                formData.append('id_job_title', this.state.id_job_title);
-                formData.append('id_job_role', this.state.id_job_role);
-                formData.append('id_mitra', this.state.id_mitra);
-                formData.append('id_paket', this.state.id_paket);
-                formData.append('no_sp', this.state.no_sp);
-                formData.append('tempat_lahir', this.state.tempat_lahir);
-                formData.append('jenis_kelamin', this.state.jenis_kelamin);
-                formData.append('alamat_ktp', this.state.alamat_ktp);
-                formData.append('id_bank', this.state.id_bank);
-                formData.append('no_rekening', this.state.no_rekening);
-                formData.append('id_jenjang_pendidikan', this.state.id_jenjang_pendidikan);
-                formData.append('provinsi_ktp', this.state.provinsi_ktp);
-                formData.append('kabupaten_ktp', this.state.kabupaten_ktp);
-                formData.append('id_jurusan', this.state.id_jurusan);
-                formData.append('lembaga_pendidikan', this.state.lembaga_pendidikan);
-                formData.append('akun_tmoney', this.state.akun_tmoney);
-                formData.append('akun_trello', this.state.akun_trello);
-                formData.append('deskripsi_pekerjaan', this.state.deskripsi_pekerjaan);
-                formData.append('thp', this.state.thp);
-                formData.append('nota_dinas', this.state.nota_dinas);
-                formData.append('bulan_onboard', this.state.bulan_onboard);
-                formData.append('no_hp', this.state.no_hp);
-                formData.append('id_lokasi_kerja', this.state.id_lokasi_kerja);
-                formData.append('id_pengalaman_kerja', this.state.id_pengalaman_kerja);
-                formData.append('no_ktp', this.state.no_ktp);
-                formData.append('nik_spv', this.state.nik_spv);
-                formData.append('tahun_onboard', this.state.tahun_onboard);
-                formData.append('status_tkp', this.state.status_tkp);
-                formData.append('tanggal_lahir', this.state.tanggal_lahir);
-                formData.append('id_mitra', this.state.id_mitra);
-                formData.append('id_paket', this.state.id_paket);
+                formData.append("nama_lengkap", this.state.nama_lengkap);
+                formData.append("email", this.state.email);
+                formData.append("password", this.state.password);
+                formData.append("id_status_tkp", this.state.id_status_tkp);
+                formData.append("id_bidang", this.state.id_bidang);
+                formData.append("id_job_title", this.state.id_job_title);
+                formData.append("id_job_role", this.state.id_job_role);
+                formData.append("id_mitra", this.state.id_mitra);
+                formData.append("id_paket", this.state.id_paket);
+                formData.append("no_sp", this.state.no_sp);
+                formData.append("tempat_lahir", this.state.tempat_lahir);
+                formData.append("jenis_kelamin", this.state.jenis_kelamin);
+                formData.append("alamat_ktp", this.state.alamat_ktp);
+                formData.append("id_bank", this.state.id_bank);
+                formData.append("no_rekening", this.state.no_rekening);
+                formData.append(
+                  "id_jenjang_pendidikan",
+                  this.state.id_jenjang_pendidikan
+                );
+                formData.append("provinsi_ktp", this.state.provinsi_ktp);
+                formData.append("kabupaten_ktp", this.state.kabupaten_ktp);
+                formData.append("id_jurusan", this.state.id_jurusan);
+                formData.append(
+                  "lembaga_pendidikan",
+                  this.state.lembaga_pendidikan
+                );
+                formData.append("akun_tmoney", this.state.akun_tmoney);
+                formData.append("akun_trello", this.state.akun_trello);
+                formData.append(
+                  "deskripsi_pekerjaan",
+                  this.state.deskripsi_pekerjaan
+                );
+                formData.append("thp", this.state.thp);
+                formData.append("nota_dinas", this.state.nota_dinas);
+                formData.append("bulan_onboard", this.state.bulan_onboard);
+                formData.append("no_hp", this.state.no_hp);
+                formData.append("id_lokasi_kerja", this.state.id_lokasi_kerja);
+                formData.append(
+                  "id_pengalaman_kerja",
+                  this.state.id_pengalaman_kerja
+                );
+                formData.append("no_ktp", this.state.no_ktp);
+                formData.append("nik_spv", this.state.nik_spv);
+                formData.append("tahun_onboard", this.state.tahun_onboard);
+                formData.append("status_tkp", this.state.status_tkp);
+                formData.append("tanggal_lahir", this.state.tanggal_lahir);
+                formData.append("id_mitra", this.state.id_mitra);
+                formData.append("id_paket", this.state.id_paket);
 
-                formData.append('cv', this.state.cv);
-                formData.append('foto_scanktp', this.state.foto_scanktp);
-                formData.append('file_skck', this.state.file_skck);
+                formData.append("cv", this.state.cv);
+                formData.append("foto_scanktp", this.state.foto_scanktp);
+                formData.append("file_skck", this.state.file_skck);
 
                 // Display the key/value pairs
                 for (var pair of formData.entries()) {
-                  console.log(pair[0] + ', ' + pair[1]);
+                  console.log(pair[0] + ", " + pair[1]);
                 }
 
-                await axios.post("http://localhost:4004/tkp/register", formData, {
-                  headers: { 'Content-Type': 'multipart/form-data; boundary=--------------------------somestring123abcdefg' }
-                }).then((response) => {
-                  if (response.status === 200) {
-                    axios.post("http://localhost:4004/register-file-upload", 'lol', {
-                      headers: { 'Content-Type': 'multipart/form-data; boundary=--------------------------somestring123abcdefg' }
-                    }).then((res) => {
-                      if (res.status == 200) {
-                        Modal.success({
-                          content: "Pengajuan TKP Anda telah berhasil",
-                          onOk() { },
+                await axios
+                  .post("http://localhost:4004/tkp/register", formData, {
+                    headers: {
+                      "Content-Type":
+                        "multipart/form-data; boundary=--------------------------somestring123abcdefg",
+                    },
+                  })
+                  .then((response) => {
+                    if (response.status === 200) {
+                      axios
+                        .post(
+                          "http://localhost:4004/register-file-upload",
+                          "lol",
+                          {
+                            headers: {
+                              "Content-Type":
+                                "multipart/form-data; boundary=--------------------------somestring123abcdefg",
+                            },
+                          }
+                        )
+                        .then((res) => {
+                          if (res.status == 200) {
+                            Modal.success({
+                              content: "Pengajuan TKP Anda telah berhasil",
+                              onOk() {},
+                            });
+                            console.log("OK!", values);
+                          } else {
+                            console.log("File upload gagal!", values);
+                          }
                         });
-                        console.log('OK!', values);
-                      }
-                      else {
-                        console.log('File upload gagal!', values);
-                      }
-                    })
-
-
-                  }
-                });
+                    }
+                  });
                 setSubmitting(false);
-
               }}
             >
               {({
@@ -767,7 +810,8 @@ class FormPengajuanTKP extends React.Component {
                           onChange={this._handleChangeDate}
                           onBlur={handleBlur}
                           value={
-                            values.tanggal_lahir && moment(tanggal_lahir, 'DD/MM/YYYY')
+                            values.tanggal_lahir &&
+                            moment(tanggal_lahir, "DD/MM/YYYY")
                           }
                         />
                       </div>

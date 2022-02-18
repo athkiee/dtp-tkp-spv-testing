@@ -10,7 +10,8 @@ import PDFViewer from "pdf-viewer-reactjs";
 import { Collapse } from "antd";
 import { CaretRightOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
-import { Avatar } from "antd";
+import { Avatar, Breadcrumb } from "antd";
+import { ROUTES } from "../../../configs";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -291,6 +292,10 @@ class DetailTKP extends React.Component {
     });
   };
 
+  _handleOpenBreadcumbs = () => {
+    window.location = ROUTES.DASHBOARD();
+  };
+
   render() {
     const { classes } = this.props;
     const { dataDetail, dataRiwayat } = this.state;
@@ -523,10 +528,26 @@ class DetailTKP extends React.Component {
         <HeadBar />
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <h1 style={{ marginLeft: 35, marginTop: 35 }}>
+          <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
+            <Breadcrumb.Item style={{ cursor: "pointer" }}>
+              <a onClick={this._handleOpenBreadcumbs}>Beranda</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item
+              style={{
+                cursor: "pointer",
+                fontColor: "#DA1E20 !important",
+                fontWeight: "bold",
+              }}
+            >
+              <a>Detail TKP</a>
+            </Breadcrumb.Item>
+          </Breadcrumb>
+          <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
             <strong>Detail TKP</strong>
           </h1>
-          <p style={{ marginLeft: 35 }}>Kelola data TKP pada halaman ini.</p>
+          <p style={{ marginLeft: 35, marginBottom: 10 }}>
+            Kelola data TKP pada halaman ini.
+          </p>
           <Container maxWidth="lg" className={classes.container}>
             <h2
               style={{

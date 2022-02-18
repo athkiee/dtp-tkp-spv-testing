@@ -1,10 +1,9 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Table, Input, Button, Space } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
+import { SearchOutlined, EyeTwoTone, DownloadOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import { ROUTES } from '../../../configs';
 
 const data = [
   {
@@ -118,6 +117,11 @@ export default class TableDashboard extends React.Component {
     this.setState({ searchText: '' });
   };
 
+  _handleOpenDetail = (key) => {
+    window.location = ROUTES.DETAIL_TKP(key);
+    localStorage.setItem('detail', key);
+  }
+
   render() {
 
     const columns = [
@@ -154,13 +158,16 @@ export default class TableDashboard extends React.Component {
       {
         width: 125,
         title: 'Aksi',
-        dataIndex: 'aksi',
+        dataIndex: 'key',
         fixed: 'right',
-        render: () => (
+        render: (key) => (
           <div>
-            <VisibilityOutlinedIcon></VisibilityOutlinedIcon>
-            <span> </span>
-            <GetAppOutlinedIcon></GetAppOutlinedIcon>
+            <span onClick={this._handleOpenDetail.bind(this, key)} style={{ marginRight: 15, cursor: 'pointer' }}>
+              <EyeTwoTone />
+            </span>
+            <span>
+              <DownloadOutlined onClick={() => window.open('http://localhost:4004/tkp/get_zip_file/216')} style={{ color: '#00FF00' }} />
+            </span>
           </div>
         )
       },

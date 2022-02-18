@@ -28,6 +28,9 @@ const routes = {
   },
   DETAIL_TKP() {
     return `/detail-tkp/`;
+  },
+  RIWAYAT_TKP() {
+    return `/riwayat-tkp/`;
   }
 };
 

@@ -7,6 +7,7 @@ import { useHistory } from "react-router";
 import { getUser, removeUserSession } from "../../../utils/Common";
 import "./dashboard.css";
 import HeadBar from "../../constant/headBar";
+import { Breadcrumb } from "antd";
 
 const drawerWidth = 240;
 
@@ -109,7 +110,7 @@ export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [supervisor, setSupervisor] = useState();
-  
+
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
@@ -168,8 +169,13 @@ export default function Dashboard() {
       <HeadBar />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <h1 style={{ marginLeft:35, marginTop:35 }}><strong>Dashboard</strong></h1>
-        <p style={{ marginLeft:35 }}>Kelola data TKP pada halaman ini.</p>
+        <Breadcrumb style={{ marginLeft: 35, marginTop: 35, cursor: 'pointer' }}>
+          <Breadcrumb.Item>Beranda</Breadcrumb.Item>
+        </Breadcrumb>
+        <h1 style={{ marginLeft: 35, marginTop: 10, fontSize: 20 }}>
+          <strong>Basis Data TKP</strong>
+        </h1>
+        <p style={{ marginLeft: 35, marginBottom: 10 }}>Kelola data TKP pada halaman ini.</p>
         <Container maxWidth="lg" className={classes.container}>
           <TableDashboard />
         </Container>

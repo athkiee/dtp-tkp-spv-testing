@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Table, Input, Button, Space } from 'antd';
-import { SearchOutlined, EyeTwoTone } from '@ant-design/icons';
+import { SearchOutlined, EyeTwoTone, DownloadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { ROUTES } from '../../../../configs';
 
@@ -13,21 +13,22 @@ export default class TableDashboard extends React.Component {
     this.state = {
       searchText: '',
       searchedColumn: '',
-      dataDP: []
+      dataRiwayat: []
     }
   }
 
   componentDidMount() {
-    axios.get('http://localhost:4004/tkp?nik_spv='+ nik_spv +'&id_kategori_status_tkp=1')
+    axios.get('http://localhost:4004/tkp?nik_spv='+ nik_spv)
       .then((response) => {
-        const dalamProses = response.data.map(dalamProses => ({
-          key: dalamProses.id_tkp,
-          name: dalamProses.nama_lengkap,
-          status: dalamProses.t_status_tkp.nama_status_tkp,
-          roles: dalamProses.t_job_role.nama_job_role,
+        const riwayat = response.data.map(riwayat => ({
+          key: riwayat.id_tkp,
+          bidang: riwayat.t_bidang.kode_bidang,
+          name: riwayat.nama_lengkap,
+          status: riwayat.t_status_tkp.nama_status_tkp,
+          jobTitle: riwayat.t_job_title.nama_job_title,
         }))
         this.setState({
-          dataDP: dalamProses
+          dataRiwayat: riwayat
         })
       })
   }
@@ -104,31 +105,40 @@ export default class TableDashboard extends React.Component {
     localStorage.setItem('detail', key);
   }
 
+  _handleOpenDetail = (key) => {
+    window.location = ROUTES.DETAIL_TKP(key);
+    localStorage.setItem('detail', key);
+  }
+
   render() {
-    console.log('coba', this.state.dataDP);
 
     const columns = [
       {
-        title: 'Tanggal',
-        dataIndex: 'tanggal_pengajuan',
-        key: 'tanggal_pengajuan',
-        width: '30%',
-        sorter: (a, b) => a.tanggal_pengajuan.localeCompare(b.tanggal_pengajuan),
-        ...this.getColumnSearchProps('tanggal_pengajuan'),
+        title: 'No',
+        width: '10%',
+        key: 'index',
+        render:(text, name, index) => index+1
       },
       {
-        title: 'Nama Calon TKP',
+        title: 'Nama TKP',
         dataIndex: 'name',
         key: 'name',
         width: '20%',
+        className: 'clientName' ? "show" : "hide",
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps('name'),
       },
       {
-        title: 'Job Role',
-        dataIndex: 'roles',
-        key: 'roles',
-        ...this.getColumnSearchProps('roles'),
+        title: 'Bidang',
+        dataIndex: 'bidang',
+        key: 'bidang',
+        ...this.getColumnSearchProps('bidang'),
+      },
+      {
+        title: 'Job Title',
+        dataIndex: 'jobTitle',
+        key: 'jobTitle',
+        ...this.getColumnSearchProps('jobTitle'),
       },
       {
         title: 'Status',
@@ -143,13 +153,16 @@ export default class TableDashboard extends React.Component {
         fixed: 'right',
         render: (key) => (
           <div>
-            <span onClick={this._handleOpenDetail.bind(this, key)} style={{ cursor: 'pointer' }}>
+            <span onClick={this._handleOpenDetail.bind(this, key)} style={{ marginRight: 15, cursor: 'pointer' }}>
               <EyeTwoTone />
+            </span>
+            <span>
+              <DownloadOutlined style={{ color: '#00FF00' }} />
             </span>
           </div>
         )
       },
     ];
-    return <Table columns={columns} dataSource={this.state.dataDP} pagination={true} />;
+    return <Table columns={columns} dataSource={this.state.dataRiwayat} pagination={true} />;
   }
 }

@@ -35,7 +35,7 @@ export default function SideMenu() {
         <ListItemIcon>
           <HomeOutlinedIcon />
         </ListItemIcon>
-        <ListItemText primary="Dashboard" />
+        <ListItemText primary="Beranda" />
       </ListItem>
 
       <ListItem button onClick={handleClick}>
@@ -60,7 +60,7 @@ export default function SideMenu() {
             </ListItem>
           </List>
         </Link>
-        <Link to="/RiwayatTKP" style={{ color: "black" }}>
+        <Link to={ROUTES.RIWAYAT_TKP} style={{ color: "black" }}>
           <List component="div">
             <ListItem button className={classes.nested}>
               <ListItemText primary="Riwayat" />
@@ -73,7 +73,7 @@ export default function SideMenu() {
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>
-        <Link to="/EvaluasiTKP" style={{ color: "black" }}>
+        <Link to={ROUTES.KELOLA_EVALUASI_TKP} style={{ color: "black" }}>
           <ListItemText primary="Evaluasi TKP"></ListItemText>
         </Link>
       </ListItem>

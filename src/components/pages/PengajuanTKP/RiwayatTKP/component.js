@@ -1,29 +1,12 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
-import MenuIcon from "@material-ui/icons/Menu";
-import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
-import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SideMenu from "../../../constant/sideMenu";
 import TableDashboard from "./Table";
-import { DownloadOutlined } from "@ant-design/icons";
-import ActiveLastBreadcrumb from "./Breadcumbs";
-import { Button } from "antd";
-import FileSaver from "file-saver";
-import TableDalamProses from "./Table";
 import HeadBar from "../../../constant/headBar";
+import { Breadcrumb, Menu, Dropdown, Checkbox } from "antd";
+import { ROUTES } from "../../../../configs";
+import { PushpinOutlined } from "@ant-design/icons";
 
 const drawerWidth = 240;
 
@@ -115,6 +98,12 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
+    width: "100%",
+    height: "auto",
+    float: "left",
+    marginLeft: 35,
+    backgroundColor: "white",
+    borderRadius: 10,
   },
   paper: {
     padding: theme.spacing(2),
@@ -127,7 +116,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RiwayatPengajuanTKP() {
+const _handleBreadcumbs = () => {
+  window.location = ROUTES.DASHBOARD();
+};
+
+export default function RiwayatTKP() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -137,17 +130,82 @@ export default function RiwayatPengajuanTKP() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const menu = (
+    <Menu>
+      <Menu.Item key="0">
+        <Checkbox>No</Checkbox>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <Checkbox>INT</Checkbox>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <Checkbox>Bidang</Checkbox>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <Checkbox>Nama TKP</Checkbox>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <Checkbox>Supervisor/PIC</Checkbox>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <Checkbox>NIK SPV</Checkbox>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <Checkbox>Loker</Checkbox>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <Checkbox>Status</Checkbox>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <Checkbox>Job Title</Checkbox>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <Checkbox>On Board</Checkbox>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <Checkbox>Perubahan Status Terakhir</Checkbox>
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <div className={classes.root}>
       <HeadBar />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <h2>Riwayat</h2>
-        <ActiveLastBreadcrumb />
-        Kelola data TKP pada halaman ini.
+        <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a onClick={_handleBreadcumbs}>Beranda</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a>Pengajuan TKP</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item
+            style={{
+              cursor: "pointer",
+              fontColor: "#DA1E20 !important",
+              fontWeight: "bold",
+            }}
+          >
+            <a>Riwayat TKP</a>
+          </Breadcrumb.Item>
+        </Breadcrumb>
+        <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
+          <strong>Riwayat TKP</strong>
+        </h1>
+        <p style={{ marginLeft: 35, marginBottom: 10 }}>
+          Kelola data riwayat TKP pada halaman ini.
+        </p>
         <Container maxWidth="lg" className={classes.container}>
-          <TableDalamProses />
+          <Dropdown overlay={menu} trigger={["click"]}>
+            <a
+              className="ant-dropdown-link"
+              onClick={(e) => e.preventDefault()}
+            >
+              <PushpinOutlined />
+            </a>
+          </Dropdown>
+          <TableDashboard />
         </Container>
       </main>
     </div>

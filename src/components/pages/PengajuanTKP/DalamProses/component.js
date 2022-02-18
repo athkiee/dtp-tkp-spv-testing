@@ -1,28 +1,11 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
-import Link from "@material-ui/core/Link";
-import MenuIcon from "@material-ui/icons/Menu";
-import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
-import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SideMenu from "../../../constant/sideMenu";
 import TableDashboard from "./Table";
-import { DownloadOutlined } from "@ant-design/icons";
-import { Button } from "antd";
-import FileSaver from "file-saver";
-import TableDalamProses from "./Table";
-import HeadBar from "../../../constant/headBar"
+import { Breadcrumb } from "antd";
+import HeadBar from "../../../constant/headBar";
+import { ROUTES } from "../../../../configs";
 
 const drawerWidth = 240;
 
@@ -132,6 +115,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const _handleBreadcumbs = () => {
+  window.location = ROUTES.DASHBOARD()
+}
+
 export default function DalamProsesPengajuanTKP() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -148,8 +135,30 @@ export default function DalamProsesPengajuanTKP() {
       <HeadBar />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <h1 style={{ marginLeft:35, marginTop:35 }}><strong>Dalam Proses</strong></h1>
-        <p style={{ marginLeft:35 }}>Kelola data TKP berstatus Menunggu Konfirmasi dan Wawancara pada tabel di bawah ini.</p>
+        <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a onClick={_handleBreadcumbs}>Beranda</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a>Pengajuan TKP</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item
+            style={{
+              cursor: "pointer",
+              fontColor: "#DA1E20 !important",
+              fontWeight: "bold",
+            }}
+          >
+            <a>Dalam Proses</a>
+          </Breadcrumb.Item>
+        </Breadcrumb>
+        <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
+          <strong>Dalam Proses</strong>
+        </h1>
+        <p style={{ marginLeft: 35, marginBottom: 10 }}>
+          Kelola data TKP berstatus Menunggu Konfirmasi dan Wawancara pada tabel
+          di bawah ini.
+        </p>
         <Container maxWidth="lg" className={classes.container}>
           <TableDashboard />
         </Container>

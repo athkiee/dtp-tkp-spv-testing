@@ -1,9 +1,7 @@
 import React from "react";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { Button } from "antd";
-import FileSaver from "file-saver";
+import { Button, Breadcrumb } from "antd";
 import TextField from "@material-ui/core/TextField";
 import HeadBar from "../../../constant/headBar";
 import { ROUTES } from "../../../../configs";
@@ -110,18 +108,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const _handleBreadcumbs = () => {
+  window.location = ROUTES.DASHBOARD()
+}
+
+
 export default function MengajukanTKP() {
   const classes = useStyles();
-  const namaSpv = sessionStorage.getItem('nama');
-  const nikSpv = sessionStorage.getItem('nik');
+  const namaSpv = sessionStorage.getItem("nama");
+  const nikSpv = sessionStorage.getItem("nik");
+  
 
   return (
     <div className={classes.root}>
       <HeadBar />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <h1 style={{ marginLeft:35, marginTop:35 }}><strong>Mengajukan Formulir TKP</strong></h1>
-        <p style={{ marginLeft:35 }}>Ajukan data diri TKP secara lengkap dengan mengisi kolom di bawah ini.</p>
+        <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a onClick={_handleBreadcumbs}>Beranda</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a>Pengajuan TKP</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item
+            style={{
+              cursor: "pointer",
+              fontColor: "#DA1E20 !important",
+              fontWeight: "bold",
+            }}
+          >
+            <a>Ajukan TKP</a>
+          </Breadcrumb.Item>
+        </Breadcrumb>
+        <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
+          <strong>Ajukan TKP</strong>
+        </h1>
+        <p style={{ marginLeft: 35, marginBottom: 10 }}>
+          Ajukan data diri TKP secara lengkap dengan mengisi kolom di bawah ini.
+        </p>
         <Container className={classes.containerTataCara}>
           <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}>
             Data Supervisor
@@ -156,7 +181,7 @@ export default function MengajukanTKP() {
           </div>
           <Button
             type="primary"
-            onClick={()=> window.location = ROUTES.PENGAJUAN_TKP_FORM()}
+            onClick={() => (window.location = ROUTES.PENGAJUAN_TKP_FORM())}
             className={classes.submitForm}
           >
             <strong>SUBMIT</strong>
