@@ -115,7 +115,7 @@ export default class TableDashboard extends React.Component {
     const columns = [
       {
         title: 'No',
-        width: '10%',
+        width: '5%',
         key: 'index',
         render:(text, name, index) => index+1
       },

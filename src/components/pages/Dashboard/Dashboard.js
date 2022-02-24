@@ -7,9 +7,11 @@ import { useHistory } from "react-router";
 import { getUser, removeUserSession } from "../../../utils/Common";
 import "./dashboard.css";
 import HeadBar from "../../constant/headBar";
-import { Breadcrumb } from "antd";
+import { Breadcrumb, Menu, Popover, Checkbox, Button, Dropdown } from "antd";
+import { PushpinOutlined, DownloadOutlined } from "@ant-design/icons";
 
 const drawerWidth = 240;
+const nikSpv = sessionStorage.getItem("nik");
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -105,6 +107,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const buttonPin = (
+  <Menu>
+    <Menu.Item key="0">
+      <Checkbox>Nama TKP</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="1">
+      <Checkbox>Job Title</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="2">
+      <Checkbox>Job Role</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="3">
+      <Checkbox>Mitra</Checkbox>
+    </Menu.Item>
+  </Menu>
+);
+
+const exportData = (
+  <Menu>
+    <Menu.Item key="0">Ekspor Data (.Csv)</Menu.Item>
+    <Menu.Item
+      key="1"
+      onClick={() =>
+        window.open(
+          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get-zip/tkp-under-spv/" + nikSpv + "/active"
+        )
+      }
+    >
+      Ekspor Data (.Zip)
+    </Menu.Item>
+  </Menu>
+);
+
 export default function Dashboard() {
   const user = getUser();
   const classes = useStyles();
@@ -115,9 +150,6 @@ export default function Dashboard() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
 
-  // Note: the empty deps array [] means
-  // this useEffect will run once
-  // similar to componentDidMount()
   useEffect(() => {
     fetch("http://localhost:4004/spv/1")
       .then((res) => res.json())
@@ -126,17 +158,12 @@ export default function Dashboard() {
           setIsLoaded(true);
           setItems(result);
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         (error) => {
           setIsLoaded(true);
           setError(error);
         }
       );
   }, []);
-
-  const handleTest = () => {};
 
   let history = useHistory();
   const handleDrawerOpen = () => {
@@ -169,14 +196,39 @@ export default function Dashboard() {
       <HeadBar />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Breadcrumb style={{ marginLeft: 35, marginTop: 35, cursor: 'pointer' }}>
+        <Breadcrumb
+          style={{ marginLeft: 35, marginTop: 35, cursor: "pointer" }}
+        >
           <Breadcrumb.Item>Beranda</Breadcrumb.Item>
         </Breadcrumb>
         <h1 style={{ marginLeft: 35, marginTop: 10, fontSize: 20 }}>
           <strong>Basis Data TKP</strong>
         </h1>
-        <p style={{ marginLeft: 35, marginBottom: 10 }}>Kelola data TKP pada halaman ini.</p>
+        <p style={{ marginLeft: 35, marginBottom: 10 }}>
+          Kelola data TKP pada halaman ini.
+        </p>
         <Container maxWidth="lg" className={classes.container}>
+          <div style={{ float: "right", marginBottom: 20 }}>
+            <Dropdown overlay={exportData} trigger={["click"]}>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Button style={{ marginRight: 20 }}>
+                  Ekspor Data
+                  <DownloadOutlined style={{ marginLeft: 40 }} />
+                </Button>
+              </a>
+            </Dropdown>
+            <Popover placement="bottom" content={buttonPin} trigger="click">
+              <PushpinOutlined
+                style={{
+                  fontSize: 24,
+                  color: "#DA1E20",
+                }}
+              />
+            </Popover>
+          </div>
           <TableDashboard />
         </Container>
       </main>

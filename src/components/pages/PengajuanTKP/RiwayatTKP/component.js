@@ -1,14 +1,14 @@
 import React from "react";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import TableDashboard from "./Table";
 import HeadBar from "../../../constant/headBar";
-import { Breadcrumb, Menu, Dropdown, Checkbox } from "antd";
+import { Breadcrumb, Menu, Popover, Checkbox, Dropdown, Button } from "antd";
 import { ROUTES } from "../../../../configs";
-import { PushpinOutlined } from "@ant-design/icons";
+import { PushpinOutlined, DownloadOutlined } from "@ant-design/icons";
 
 const drawerWidth = 240;
+const nikSpv = sessionStorage.getItem("nik");
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -120,53 +120,41 @@ const _handleBreadcumbs = () => {
   window.location = ROUTES.DASHBOARD();
 };
 
+const buttonPin = (
+  <Menu>
+    <Menu.Item key="0">
+      <Checkbox>Nama TKP</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="1">
+      <Checkbox>Job Title</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="2">
+      <Checkbox>Job Role</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="3">
+      <Checkbox>Mitra</Checkbox>
+    </Menu.Item>
+  </Menu>
+);
+
+const exportData = (
+  <Menu>
+    <Menu.Item key="0">Ekspor Data (.Csv)</Menu.Item>
+    <Menu.Item
+      key="1"
+      onClick={() =>
+        window.open(
+          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get-zip/tkp-under-spv/" + nikSpv
+        )
+      }
+    >
+      Ekspor Data (.Zip)
+    </Menu.Item>
+  </Menu>
+);
+
 export default function RiwayatTKP() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const menu = (
-    <Menu>
-      <Menu.Item key="0">
-        <Checkbox>No</Checkbox>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <Checkbox>INT</Checkbox>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <Checkbox>Bidang</Checkbox>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <Checkbox>Nama TKP</Checkbox>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <Checkbox>Supervisor/PIC</Checkbox>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <Checkbox>NIK SPV</Checkbox>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <Checkbox>Loker</Checkbox>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <Checkbox>Status</Checkbox>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <Checkbox>Job Title</Checkbox>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <Checkbox>On Board</Checkbox>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <Checkbox>Perubahan Status Terakhir</Checkbox>
-      </Menu.Item>
-    </Menu>
-  );
 
   return (
     <div className={classes.root}>
@@ -197,14 +185,27 @@ export default function RiwayatTKP() {
           Kelola data riwayat TKP pada halaman ini.
         </p>
         <Container maxWidth="lg" className={classes.container}>
-          <Dropdown overlay={menu} trigger={["click"]}>
-            <a
-              className="ant-dropdown-link"
-              onClick={(e) => e.preventDefault()}
-            >
-              <PushpinOutlined />
-            </a>
-          </Dropdown>
+          <div style={{ float: "right", marginBottom: 20 }}>
+            <Dropdown overlay={exportData} trigger={["click"]}>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Button style={{ marginRight: 20 }}>
+                  Ekspor Data
+                  <DownloadOutlined style={{ marginLeft: 40 }} />
+                </Button>
+              </a>
+            </Dropdown>
+            <Popover placement="bottom" content={buttonPin} trigger="click">
+              <PushpinOutlined
+                style={{
+                  fontSize: 24,
+                  color: "#DA1E20",
+                }}
+              />
+            </Popover>
+          </div>
           <TableDashboard />
         </Container>
       </main>

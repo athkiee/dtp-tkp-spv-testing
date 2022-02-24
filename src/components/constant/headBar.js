@@ -184,11 +184,6 @@ export default function HeadBar() {
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
-              <ForumOutlinedIcon style={{ color: "black" }} />
-            </Badge>
-          </IconButton>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
               <NotificationsNoneIcon style={{ color: "black" }} />
             </Badge>
           </IconButton>

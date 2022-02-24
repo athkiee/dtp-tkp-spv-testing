@@ -43,9 +43,9 @@ export default function SideMenu() {
           <DescriptionOutlinedIcon />
         </ListItemIcon>
         <ListItemText primary="Pengajuan TKP" />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        {open ? <ExpandMore /> : <ExpandLess />}
       </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse in={!open} timeout="auto" unmountOnExit>
         <Link to={ROUTES.PENGAJUAN_TKP} style={{ color: "black" }}>
           <List alignItems="center" component="div">
             <ListItem button className={classes.nested}>

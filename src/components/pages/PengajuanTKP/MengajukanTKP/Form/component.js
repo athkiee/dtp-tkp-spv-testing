@@ -64,11 +64,9 @@ const styles = (theme) => ({
   inputForm: {
     display: "block",
     paddingLeft: 10,
-    // outline: none,
     borderRadius: 2,
     height: 40,
     width: "100%",
-    // border: none,
   },
   drawerPaper: {
     position: "relative",
