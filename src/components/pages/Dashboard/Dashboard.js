@@ -126,12 +126,23 @@ const buttonPin = (
 
 const exportData = (
   <Menu>
-    <Menu.Item key="0">Ekspor Data (.Csv)</Menu.Item>
+    <Menu.Item
+      key="0"
+      onClick={() =>
+        window.open(
+          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/export-csv/tkp-under-spv/" + nikSpv + "/active"
+        )
+      }
+    >
+      Ekspor Data (.Csv)
+    </Menu.Item>
     <Menu.Item
       key="1"
       onClick={() =>
         window.open(
-          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get-zip/tkp-under-spv/" + nikSpv + "/active"
+          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get-zip/tkp-under-spv/" +
+            nikSpv +
+            "/active"
         )
       }
     >
@@ -151,7 +162,7 @@ export default function Dashboard() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4004/spv/1")
+    fetch("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/spv/1")
       .then((res) => res.json())
       .then(
         (result) => {

@@ -30,7 +30,7 @@ const useForm = (callback, validate) => {
   };
 
   async function registerSpv(props) {
-    await axios.post('http://localhost:4004/spv/register', {
+    await axios.post('http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/spv/register', {
       values
     }).then(res => {
       console.log('Registrasi telah berhasil!');

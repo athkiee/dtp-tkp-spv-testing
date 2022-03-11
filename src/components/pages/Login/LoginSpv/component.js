@@ -18,7 +18,7 @@ function LoginSupervisor(props) {
     setError(null);
     setLoading(true);
     axios
-      .post("http://localhost:4004/spv/login", {
+      .post("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/spv/login", {
         nik: nik.value,
         password: password.value,
       })

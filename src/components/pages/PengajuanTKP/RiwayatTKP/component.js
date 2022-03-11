@@ -11,6 +11,12 @@ const drawerWidth = 240;
 const nikSpv = sessionStorage.getItem("nik");
 
 const useStyles = makeStyles((theme) => ({
+  '@global': {
+    ' .ant-popover-inner':{
+      overflow: 'scroll',
+      height: 400
+    }
+  },
   root: {
     display: "flex",
   },
@@ -123,28 +129,78 @@ const _handleBreadcumbs = () => {
 const buttonPin = (
   <Menu>
     <Menu.Item key="0">
-      <Checkbox>Nama TKP</Checkbox>
+      <Checkbox>Pilih Semua</Checkbox>
     </Menu.Item>
     <Menu.Item key="1">
-      <Checkbox>Job Title</Checkbox>
+      <Checkbox>No</Checkbox>
     </Menu.Item>
     <Menu.Item key="2">
-      <Checkbox>Job Role</Checkbox>
+      <Checkbox>Nama TKP</Checkbox>
     </Menu.Item>
     <Menu.Item key="3">
+      <Checkbox>Bidang</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="4">
+      <Checkbox>Lokasi Kerja</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="5">
+      <Checkbox>Nama SPV</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="6">
+      <Checkbox>NIK SPV</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="7">
+      <Checkbox>Status</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="8">
+      <Checkbox>Job Role</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="9">
+      <Checkbox>Kelompok Pekerjaan</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="10">
       <Checkbox>Mitra</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="11">
+      <Checkbox>Paket</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="12">
+      <Checkbox>No. SP</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="13">
+      <Checkbox>THP</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="14">
+      <Checkbox>Headcount</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="15">
+      <Checkbox>On Board</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="16">
+      <Checkbox>Perubahan Status Terakhir</Checkbox>
     </Menu.Item>
   </Menu>
 );
 
 const exportData = (
   <Menu>
-    <Menu.Item key="0">Ekspor Data (.Csv)</Menu.Item>
+    <Menu.Item
+      key="0"
+      onClick={() =>
+        window.open(
+          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/export-csv/tkp-under-spv/" +
+            nikSpv
+        )
+      }
+    >
+      Ekspor Data (.Csv)
+    </Menu.Item>
     <Menu.Item
       key="1"
       onClick={() =>
         window.open(
-          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get-zip/tkp-under-spv/" + nikSpv
+          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get-zip/tkp-under-spv/" +
+            nikSpv
         )
       }
     >
@@ -197,7 +253,11 @@ export default function RiwayatTKP() {
                 </Button>
               </a>
             </Dropdown>
-            <Popover placement="bottom" content={buttonPin} trigger="click">
+            <Popover
+              placement="bottom"
+              content={buttonPin}
+              trigger="click"
+            >
               <PushpinOutlined
                 style={{
                   fontSize: 24,

@@ -40,7 +40,7 @@ export default class TableDashboard extends React.Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:4004/tkp?nik_spv=" + nik_spv)
+      .get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp?nik_spv=" + nik_spv)
       .then((response) => {
         const tkp = response.data.map((tkp) => ({
           key: tkp.id_tkp,

@@ -169,13 +169,13 @@ class DetailTKP extends React.Component {
 
   componentDidMount() {
     let id_tkp = localStorage.getItem("detail");
-    axios.get("http://localhost:4004/tkp/216").then((response) => {
+    axios.get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/216").then((response) => {
       const detail = response.data;
       this.setState({
         dataDetail: detail[0],
       });
     });
-    axios.get("http://localhost:4004/tkp/216riwayat").then((response) => {
+    axios.get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/216riwayat").then((response) => {
       const detail = response.data;
       this.setState({
         dataRiwayat: detail[0],
@@ -185,7 +185,7 @@ class DetailTKP extends React.Component {
 
   _handleDokumenPenunjang = async (value) => {
     await axios
-      .get("http://localhost:4004/tkp/get_file/" + value.desc)
+      .get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" + value.desc)
       .then((response) => {
         const urlDokumen = response.data;
         this.setState({
@@ -199,7 +199,7 @@ class DetailTKP extends React.Component {
 
   _handleDokumenFoto = async (value) => {
     await axios
-      .get("http://localhost:4004/tkp/get_file/" + value.desc)
+      .get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" + value.desc)
       .then((response) => {
         const urlDokumen = response.data;
         this.setState({
