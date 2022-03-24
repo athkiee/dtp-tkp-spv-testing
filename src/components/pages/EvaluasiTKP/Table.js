@@ -1,98 +1,35 @@
 import React from "react";
+import axios from "axios";
 import "antd/dist/antd.css";
 import { Table, Input, Button, Space } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
-
-const data = [
-  {
-    key: "1",
-    name: "Tono",
-    spvName: "Tiffany",
-    jobTitle: "Administration",
-    status: "Belum dibuka",
-    mitra: "SKI",
-  },
-  {
-    key: "2",
-    name: "Tony",
-    spvName: "Tiffany",
-    jobTitle: "Administration",
-    status: "Belum dibuka",
-    mitra: "ISH",
-  },
-  {
-    key: "3",
-    name: "Timmy",
-    spvName: "Tiffany",
-    jobTitle: "Administration",
-    status: "Belum dibuka",
-    mitra: "ISH",
-  },
-  {
-    key: "4",
-    name: "Bambang",
-    spvName: "Tiffany",
-    jobTitle: "Administration",
-    status: "Belum dibuka",
-    mitra: "SKI",
-  },
-  {
-    key: "5",
-    name: "Jonathan",
-    spvName: "Tiffany",
-    jobTitle: "Developer",
-    status: "Belum dibuka",
-    mitra: "SKI",
-  },
-  {
-    key: "6",
-    name: "Budi",
-    spvName: "Tiffany",
-    jobTitle: "Developer",
-    status: "Belum dibuka",
-    mitra: "SKI",
-  },
-  {
-    key: "7",
-    name: "Setiawan",
-    spvName: "Tiffany",
-    jobTitle: "Administration",
-    status: "Belum dibuka",
-    mitra: "SKI",
-  },
-  {
-    key: "8",
-    name: "Chaerul",
-    spvName: "Tiffany",
-    jobTitle: "Janitor",
-    status: "Belum dibuka",
-    mitra: "SKI",
-  },
-  {
-    key: "9",
-    name: "Syahrul",
-    spvName: "Tiffany",
-    jobTitle: "Administration",
-    status: "Belum dibuka",
-    mitra: "SKI",
-  },
-  {
-    key: "10",
-    name: "Jim Red",
-    spvName: "Tiffany",
-    jobTitle: "Administration",
-    status: "Belum dibuka",
-    mitra: "SKI",
-  },
-];
+import { API } from '../../../configs';
 
 export default class TableDashboard extends React.Component {
   state = {
     searchText: "",
     searchedColumn: "",
   };
+
+  componentDidMount() {
+    const nik_spv = sessionStorage.getItem('nik');
+    axios
+      .get(API.tkpUnderSpv + nik_spv + '&id_kategori_status_tkp=2', API.token)
+      .then((response) => {
+        const tkp = response.data.map((tkp) => ({
+          key: tkp.id_tkp,
+          name: tkp.nama_lengkap,
+          jobTitle: tkp.t_job_title.nama_job_title,
+          roles: tkp.t_job_role.nama_job_role,
+          mitra: tkp.t_mitra.nama_mitra,
+        }));
+        this.setState({
+          dataTKP: tkp,
+        });
+      });
+  }
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -180,7 +117,7 @@ export default class TableDashboard extends React.Component {
   };
 
   render() {
-    const { selectedRowKeys } = this.state;
+    const { selectedRowKeys, dataTKP } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -228,13 +165,6 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("name"),
       },
       {
-        title: "Nama SPV",
-        dataIndex: "spvName",
-        key: "spvName",
-        width: "20%",
-        ...this.getColumnSearchProps("spvName"),
-      },
-      {
         title: "Job Title",
         dataIndex: "jobTitle",
         key: "jobTitle",
@@ -264,7 +194,7 @@ export default class TableDashboard extends React.Component {
     ];
 
     return (
-      <Table columns={columns} rowSelection={rowSelection} dataSource={data} />
+      <Table columns={columns} rowSelection={rowSelection} dataSource={dataTKP} />
     );
   }
 }

@@ -9,6 +9,7 @@ import "./dashboard.css";
 import HeadBar from "../../constant/headBar";
 import { Breadcrumb, Menu, Popover, Checkbox, Button, Dropdown } from "antd";
 import { PushpinOutlined, DownloadOutlined } from "@ant-design/icons";
+import { API } from "../../../configs";
 
 const drawerWidth = 240;
 const nikSpv = sessionStorage.getItem("nik");
@@ -86,10 +87,11 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-    width: "100%",
+    width: "1200px",
     height: "auto",
-    float: "left",
+    float: "center",
     marginLeft: 35,
+    marginBottom: 50,
     backgroundColor: "white",
     borderRadius: 10,
   },
@@ -128,23 +130,13 @@ const exportData = (
   <Menu>
     <Menu.Item
       key="0"
-      onClick={() =>
-        window.open(
-          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/export-csv/tkp-under-spv/" + nikSpv + "/active"
-        )
-      }
+      onClick={() => window.open(API.exportCsvUnderSpv + nikSpv + "/active")}
     >
       Ekspor Data (.Csv)
     </Menu.Item>
     <Menu.Item
       key="1"
-      onClick={() =>
-        window.open(
-          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get-zip/tkp-under-spv/" +
-            nikSpv +
-            "/active"
-        )
-      }
+      onClick={() => window.open(API.exportFileUnderSpv + nikSpv + "/active")}
     >
       Ekspor Data (.Zip)
     </Menu.Item>

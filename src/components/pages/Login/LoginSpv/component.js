@@ -5,7 +5,7 @@ import "../styles/Login.css";
 import TextField from "@material-ui/core/TextField";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
-import { IMAGES } from "../../../../configs"
+import { IMAGES, API } from "../../../../configs"
 
 function LoginSupervisor(props) {
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,7 @@ function LoginSupervisor(props) {
     setError(null);
     setLoading(true);
     axios
-      .post("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/spv/login", {
+      .post(API.loginSpv, {
         nik: nik.value,
         password: password.value,
       })

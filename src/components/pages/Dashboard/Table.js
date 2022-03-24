@@ -7,7 +7,7 @@ import {
   DownloadOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
-import { ROUTES } from "../../../configs";
+import { ROUTES, API } from "../../../configs";
 
 const data = [
   {
@@ -26,21 +26,13 @@ export default class TableDashboard extends React.Component {
     this.state = {
       searchText: "",
       searchedColumn: "",
-      dataTKP: [
-        {
-          key: "1",
-          name: "Tono",
-          jobTitle: "Administration",
-          roles: "Digital Business Partnership",
-          mitra: "SKI",
-        },
-      ],
+      dataTKP: []
     };
   }
 
   componentDidMount() {
     axios
-      .get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp?nik_spv=" + nik_spv)
+      .get(API.tkpUnderSpv + nik_spv + '&id_kategori_status_tkp=2', API.token)
       .then((response) => {
         const tkp = response.data.map((tkp) => ({
           key: tkp.id_tkp,
@@ -146,12 +138,12 @@ export default class TableDashboard extends React.Component {
   };
 
   render() {
+    const coba = [{dataIndex: 'mitra'}, {dataIndex: 'roles'}];
     const columns = [
       {
         title: "Nama TKP",
         dataIndex: "name",
         key: "name",
-        width: "30%",
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
       },
@@ -159,7 +151,6 @@ export default class TableDashboard extends React.Component {
         title: "Job Title",
         dataIndex: "jobTitle",
         key: "jobTitle",
-        width: "20%",
         sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
         ...this.getColumnSearchProps("jobTitle"),
       },
@@ -203,9 +194,10 @@ export default class TableDashboard extends React.Component {
         ),
       },
     ];
+    console.log('test', coba);
     return (
       <Table
-        columns={columns}
+        columns={columns.filter((col) => coba.some(coba2 => col.dataIndex !== coba2.dataIndex))}
         dataSource={this.state.dataTKP}
         pagination={true}
       />

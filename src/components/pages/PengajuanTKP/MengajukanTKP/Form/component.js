@@ -8,7 +8,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Select, Input, DatePicker, Modal, Breadcrumb } from "antd";
 import { Formik } from "formik";
 import moment from "moment";
-import { ROUTES } from "../../../../../configs";
+import { ROUTES, API } from "../../../../../configs";
 
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
@@ -173,7 +173,7 @@ class FormPengajuanTKP extends React.Component {
           dataProvinsi: prov,
         });
       });
-    axios.get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/bidang/").then((response) => {
+    axios.get(API.allBidang).then((response) => {
       const tribe = response.data.map((tribe) => ({
         key: tribe.id_bidang,
         name: tribe.kode_bidang,
@@ -182,7 +182,7 @@ class FormPengajuanTKP extends React.Component {
         dataBidang: tribe,
       });
     });
-    axios.get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/lokasi_kerja/").then((response) => {
+    axios.get(API.allLokasiKerja).then((response) => {
       const loker = response.data.map((loker) => ({
         key: loker.id_lokasi_kerja,
         name: loker.nama_lokasi_kerja,
@@ -191,7 +191,7 @@ class FormPengajuanTKP extends React.Component {
         dataLokasiKerja: loker,
       });
     });
-    axios.get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/bank").then((response) => {
+    axios.get(API.allBank).then((response) => {
       const bank = response.data.map((bank) => ({
         key: bank.id_bank,
         name: bank.nama_bank,
@@ -200,7 +200,7 @@ class FormPengajuanTKP extends React.Component {
         dataBank: bank,
       });
     });
-    axios.get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/jurusan").then((response) => {
+    axios.get(API.allJurusan).then((response) => {
       const jurusan = response.data.map((jurusan) => ({
         key: jurusan.id_jurusan,
         name: jurusan.nama_jurusan,
@@ -209,7 +209,7 @@ class FormPengajuanTKP extends React.Component {
         dataJurusan: jurusan,
       });
     });
-    axios.get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/job_title").then((response) => {
+    axios.get(API.allJobTitle).then((response) => {
       const jobTitle = response.data.map((jobTitle) => ({
         key: jobTitle.id_job_title,
         name: jobTitle.nama_job_title,
@@ -219,7 +219,7 @@ class FormPengajuanTKP extends React.Component {
         datajobTitle: jobTitle,
       });
     });
-    axios.get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/pengalaman_kerja/").then((response) => {
+    axios.get(API.allExperience).then((response) => {
       const experience = response.data.map((experience) => ({
         key: experience.id_pengalaman_kerja,
         name: experience.keterangan_pengalaman_kerja,
@@ -228,7 +228,7 @@ class FormPengajuanTKP extends React.Component {
         dataExperience: experience,
       });
     });
-    axios.get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/jenjang_pendidikan").then((response) => {
+    axios.get(API.allPendidikan).then((response) => {
       const jenjangPendidikan = response.data.map((jenjangPendidikan) => ({
         key: jenjangPendidikan.id_jenjang_pendidikan,
         name: jenjangPendidikan.nama_jenjang_pendidikan,
@@ -261,7 +261,7 @@ class FormPengajuanTKP extends React.Component {
 
   _onChangeJobTitle = (key, roles) => {
     axios
-      .get(`http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/job_title_levelling/${key}`)
+      .get(API.allJobTitleLevelling + key)
       .then((response) => {
         const jtLevel = response.data.map((jtLevel) => ({
           key: jtLevel.id_job_title_levelling,
@@ -273,7 +273,7 @@ class FormPengajuanTKP extends React.Component {
         });
       });
     axios
-      .get(`http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/job_role/${roles.roles}`)
+      .get(API.allJobRoles + roles.roles)
       .then((response) => {
         const jobRole = response.data.map((jobRole) => ({
           key: jobRole.id_job_role,
@@ -480,6 +480,9 @@ class FormPengajuanTKP extends React.Component {
                 if (!values.no_ktp) {
                   errors.no_ktp = "Nomor KTP tidak boleh kosong";
                 }
+                else if (values.no_ktp.length !== 16) {
+                  errors.no_ktp = "Nomor KTP harus berjumlah 16 karakter"
+                }
                 if (!values.tempat_lahir) {
                   errors.tempat_lahir = "Tempat lahir tidak boleh kosong";
                 }
@@ -645,7 +648,7 @@ class FormPengajuanTKP extends React.Component {
                 }
 
                 await axios
-                  .post("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/register", formData, {
+                  .post(API.registerTkp, formData, {
                     headers: {
                       "Content-Type":
                         "multipart/form-data; boundary=--------------------------somestring123abcdefg",
@@ -655,7 +658,7 @@ class FormPengajuanTKP extends React.Component {
                     if (response.status === 200) {
                       axios
                         .post(
-                          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/register-file-upload",
+                          API.registerFileTkp,
                           "lol",
                           {
                             headers: {
