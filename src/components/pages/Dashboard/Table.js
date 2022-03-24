@@ -138,7 +138,7 @@ export default class TableDashboard extends React.Component {
   };
 
   render() {
-    const coba = [{dataIndex: 'mitra'}, {dataIndex: 'roles'}];
+    const coba = ['mitra', 'roles'];
     const columns = [
       {
         title: "Nama TKP",
@@ -197,7 +197,7 @@ export default class TableDashboard extends React.Component {
     console.log('test', coba);
     return (
       <Table
-        columns={columns.filter((col) => coba.some(coba2 => col.dataIndex !== coba2.dataIndex))}
+        columns={columns.filter(col => col.dataIndex !== 'mitra')}
         dataSource={this.state.dataTKP}
         pagination={true}
       />
