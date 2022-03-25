@@ -21,5 +21,6 @@ export default {
     registerFileTkp: baseUrl + 'register-file-upload',
     exportCsvUnderSpv: baseUrl + 'tkp/export-csv/tkp-under-spv/',
     exportFileUnderSpv: baseUrl + 'tkp/get-zip/tkp-under-spv/',
-    tkpUnderSpv: baseUrl + 'tkp?nik_spv=',
+    tkpUnderSpv: baseUrl + 'tkp/filter/tkp-under-spv/',
+    detailTkp: baseUrl + 'tkp/'
 }

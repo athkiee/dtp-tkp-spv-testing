@@ -9,6 +9,8 @@ import {
 import axios from "axios";
 import { ROUTES, API } from "../../../configs";
 
+const token = sessionStorage.getItem('token');
+
 const data = [
   {
     key: "1",
@@ -32,7 +34,9 @@ export default class TableDashboard extends React.Component {
 
   componentDidMount() {
     axios
-      .get(API.tkpUnderSpv + nik_spv + '&id_kategori_status_tkp=2', API.token)
+      .get(API.tkpUnderSpv + nik_spv + '/aktif', {
+        headers: { Authorization: `Bearer ${token}`}
+    })
       .then((response) => {
         const tkp = response.data.map((tkp) => ({
           key: tkp.id_tkp,
@@ -40,12 +44,13 @@ export default class TableDashboard extends React.Component {
           jobTitle: tkp.t_job_title.nama_job_title,
           roles: tkp.t_job_role.nama_job_role,
           mitra: tkp.t_mitra.nama_mitra,
-        }));
+        } ));
         this.setState({
           dataTKP: tkp,
         });
+        console.log('test', response);
       });
-  }
+    }
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({

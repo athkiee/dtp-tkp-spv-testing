@@ -11,13 +11,14 @@ import { Collapse } from "antd";
 import { CaretRightOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import { Avatar, Breadcrumb } from "antd";
-import { ROUTES } from "../../../configs";
+import { ROUTES, API } from "../../../configs";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const drawerWidth = 240;
 const borderStyle = { borderRight: "4px solid #DA1E20" };
 const rowStyle = { ...borderStyle, width: "100%", padding: 10 };
+const token = sessionStorage.getItem("token");
 
 const styles = (theme) => ({
   root: {
@@ -169,23 +170,36 @@ class DetailTKP extends React.Component {
 
   componentDidMount() {
     let id_tkp = localStorage.getItem("detail");
-    axios.get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/216").then((response) => {
-      const detail = response.data;
-      this.setState({
-        dataDetail: detail[0],
+    axios
+      .get(API.detailTkp + "216", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        const detail = response.data;
+        this.setState({
+          dataDetail: detail[0],
+        });
       });
-    });
-    axios.get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/216riwayat").then((response) => {
-      const detail = response.data;
-      this.setState({
-        dataRiwayat: detail[0],
+    axios
+      .get(
+        API.detailTkp + "216/riwayat", {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        const detail = response.data;
+        this.setState({
+          dataRiwayat: detail[0],
+        });
       });
-    });
   }
 
   _handleDokumenPenunjang = async (value) => {
     await axios
-      .get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" + value.desc)
+      .get(
+        "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" +
+          value.desc
+      )
       .then((response) => {
         const urlDokumen = response.data;
         this.setState({
@@ -199,7 +213,10 @@ class DetailTKP extends React.Component {
 
   _handleDokumenFoto = async (value) => {
     await axios
-      .get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" + value.desc)
+      .get(
+        "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" +
+          value.desc
+      )
       .then((response) => {
         const urlDokumen = response.data;
         this.setState({
