@@ -199,10 +199,9 @@ export default class TableDashboard extends React.Component {
         ),
       },
     ];
-    console.log('test', coba);
     return (
       <Table
-        columns={columns.filter(col => col.dataIndex !== 'mitra')}
+        columns={columns}
         dataSource={this.state.dataTKP}
         pagination={true}
       />

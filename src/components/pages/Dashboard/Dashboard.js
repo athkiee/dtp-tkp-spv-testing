@@ -144,55 +144,8 @@ const exportData = (
 );
 
 export default function Dashboard() {
-  const user = getUser();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const [supervisor, setSupervisor] = useState();
-
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    fetch("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/spv/1")
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setItems(result);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      );
-  }, []);
-
-  let history = useHistory();
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const handleClick = () => {
-    setOpen(!open);
-  };
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open1 = Boolean(anchorEl);
-  const handleClick1 = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleLogout = () => {
-    removeUserSession();
-    history.push("/");
-  };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  console.log("sess", sessionStorage);
-  const nama_user = sessionStorage.getItem("nama");
 
   return (
     <div className={classes.root}>

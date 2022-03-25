@@ -1,6 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import DragAndDrop from "../../element/DragAndDrop";
 import HeadBar from "../../constant/headBar";
 import { Tabs, Modal } from "antd";
 import { Grid } from "@material-ui/core";
@@ -8,17 +9,23 @@ import axios from "axios";
 import { get } from "lodash";
 import PDFViewer from "pdf-viewer-reactjs";
 import { Collapse } from "antd";
-import { CaretRightOutlined } from "@ant-design/icons";
+import {
+  CaretRightOutlined,
+  PlusOutlined,
+  CheckCircleOutlined,
+} from "@ant-design/icons";
 import { Row, Col } from "antd";
-import { Avatar, Breadcrumb } from "antd";
-import { ROUTES, API } from "../../../configs";
+import { Button } from "antd";
+import { Avatar } from "antd";
+import { API } from "../../../configs";
+
+const token = sessionStorage.getItem("token");
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const drawerWidth = 240;
 const borderStyle = { borderRight: "4px solid #DA1E20" };
 const rowStyle = { ...borderStyle, width: "100%", padding: 10 };
-const token = sessionStorage.getItem("token");
 
 const styles = (theme) => ({
   root: {
@@ -79,8 +86,33 @@ const styles = (theme) => ({
     color: "#fff",
     fontWeight: 700,
     fontSize: 24,
-    display: "flex",
     justifyContent: "center",
+  },
+  buttonSimpan: {
+    width: 216,
+    height: 56,
+    marginTop: 10,
+    borderRadius: 15,
+    background: "#D51100",
+    outline: "none",
+    border: "none",
+    color: "#fff",
+    fontWeight: 700,
+    fontSize: 24,
+    justifyContent: "right",
+  },
+  buttonOke: {
+    width: 216,
+    height: 56,
+    marginTop: 10,
+    borderRadius: 15,
+    background: "#D51100",
+    outline: "none",
+    border: "none",
+    color: "#fff",
+    fontWeight: 700,
+    fontSize: 24,
+    justifyContent: "right",
   },
   detailWrapper: {
     maxWidth: 1100,
@@ -155,6 +187,16 @@ const styles = (theme) => ({
   modalPreview: {
     width: "760px !important",
   },
+  formModal: {
+    height: "50px",
+  },
+  noteModal: {
+    marginTop: "20px",
+    fontSize: "10px",
+    lineHeight: "12px",
+    fontFamily: "Roboto",
+    color: "#a0a0a0",
+  },
 });
 
 class DetailTKP extends React.Component {
@@ -163,15 +205,17 @@ class DetailTKP extends React.Component {
     this.state = {
       data: [],
       modalPreview: null,
+      modalInputSkck: null,
       modalPhoto: null,
       preview: "",
+      editData: false,
     };
   }
 
   componentDidMount() {
     let id_tkp = localStorage.getItem("detail");
     axios
-      .get(API.detailTkp + "216", {
+      .get(API.detailTkp + "3", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -181,11 +225,9 @@ class DetailTKP extends React.Component {
         });
       });
     axios
-      .get(
-        API.detailTkp + "216/riwayat", {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .get(API.detailTkp + "3/riwayat", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
         const detail = response.data;
         this.setState({
@@ -198,7 +240,10 @@ class DetailTKP extends React.Component {
     await axios
       .get(
         "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" +
-          value.desc
+          value.desc,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       )
       .then((response) => {
         const urlDokumen = response.data;
@@ -207,7 +252,6 @@ class DetailTKP extends React.Component {
           modalPreview: true,
           modalTitle: value.title,
         });
-        this._renderDokumenPenunjang();
       });
   };
 
@@ -215,7 +259,10 @@ class DetailTKP extends React.Component {
     await axios
       .get(
         "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" +
-          value.desc
+          value.desc,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       )
       .then((response) => {
         const urlDokumen = response.data;
@@ -228,7 +275,103 @@ class DetailTKP extends React.Component {
       });
   };
 
-  _renderDokumenPenunjang = (value) => {
+  _handleFilesFromDrag = (name, file) => {
+    this.setState({ [name]: file });
+  };
+
+  _handleSubmit = (value) => {
+    console.log("isiSubmit", value);
+    axios
+      .put(
+        "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/documents/upload-skck",
+        this.state.file_skck
+      )
+      .then(
+        (res) => {
+          console.log("resPut", res);
+          this._renderModalInfo();
+        },
+        (err) => {
+          console.log("Error : ", err);
+        }
+      );
+  };
+
+  _handleModal = async (value) => {
+    this.setState({
+      modalInputSkck: true,
+      modalTitle: value.title,
+      editData: true,
+    });
+    this._renderModal();
+  };
+
+  _renderModal = (value) => {
+    const { modalInputSkck, modalTitle, handleBlur } = this.state;
+    const { classes } = this.props;
+    return (
+      <div>
+        <Modal
+          visible={modalInputSkck}
+          onCancel={this._handleCloseModal}
+          footer={null}
+          className={classes.modalPreview}
+        >
+          <h2
+            style={{
+              fontSize: 40,
+              color: "#DA1E20",
+              fontWeight: "bold",
+              marginTop: 15,
+              textAlign: "center",
+            }}
+          >
+            {modalTitle}
+          </h2>
+          <div className={classes.formModal}>
+            <DragAndDrop
+              acceptFiles="application/pdf"
+              uploadType="SKCK"
+              onChange={this._handleFilesFromDrag.bind(this, "file_skck")}
+              onBlur={handleBlur}
+              value={this.state.file_skck}
+              name={"file_skck"}
+            />
+          </div>
+          <p className={classes.noteModal}>
+            Format file berupa PDF dengan maksimal ukuran 2 MB
+          </p>
+          <button
+            className={classes.buttonSimpan}
+            onClick={this._handleSubmit(this.state.file_skck)}
+          >
+            Simpan
+          </button>
+        </Modal>
+      </div>
+    );
+  };
+
+  /*_inputChange = e => {
+      let newSkck = { ...this.state.file_skck }
+      if (this.state.editData === false) {
+        newSkck["id"] = new Date().getTime()
+      }
+      newSkck[e.target.name] = e.target.value
+      this.setState({
+        file_skck: newSkck,
+      })
+    }*/
+
+  _renderModalInfo = () => {
+    Modal.success({
+      content: "Unggah SKCK Berhasil",
+      onOk() {},
+    });
+    this._handleCloseModal();
+  };
+
+  _renderDokumenPenunjang = () => {
     const { preview, modalPreview, modalTitle } = this.state;
     const { classes } = this.props;
     return (
@@ -267,7 +410,7 @@ class DetailTKP extends React.Component {
     );
   };
 
-  _renderDokumenFoto = (value) => {
+  _renderDokumenFoto = () => {
     const { preview, modalPhoto, modalTitle } = this.state;
     const { classes } = this.props;
     return (
@@ -305,12 +448,9 @@ class DetailTKP extends React.Component {
     this.setState({
       modalPreview: false,
       modalPhoto: false,
+      modalInputSkck: false,
       preview: "",
     });
-  };
-
-  _handleOpenBreadcumbs = () => {
-    window.location = ROUTES.DASHBOARD();
   };
 
   render() {
@@ -429,7 +569,7 @@ class DetailTKP extends React.Component {
       },
       {
         title: "SKCK",
-        desc: get(dataDetail, "file_skck") || "-",
+        desc: get(dataDetail, "file_skck") || "",
       },
     ];
     const listTab4 = [
@@ -545,26 +685,11 @@ class DetailTKP extends React.Component {
         <HeadBar />
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
-            <Breadcrumb.Item style={{ cursor: "pointer" }}>
-              <a onClick={this._handleOpenBreadcumbs}>Beranda</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item
-              style={{
-                cursor: "pointer",
-                fontColor: "#DA1E20 !important",
-                fontWeight: "bold",
-              }}
-            >
-              <a>Detail TKP</a>
-            </Breadcrumb.Item>
-          </Breadcrumb>
-          <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
+
+          <h1 style={{ marginLeft: 35, marginTop: 35 }}>
             <strong>Detail TKP</strong>
           </h1>
-          <p style={{ marginLeft: 35, marginBottom: 10 }}>
-            Kelola data TKP pada halaman ini.
-          </p>
+          <p style={{ marginLeft: 35 }}>Kelola data TKP pada halaman ini.</p>
           <Container maxWidth="lg" className={classes.container}>
             <h2
               style={{
@@ -754,7 +879,9 @@ class DetailTKP extends React.Component {
                         <a
                           className="desc"
                           onClick={
-                            item.title === "Foto/Scan KTP"
+                            item.desc === ""
+                              ? this._handleModal.bind(this, item)
+                              : item.title === "Foto/Scan KTP"
                               ? this._handleDokumenFoto.bind(this, item)
                               : this._handleDokumenPenunjang.bind(this, item)
                           }
@@ -765,8 +892,9 @@ class DetailTKP extends React.Component {
                     </Grid>
                   ))}
                 </div>
-                {this._renderDokumenPenunjang()}
+                {this._renderModal()}
                 {this._renderDokumenFoto()}
+                {this._renderDokumenPenunjang()}
               </TabPane>
               <TabPane tab="Data Ketetapan Wawancara" key="4">
                 <h2
