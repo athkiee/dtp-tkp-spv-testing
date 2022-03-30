@@ -29,10 +29,10 @@ export default class TableDashboard extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const token = sessionStorage.getItem('token');
     const nik_spv = sessionStorage.getItem("nik");
-    axios
+    await axios
       .get(API.tkpUnderSpv + nik_spv + '/aktif', {
         headers: { Authorization: `Bearer ${token}`}
     })
