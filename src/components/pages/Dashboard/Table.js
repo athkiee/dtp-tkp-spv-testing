@@ -9,8 +9,6 @@ import {
 import axios from "axios";
 import { ROUTES, API } from "../../../configs";
 
-const token = sessionStorage.getItem('token');
-
 const data = [
   {
     key: "1",
@@ -20,7 +18,6 @@ const data = [
     mitra: "SKI",
   },
 ];
-const nik_spv = sessionStorage.getItem("nik");
 
 export default class TableDashboard extends React.Component {
   constructor(props) {
@@ -33,6 +30,8 @@ export default class TableDashboard extends React.Component {
   }
 
   componentDidMount() {
+    const token = sessionStorage.getItem('token');
+    const nik_spv = sessionStorage.getItem("nik");
     axios
       .get(API.tkpUnderSpv + nik_spv + '/aktif', {
         headers: { Authorization: `Bearer ${token}`}
