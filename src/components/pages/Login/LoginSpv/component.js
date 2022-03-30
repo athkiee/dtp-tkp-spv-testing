@@ -36,7 +36,9 @@ function LoginSupervisor(props) {
         console.log('test', response);
 
         if (response.status === 200) {
-          history.push("/Dashboard");
+          setTimeout(() => {
+            history.push('/Dashboard');
+          }, 1500);
         }
 
       })
