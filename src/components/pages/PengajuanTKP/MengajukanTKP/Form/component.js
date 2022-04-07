@@ -13,6 +13,7 @@ import { ROUTES, API } from "../../../../../configs";
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
 const { TextArea } = Input;
+const token = sessionStorage.getItem("token");
 
 const drawerWidth = 240;
 
@@ -652,6 +653,7 @@ class FormPengajuanTKP extends React.Component {
                     headers: {
                       "Content-Type":
                         "multipart/form-data; boundary=--------------------------somestring123abcdefg",
+                      Authorization: `Bearer ${token}`
                     },
                   })
                   .then((response) => {
@@ -664,6 +666,7 @@ class FormPengajuanTKP extends React.Component {
                             headers: {
                               "Content-Type":
                                 "multipart/form-data; boundary=--------------------------somestring123abcdefg",
+                              Authorization: `Bearer ${token}`
                             },
                           }
                         )

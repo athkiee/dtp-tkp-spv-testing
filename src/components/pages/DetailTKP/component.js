@@ -11,11 +11,8 @@ import PDFViewer from "pdf-viewer-reactjs";
 import { Collapse } from "antd";
 import {
   CaretRightOutlined,
-  PlusOutlined,
-  CheckCircleOutlined,
 } from "@ant-design/icons";
 import { Row, Col } from "antd";
-import { Button } from "antd";
 import { Avatar } from "antd";
 import { API } from "../../../configs";
 
@@ -237,22 +234,52 @@ class DetailTKP extends React.Component {
   }
 
   _handleDokumenPenunjang = async (value) => {
-    await axios
-      .get(
-        "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" +
-          value.desc,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        const urlDokumen = response.data;
-        this.setState({
-          preview: urlDokumen,
-          modalPreview: true,
-          modalTitle: value.title,
+    console.log('test', value.desc);
+    if (value.title === "CV") {
+      await axios
+        .get(
+          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" +
+            value.desc,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((response) => {
+          const urlDokumen = response.data;
+          this.setState({
+            preview: urlDokumen,
+            modalPreview: true,
+            modalTitle: value.title,
+          });
+          console.log('preview', this.state.preview);
+          this._renderDokumenPenunjang();
         });
-      });
+    } else if (value.title === "SKCK") {
+      await axios
+        .get(
+          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" +
+            value.desc,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((response) => {
+          const urlDokumen = response.data;
+          this.setState({
+            preview: urlDokumen,
+            modalTitle: value.title,
+          });
+          if (value.desc === "") {
+            this.setState({
+              modalInputSkck: true,
+            });
+          } else {
+            this.setState({
+              modalPreview: true,
+            });
+          }
+        });
+    }
   };
 
   _handleDokumenFoto = async (value) => {
@@ -279,12 +306,17 @@ class DetailTKP extends React.Component {
     this.setState({ [name]: file });
   };
 
-  _handleSubmit = (value) => {
-    console.log("isiSubmit", value);
+  _handleSubmit = () => {
+    var payload = new FormData();
+    payload.append("id_tkp", '3');
+    payload.append("file_skck", this.state.file_skck);
     axios
       .put(
         "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/documents/upload-skck",
-        this.state.file_skck
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       )
       .then(
         (res) => {
@@ -295,18 +327,10 @@ class DetailTKP extends React.Component {
           console.log("Error : ", err);
         }
       );
+    console.log("payload", payload);
   };
 
-  _handleModal = async (value) => {
-    this.setState({
-      modalInputSkck: true,
-      modalTitle: value.title,
-      editData: true,
-    });
-    this._renderModal();
-  };
-
-  _renderModal = (value) => {
+  _renderModalUpload = () => {
     const { modalInputSkck, modalTitle, handleBlur } = this.state;
     const { classes } = this.props;
     return (
@@ -343,7 +367,7 @@ class DetailTKP extends React.Component {
           </p>
           <button
             className={classes.buttonSimpan}
-            onClick={this._handleSubmit(this.state.file_skck)}
+            onClick={this._handleSubmit.bind(this.state.file_skck)}
           >
             Simpan
           </button>
@@ -351,17 +375,6 @@ class DetailTKP extends React.Component {
       </div>
     );
   };
-
-  /*_inputChange = e => {
-      let newSkck = { ...this.state.file_skck }
-      if (this.state.editData === false) {
-        newSkck["id"] = new Date().getTime()
-      }
-      newSkck[e.target.name] = e.target.value
-      this.setState({
-        file_skck: newSkck,
-      })
-    }*/
 
   _renderModalInfo = () => {
     Modal.success({
@@ -677,8 +690,6 @@ class DetailTKP extends React.Component {
         desc: get(dataRiwayat, "file_surat_resign") || "-",
       },
     ];
-    console.log("rev", dataDetail);
-    console.log("riwayat", dataRiwayat);
 
     return (
       <div className={classes.root}>
@@ -879,9 +890,7 @@ class DetailTKP extends React.Component {
                         <a
                           className="desc"
                           onClick={
-                            item.desc === ""
-                              ? this._handleModal.bind(this, item)
-                              : item.title === "Foto/Scan KTP"
+                            item.title === "Foto/Scan KTP"
                               ? this._handleDokumenFoto.bind(this, item)
                               : this._handleDokumenPenunjang.bind(this, item)
                           }
@@ -892,7 +901,7 @@ class DetailTKP extends React.Component {
                     </Grid>
                   ))}
                 </div>
-                {this._renderModal()}
+                {this._renderModalUpload()}
                 {this._renderDokumenFoto()}
                 {this._renderDokumenPenunjang()}
               </TabPane>
