@@ -131,7 +131,7 @@ function LoginSupervisor(props) {
             />
            
            <Grid container>
-            <Grid item xs>
+            <Grid item md>
                 <FromControlLabel
                   control={
                     <Checkbox 
@@ -139,7 +139,7 @@ function LoginSupervisor(props) {
                     value="Remember"
                     />
                   }
-                  label="Ingat saya"
+                  label="Ingat Saya"
                 />
            </Grid>
             <Grid item className="mt-2">

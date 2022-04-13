@@ -8,10 +8,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
-import MenuIcon from "@material-ui/icons/Menu";
-import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
-import ForumOutlinedIcon from "@material-ui/icons/ForumOutlined";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SideMenu from "./sideMenu";
 import ExpandLess from "@material-ui/icons/ExpandLess";
@@ -20,6 +16,9 @@ import { Menu, MenuItem } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { removeUserSession } from "../../utils/Common";
 import { IMAGES } from "../../configs";
+import Notifications from "./notification/component"
+
+
 
 const drawerWidth = 240;
 
@@ -124,9 +123,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function HeadBar() {
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleTest = () => {};
+
+
+  const [anchor, setAnchor] = React.useState(null);
+
+  const handleClickPopover = (event) => {
+    setAnchor(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setAnchor(null);
+  };
+
+  const click = Boolean(anchor);
+  const id = click ? 'simple-popover' : undefined;
 
   let history = useHistory();
   const handleDrawerOpen = () => {
@@ -172,7 +186,7 @@ export default function HeadBar() {
               open && classes.menuButtonHidden
             )}
           >
-            <MenuIcon />
+    
           </IconButton>
           <Typography
             component="h1"
@@ -182,12 +196,12 @@ export default function HeadBar() {
             className={classes.title}
           >
           </Typography>
+         
+         
+            <Notifications />
+      
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsNoneIcon style={{ color: "black" }} />
-            </Badge>
-          </IconButton>
-          <IconButton color="inherit">
+            
             <AccountCircleIcon
               style={{ color: "black" }}
               button
@@ -195,6 +209,7 @@ export default function HeadBar() {
             />
             {nama_user}
           </IconButton>
+          
           <IconButton color="inherit" button onClick={handleClick1}>
             {open ? (
               <ExpandMore style={{ color: "black" }} />
@@ -230,14 +245,14 @@ export default function HeadBar() {
         }}
         open={open}
       >
-        <div className={classes.toolbarIcon}>
+        <div  className={classes.toolbarIcon}>
           <img
             onClick={handleDrawerClose}
             src={IMAGES.LOGO}
             className="nav-Logo"
           />
         </div>
-        <List>
+        <List >
           <SideMenu />
         </List>
       </Drawer>
