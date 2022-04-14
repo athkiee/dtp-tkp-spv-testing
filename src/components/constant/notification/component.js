@@ -16,8 +16,8 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import WebAssetOffOutlinedIcon from '@mui/icons-material/WebAssetOffOutlined';
 
 export default function Notifications() {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [open, setOpen] = React.useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
 
 
     const handleClose = () => {
@@ -38,10 +38,10 @@ export default function Notifications() {
                 backgroundColor: '#DBE8F4',
                 color:'#66ACEA', 
                 message: "Terdapat perubahan status calon TKP menjadi  Wawancara yang perlu anda tinjau",
-                detailPage: "http://localhost:3000/Dashboard",
+                detailPage: "/pengajuan-tkp/dalam-proses",
                 receivedTime: "27 juli 2021, 09.00 WIB",
                 read: false,
-                status: "unread"
+                Status: "Wawancara"
             },
             {
                 id: 2,
@@ -49,9 +49,10 @@ export default function Notifications() {
                 backgroundColor: '#CCEDC4',
                 color: '#409C2A',
                 message: "Terdapat perubahan status calon TKP menjadi  Diterima yang perlu anda tinjau",
-                detailPage: "/",
+                detailPage: "/riwayat-tkp",
                 receivedTime: "27 juli 2021, 09.00 WIB",
-                read: false
+                read: false,
+                Status: "Diterima"
             },
             {
                 id: 3,
@@ -59,9 +60,10 @@ export default function Notifications() {
                 backgroundColor: '#EBD0D1',
                 color: '#EE2E24',
                 message: "Terdapat perubahan status calon TKP menjadi  Ditolak yang perlu anda tinjau",
-                detailPage: "/",
+                detailPage: "/riwayat-tkp",
                 receivedTime: "27 juli 2021, 09.00 WIB",
-                read: false
+                read: false,
+                Status: "Ditolak"
             },
             {
                 id: 4,
@@ -69,9 +71,10 @@ export default function Notifications() {
                 backgroundColor: '#FFBD70',
                 color: '#603D13',
                 message: "Terdapat perubahan status calon TKP menjadi  Kontrak Tidak Diperpanjang yang perlu anda tinjau",
-                detailPage: "/",
+                detailPage: "/riwayat-tkp",
                 receivedTime: "27 juli 2021, 09.00 WIB",
-                read: false
+                read: false,
+                Status: "Kontrak Tidak Diperpanjang"
             },
             {
                 id: 5,
@@ -79,9 +82,10 @@ export default function Notifications() {
                 backgroundColor: ' #B5D8F7',
                 color: '#3498DB',
                 message: "Terdapat perubahan status calon TKP menjadi  Perubahan Job Title yang perlu anda tinjau",
-                detailPage: "/",
+                detailPage: "/riwayat-tkp",
                 receivedTime: "27 juli 2021, 09.00 WIB",
                 read: false,
+                Status:"Perubahan Job Title"
 
             },
             {
@@ -90,9 +94,10 @@ export default function Notifications() {
                 backgroundColor: '#FF979A',
                 color: '#BC1D15',
                 message: "Terdapat perubahan status calon TKP menjadi  Resign yang perlu anda tinjau",
-                detailPage: "/",
+                detailPage: "/riwayat-tkp",
                 receivedTime: "27 juli 2021, 09.00 WIB",
-                read: false
+                read: false,
+                Status: "Resign"
 
             }
         ]
@@ -104,7 +109,7 @@ export default function Notifications() {
             if (notification.id === id) {
                 return {
                     ...notification,
-                    read: true
+                    read: true,
                 }
             }
             return notification;
@@ -129,26 +134,22 @@ export default function Notifications() {
             <IconButton aria-describedby={id} onClick={handleClick}>
             
             <Badge badgeContent={notificationsCount} color="secondary">
-                <NotificationsNoneIcon style={{color:'black'}} />
+                <NotificationsNoneIcon fontSize="large" style={{color:'black'}} />
             </Badge>
             </IconButton>
         
     );
 
-       
-   
-
-  
 
   // end notification
 
   return (
+      
     <div>
           
               {notificationsBadge}
-         
-        <Popover
-              
+
+        <Popover   
             id={id}
             open={open}
             anchorEl={anchorEl}
@@ -159,7 +160,7 @@ export default function Notifications() {
             }}
             transformOrigin={{
                 vertical: 'top',
-                horizontal: 'center',
+                horizontal: 'x(px)',
             }}
             style={{
                 width: '100%',
@@ -180,7 +181,7 @@ export default function Notifications() {
                 </Typography>
                   {notifications.map(notification => (
                    
-                          <div key={notifications.id} style={{ padding: "10px" }}>
+                          <div key="{notifications.id}" style={{ padding: "10px" }}>
                               <Link
                                     onMouseEnter={() => handleReadNotification(notification.id)}
                                    href={notification.detailPage}
@@ -193,7 +194,7 @@ export default function Notifications() {
                                         }}}
                                        >
                                   <div style={{ display: "flex", alignItems: "center" }}>
-                                  <Avatar variant='elips' style={{
+                                  <Avatar  variant='elips' style={{
                                         width: '50px',
                                         height: '50px',
                                       backgroundColor:notification.backgroundColor,
@@ -221,33 +222,3 @@ export default function Notifications() {
 } 
 
 
-
-/*
- <Button variant="outlined" color="primary" onClick={() => handleButtonClick(notification.id)}>
-                                    {notification.read ? 'Sudah dibaca' : 'Baca'}
-                                </Button>
- notifications.map(notification => (
-                        <div key={notifications.id} style={{ padding: "10px" }}>
-                            <Link
-                                to={notification.detailPage}
-                                style={{
-                                    textDecoration: 'none',
-                                    color: 'black',
-                                    fontFamily: "Montserrat",
-                                    hover: 'black'
-
-                                }}
-                            >
-                                <div style={{ display: "flex", alignItems: "center" }}>
-                                    <img src={notification.image} style={{ width: "50px", height: "50px" }} />
-                                    <div style={{ marginLeft: "10px" }}>
-                                        <Typography style={{ fontSize: "12px" }} >{notification.message}</Typography>
-                                        <Typography variant="subtitle1" style={{ fontSize: "10px" }}>
-                                            {notification.receivedTime}
-                                        </Typography>
-                                    </div>
-                                </div>
-                            </Link>
-                        </div>
-                    ))     
-*/
