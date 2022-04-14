@@ -81,6 +81,7 @@
 }
 
 .login-form h2 {
+  font-size: larger;
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
@@ -88,6 +89,7 @@
 }
 
 .login-form h1 {
+  font-size: xx-large;
   float: left;
   font-family: Montserrat;
   font-style: normal;
@@ -123,6 +125,7 @@
   width: 100%;
   border: none;
 }
+
 
 .form-input::placeholder {
   color: #595959;

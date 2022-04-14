@@ -147,7 +147,7 @@ export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
-  return (
+  return ( 
     <div className={classes.root}>
       <HeadBar />
       <main className={classes.content}>
