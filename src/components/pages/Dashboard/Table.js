@@ -182,7 +182,7 @@ export default class TableDashboard extends React.Component {
         dataIndex: "key",
         fixed: "right",
         render: (key) => (
-          <div>
+          <div >
             <span
               onClick={this._handleOpenDetail.bind(this, key)}
               style={{ marginRight: 15, cursor: "pointer" }}

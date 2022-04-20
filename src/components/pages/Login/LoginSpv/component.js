@@ -5,7 +5,17 @@ import "../styles/Login.css";
 import TextField from "@material-ui/core/TextField";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
-import { IMAGES, API } from "../../../../configs"
+import { IMAGES, API } from "../../../../configs";
+import  InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Button from "@material-ui/core/Button";
+import FromControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Grid from "@material-ui/core/Grid";
+import { createTheme } from "@mui/material";
+
+
 
 function LoginSupervisor(props) {
   const [loading, setLoading] = useState(false);
@@ -13,6 +23,27 @@ function LoginSupervisor(props) {
   const password = useFormInput("");
   const [error, setError] = useState(null);
   let history = useHistory();
+  const [values, setValues] = useState({ password:"", showPassword: false });
+  const [checked, setChecked] = useState({});
+
+  const handleCheckStyle = () => {
+    setChecked(!checked);
+  };
+
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handlePasswordChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+
+
 
   const handleLogin = () => {
     setError(null);
@@ -79,11 +110,45 @@ function LoginSupervisor(props) {
             <label className="form-label">Password</label>
             <TextField
               className="form-input"
-              type="password"
+              type={values.showPassword ? "text" : "password"}
+              onChange={handlePasswordChange("password")}
+              value={values.password}
               name="password"
               placeholder="Masukkan Password Anda"
               {...password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Button 
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </Button>
+                  </InputAdornment>
+                ),
+              }}
             />
+           
+           <Grid container>
+            <Grid item md>
+                <FromControlLabel
+                  control={
+                    <Checkbox 
+                      style={{ color: '#D51100' }}
+                    value="Remember"
+                    />
+                  }
+                  label="Ingat Saya"
+                />
+           </Grid>
+            <Grid item className="mt-2">
+                <Link to="/forgot-password" style={{ color: '#D51100'}} >
+                Lupa Password?
+                </Link>
+
+           </Grid>
+            </Grid>
           </div>
           {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
           <button
