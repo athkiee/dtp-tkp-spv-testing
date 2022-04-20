@@ -9,8 +9,6 @@ import {
 import axios from "axios";
 import { ROUTES } from "../../../../configs";
 
-const nik_spv = sessionStorage.getItem("nik");
-
 export default class TableDashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -21,9 +19,13 @@ export default class TableDashboard extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const token = sessionStorage.getItem('token');
+    const nik_spv = sessionStorage.getItem("nik");
     axios
-      .get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp?nik_spv=" + nik_spv)
+      .get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/filter/tkp-under-spv/" + nik_spv, {
+        headers: { Authorization: `Bearer ${token}` }
+    })
       .then((response) => {
         const riwayat = response.data.map((riwayat) => ({
           key: riwayat.id_tkp,

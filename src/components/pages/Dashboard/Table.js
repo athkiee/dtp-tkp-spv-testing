@@ -25,7 +25,11 @@ export default class TableDashboard extends React.Component {
     this.state = {
       searchText: "",
       searchedColumn: "",
-      dataTKP: []
+      dataTKP: [],
+      pagination: {
+        current: 1,
+        pageSize: 10,
+      },
     };
   }
 
@@ -143,6 +147,7 @@ export default class TableDashboard extends React.Component {
 
   render() {
     const coba = ['mitra', 'roles'];
+    const { pagination } = this.state;
     const columns = [
       {
         title: "Nama TKP",
@@ -202,7 +207,7 @@ export default class TableDashboard extends React.Component {
       <Table
         columns={columns}
         dataSource={this.state.dataTKP}
-        pagination={true}
+        pagination={pagination}
       />
     );
   }

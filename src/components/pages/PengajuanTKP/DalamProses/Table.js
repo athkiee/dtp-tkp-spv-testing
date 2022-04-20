@@ -12,6 +12,10 @@ export default class TableDashboard extends React.Component {
       searchText: "",
       searchedColumn: "",
       dataDP: [],
+      pagination: {
+        current: 1,
+        pageSize: 3,
+      },
     };
   }
 
@@ -127,6 +131,7 @@ export default class TableDashboard extends React.Component {
 
   render() {
     console.log("coba", this.state.dataDP);
+    const { pagination } = this.state;
 
     const columns = [
       {
@@ -179,7 +184,7 @@ export default class TableDashboard extends React.Component {
       <Table
         columns={columns}
         dataSource={this.state.dataDP}
-        pagination={true}
+        pagination={pagination}
       />
     );
   }

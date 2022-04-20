@@ -212,7 +212,7 @@ class DetailTKP extends React.Component {
   componentDidMount() {
     let id_tkp = localStorage.getItem("detail");
     axios
-      .get(API.detailTkp + "3", {
+      .get(API.detailTkp + "6", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -308,7 +308,7 @@ class DetailTKP extends React.Component {
 
   _handleSubmit = () => {
     var payload = new FormData();
-    payload.append("id_tkp", '3');
+    payload.append("id_tkp", '6');
     payload.append("file_skck", this.state.file_skck);
     axios
       .put(
