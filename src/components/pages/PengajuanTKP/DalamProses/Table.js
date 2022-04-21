@@ -20,8 +20,8 @@ export default class TableDashboard extends React.Component {
   }
 
   async componentDidMount() {
-    const nik_spv = sessionStorage.getItem("nik");
-    const token = sessionStorage.getItem("token");
+    const nik_spv = localStorage.getItem("nik");
+    const token = localStorage.getItem("token");
     await axios
       .get(API.tkpUnderSpv + nik_spv + "/dalam-proses", {
         headers: { Authorization: `Bearer ${token}` },

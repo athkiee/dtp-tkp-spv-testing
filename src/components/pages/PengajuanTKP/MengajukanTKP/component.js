@@ -115,8 +115,8 @@ const _handleBreadcumbs = () => {
 
 export default function MengajukanTKP() {
   const classes = useStyles();
-  const namaSpv = sessionStorage.getItem("nama");
-  const nikSpv = sessionStorage.getItem("nik");
+  const namaSpv = localStorage.getItem("nama");
+  const nikSpv = localStorage.getItem("nik");
   
 
   return (

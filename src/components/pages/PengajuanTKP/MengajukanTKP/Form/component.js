@@ -13,7 +13,7 @@ import { ROUTES, API } from "../../../../../configs";
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
 const { TextArea } = Input;
-const token = sessionStorage.getItem("token");
+const token = localStorage.getItem("token");
 
 const drawerWidth = 240;
 
@@ -239,7 +239,7 @@ class FormPengajuanTKP extends React.Component {
       });
     });
     this.setState({
-      nik_spv: sessionStorage.getItem("nik"),
+      nik_spv: localStorage.getItem("nik"),
     });
   }
 
@@ -436,7 +436,7 @@ class FormPengajuanTKP extends React.Component {
     const optionJenjang = dataPendidikan.map((d) => (
       <Option key={d.key}>{d.name}</Option>
     ));
-    const namaSpv = sessionStorage.getItem("nama");
+    const namaSpv = localStorage.getItem("nama");
     const important = <b style={{ color: "#EE2E24" }}>*</b>;
     // console.log('testing', cv);
 

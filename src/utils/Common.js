@@ -1,19 +1,18 @@
 // return the user data from the session storage
 export const getUser = () => {
-    const userStr = sessionStorage.getItem('nik');
+    const userStr = localStorage.getItem('nik');
     if (userStr) return JSON.parse(userStr);
     else return null;
   }
    
   // return the token from the session storage
   export const getToken = () => {
-    return sessionStorage.getItem('token') || null;
+    return localStorage.getItem('token') || null;
   }
    
   // remove the token and user from the session storage
   export const removeUserSession = () => {
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('nik');
+    localStorage.clear();
   }
    
   // set the token and user from the session storage
@@ -24,13 +23,15 @@ export const getUser = () => {
     id_spv,
     no_hp,
     email,
-    foto_profil
+    foto_profil,
+    type
     ) => {
-    sessionStorage.setItem('token', token);
-    sessionStorage.setItem('nik', nik);
-    sessionStorage.setItem('nama', nama_lengkap);
-    sessionStorage.setItem('id_spv', id_spv);
-    sessionStorage.setItem('no_hp', no_hp);
-    sessionStorage.setItem('email', email);
-    sessionStorage.setItem('foto_profil', foto_profil);
+    localStorage.setItem('token', token);
+    localStorage.setItem('nik', nik);
+    localStorage.setItem('nama', nama_lengkap);
+    localStorage.setItem('id_spv', id_spv);
+    localStorage.setItem('no_hp', no_hp);
+    localStorage.setItem('email', email);
+    localStorage.setItem('foto_profil', foto_profil);
+    localStorage.setItem('typeAuth', type);
   }

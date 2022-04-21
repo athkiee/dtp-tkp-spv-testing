@@ -159,7 +159,7 @@ export default function HeadBar() {
   };
 
 
-  const nama_user = sessionStorage.getItem("nama");
+  const nama_user = localStorage.getItem("nama");
 
 
   // Modal

@@ -1,4 +1,4 @@
-const tokenSpv = sessionStorage.getItem('token');
+const tokenSpv = localStorage.getItem('token');
 const baseUrl = 'http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/';
 
 const token = {

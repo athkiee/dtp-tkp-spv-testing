@@ -12,7 +12,7 @@ import { PushpinOutlined, DownloadOutlined } from "@ant-design/icons";
 import { API } from "../../../configs";
 
 const drawerWidth = 240;
-const nikSpv = sessionStorage.getItem("nik");
+const nikSpv = localStorage.getItem("nik");
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -146,6 +146,7 @@ const exportData = (
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  console.log(localStorage);
 
   return ( 
     <div className={classes.root}>

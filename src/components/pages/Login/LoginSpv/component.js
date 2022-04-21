@@ -13,7 +13,6 @@ import Button from "@material-ui/core/Button";
 import FromControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
-import { createTheme } from "@mui/material";
 
 
 
@@ -63,6 +62,7 @@ function LoginSupervisor(props) {
           response.data.no_hp,
           response.data.email,
           response.data.foto_profil,
+          response.data.type,
         );
         console.log('test', response);
 

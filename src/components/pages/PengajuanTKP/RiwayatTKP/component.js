@@ -8,7 +8,7 @@ import { ROUTES } from "../../../../configs";
 import { PushpinOutlined, DownloadOutlined } from "@ant-design/icons";
 
 const drawerWidth = 240;
-const nikSpv = sessionStorage.getItem("nik");
+const nikSpv = localStorage.getItem("nik");
 
 const useStyles = makeStyles((theme) => ({
   '@global': {

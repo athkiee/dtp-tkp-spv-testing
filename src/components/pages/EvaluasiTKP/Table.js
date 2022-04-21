@@ -14,7 +14,7 @@ export default class TableDashboard extends React.Component {
   };
 
   componentDidMount() {
-    const nik_spv = sessionStorage.getItem('nik');
+    const nik_spv = localStorage.getItem('nik');
     axios
       .get(API.tkpUnderSpv + nik_spv + '&id_kategori_status_tkp=2', API.token)
       .then((response) => {

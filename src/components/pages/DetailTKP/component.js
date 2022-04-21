@@ -16,7 +16,7 @@ import { Row, Col } from "antd";
 import { Avatar } from "antd";
 import { API } from "../../../configs";
 
-const token = sessionStorage.getItem("token");
+const token = localStorage.getItem("token");
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
