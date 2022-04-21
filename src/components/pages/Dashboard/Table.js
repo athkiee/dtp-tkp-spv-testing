@@ -197,11 +197,33 @@ export default class TableDashboard extends React.Component {
 
     const columnsekbid = [
       {
-        title: "Nama TKP sekbid",
+        title: "N0",
+        dataIndex: "key",
+        key: "key",
+        sorter: (a, b) => a.name.localeCompare(b.name),
+        ...this.getColumnSearchProps("key"),
+      },
+      {
+        title: "INT",
+      },
+      {
+        title: "Bidang",
+      },
+      {
+        title: "Nama TKP",
         dataIndex: "name",
         key: "name",
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
+      },
+      {
+        title:"Supervisor/PIC"
+      },
+      {
+        title: "Nik SPV",
+      },
+      {
+        title:"Loker"
       },
       {
         title: "Job Title",
@@ -211,17 +233,17 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("jobTitle"),
       },
       {
-        title: "Job Role",
-        dataIndex: "roles",
-        key: "roles",
-        sorter: (a, b) => a.roles.localeCompare(b.roles),
-        ...this.getColumnSearchProps("roles"),
+        title:"Kelompok Pekerjaan"
       },
+      
       {
         title: "Mitra",
         dataIndex: "mitra",
         key: "mitra",
         ...this.getColumnSearchProps("mitra"),
+      },
+      {
+        title:"Onboard"
       },
       {
         width: 125,

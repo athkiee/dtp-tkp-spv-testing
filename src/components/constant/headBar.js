@@ -23,6 +23,8 @@ import Button from "@material-ui/core/Button";
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import Avatar from "@material-ui/core/Avatar";
 import MenuIcon from '@mui/icons-material/Menu';
+import Popover from "@material-ui/core/Popover";
+import Card from "@material-ui/core/Card";
 
 
 const drawerWidth = 240;
@@ -155,7 +157,7 @@ export default function HeadBar() {
   
  const handleLogout = () => {
     removeUserSession();
-    history.push("/login/spv");
+    history.push("/");
   };
 
 
@@ -170,7 +172,6 @@ export default function HeadBar() {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-  
 
 
   return (
@@ -213,10 +214,11 @@ export default function HeadBar() {
               alt="Remy Sharp"
               style={{
                 marginRight: "10px",
+                backgroundColor: "#6D6E71",
               }}
 
             >
-              
+              {nama_user.charAt(0).toUpperCase()}
             </Avatar>
             <Typography
               style={{
@@ -230,32 +232,14 @@ export default function HeadBar() {
             </Typography>
           </IconButton>
           
-          <IconButton color="inherit"  onClick={handleClick1}>
-            {open ? (
+          <IconButton color="inherit" onClick={handleClick1}>
+            {open1 ? (
               <ExpandMore fontSize="large" style={{ color: "black" }} />
             ) : (
                 <ExpandLess fontSize="large" style={{ color: "black" }} />
             )}
           </IconButton>
-            <Menu
-              id="demo-positioned-menu"
-              aria-labelledby="demo-positioned-button"
-              anchorEl={anchorEl}
-              open={open1}
-              onClose={handleClose} 
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'rigth',
-            }}
-            >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
-              <MenuItem onClick={handleOpenModal}>Logout</MenuItem>
-            </Menu>
+            
          
         </Toolbar>
       </AppBar>
@@ -278,6 +262,49 @@ export default function HeadBar() {
           <SideMenu />
         </List>
       </Drawer>
+      {/*Popover arrow down*/}
+      <Popover
+
+        overflow="hidden"
+        open={open1}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+     >  
+     <Box>
+        <IconButton style={{
+          fontSize: "14px",
+          fontFamily: "Roboto",
+          color: "#000000",
+        }} onClick={handleClose}>
+        <Box
+          width="140px"
+          textAlign={'left'}
+        >
+          Profile
+        </Box>
+        </IconButton>
+        </Box>
+        <Box>
+          <IconButton style={{
+            fontSize: "14px",
+            fontFamily: "Roboto",
+            color: "#000000",
+          }} onClick={handleOpenModal}>
+            <Box
+              width="140px"
+              textAlign={'left'}
+            >
+              Logout
+            </Box>
+          </IconButton>
+        </Box>
+        
+      </Popover>
+        
         {/* Modal Logout */}
       <Modal
         open={openModal}
