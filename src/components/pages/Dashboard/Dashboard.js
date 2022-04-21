@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-    width: "1200px",
+    width: "100%",
     height: "auto",
     float: "center",
     marginLeft: 35,
@@ -164,7 +164,9 @@ export default function Dashboard() {
         <p style={{ marginLeft: 35, marginBottom: 10 }}>
           Kelola data TKP pada halaman ini.
         </p>
-        <Container maxWidth="lg" className={classes.container}>
+        <Container maxWidth="lg" className={classes.container}
+          
+        >
           <div style={{ float: "right", marginBottom: 20 }}>
             <Dropdown overlay={exportData} trigger={["click"]}>
               <a
