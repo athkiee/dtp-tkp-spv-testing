@@ -8,6 +8,7 @@ const token = {
 export default {
     token,
     loginSpv: baseUrl + 'spv/login',
+    loginSekbid: baseUrl + 'sekretaris/login',
     allBidang: baseUrl + 'bidang',
     allLokasiKerja: baseUrl + 'lokasi_kerja',
     allBank: baseUrl + 'bank',

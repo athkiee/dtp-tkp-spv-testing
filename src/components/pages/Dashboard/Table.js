@@ -9,16 +9,6 @@ import {
 import axios from "axios";
 import { ROUTES, API } from "../../../configs";
 
-const data = [
-  {
-    key: "1",
-    name: "Tono",
-    jobTitle: "Administration",
-    roles: "Digital Business Partnership",
-    mitra: "SKI",
-  },
-];
-
 export default class TableDashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -36,6 +26,7 @@ export default class TableDashboard extends React.Component {
   async componentDidMount() {
     const token = localStorage.getItem('token');
     const nik_spv = localStorage.getItem("nik");
+    console.log(token);
     await axios
       .get(API.tkpUnderSpv + nik_spv + '/aktif', {
         headers: { Authorization: `Bearer ${token}`}
@@ -53,6 +44,7 @@ export default class TableDashboard extends React.Component {
         });
         console.log('test', response);
       });
+      console.log(localStorage);
     }
 
   getColumnSearchProps = (dataIndex) => ({
@@ -146,7 +138,6 @@ export default class TableDashboard extends React.Component {
   };
 
   render() {
-    const coba = ['mitra', 'roles'];
     const { pagination } = this.state;
     const columns = [
       {
@@ -203,9 +194,68 @@ export default class TableDashboard extends React.Component {
         ),
       },
     ];
+
+    const columnsekbid = [
+      {
+        title: "Nama TKP sekbid",
+        dataIndex: "name",
+        key: "name",
+        sorter: (a, b) => a.name.localeCompare(b.name),
+        ...this.getColumnSearchProps("name"),
+      },
+      {
+        title: "Job Title",
+        dataIndex: "jobTitle",
+        key: "jobTitle",
+        sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
+        ...this.getColumnSearchProps("jobTitle"),
+      },
+      {
+        title: "Job Role",
+        dataIndex: "roles",
+        key: "roles",
+        sorter: (a, b) => a.roles.localeCompare(b.roles),
+        ...this.getColumnSearchProps("roles"),
+      },
+      {
+        title: "Mitra",
+        dataIndex: "mitra",
+        key: "mitra",
+        ...this.getColumnSearchProps("mitra"),
+      },
+      {
+        width: 125,
+        title: "Aksi",
+        dataIndex: "key",
+        fixed: "right",
+        render: (key) => (
+          <div >
+            <span
+              onClick={this._handleOpenDetail.bind(this, key)}
+              style={{ marginRight: 15, cursor: "pointer" }}
+            >
+              <EyeTwoTone />
+            </span>
+            <span>
+              <DownloadOutlined
+                onClick={() =>
+                  window.open(
+                    "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_zip_file/216"
+                  )
+                }
+                style={{ color: "#00FF00" }}
+              />
+            </span>
+          </div>
+        ),
+      },
+    ];
+    const typeAuth = localStorage.getItem('typeAuth');
+    console.log(localStorage);
+
     return (
       <Table
-        columns={columns}
+        columns={ typeAuth === 'sekretaris' ? columnsekbid : columns}
         dataSource={this.state.dataTKP}
         pagination={pagination}
       />
