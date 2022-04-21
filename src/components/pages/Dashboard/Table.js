@@ -134,7 +134,7 @@ export default class TableDashboard extends React.Component {
 
   _handleOpenDetail = (key) => {
     window.location = ROUTES.DETAIL_TKP(key);
-    localStorage.setItem("detail", key);
+    localStorage.setItem("detail_id", key);
   };
 
   render() {
@@ -251,7 +251,6 @@ export default class TableDashboard extends React.Component {
       },
     ];
     const typeAuth = localStorage.getItem('typeAuth');
-    console.log(localStorage);
 
     return (
       <Table

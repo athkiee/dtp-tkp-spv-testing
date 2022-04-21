@@ -210,9 +210,9 @@ class DetailTKP extends React.Component {
   }
 
   componentDidMount() {
-    let id_tkp = localStorage.getItem("detail");
+    let id_tkp = localStorage.getItem("detail_id");
     axios
-      .get(API.detailTkp + "6", {
+      .get(API.detailTkp + id_tkp, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -222,7 +222,7 @@ class DetailTKP extends React.Component {
         });
       });
     axios
-      .get(API.detailTkp + "3/riwayat", {
+      .get(API.detailTkp + id_tkp + "/riwayat", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -307,8 +307,9 @@ class DetailTKP extends React.Component {
   };
 
   _handleSubmit = () => {
+    let id_tkp = localStorage.getItem("detail_id");
     var payload = new FormData();
-    payload.append("id_tkp", '6');
+    payload.append("id_tkp", id_tkp);
     payload.append("file_skck", this.state.file_skck);
     axios
       .put(
