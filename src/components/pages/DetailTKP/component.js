@@ -9,14 +9,10 @@ import axios from "axios";
 import { get } from "lodash";
 import PDFViewer from "pdf-viewer-reactjs";
 import { Collapse } from "antd";
-import {
-  CaretRightOutlined,
-} from "@ant-design/icons";
+import { CaretRightOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import { Avatar } from "antd";
 import { API } from "../../../configs";
-
-const token = localStorage.getItem("token");
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -51,14 +47,6 @@ const styles = (theme) => ({
       backgroundColor: "#DA1E20",
       borderColor: "#DA1E20",
     },
-  },
-  containerTataCara: {
-    width: 550,
-    height: 180,
-    float: "left",
-    margin: 35,
-    backgroundColor: "white",
-    borderRadius: 10,
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -165,10 +153,10 @@ const styles = (theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-    width: "100%",
+    width: "1200px",
     height: "auto",
-    float: "left",
-    marginLeft: 35,
+    float: "center",
+    margin: "0px 35px 40px 35px",
     backgroundColor: "white",
     borderRadius: 10,
   },
@@ -209,8 +197,9 @@ class DetailTKP extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     let id_tkp = localStorage.getItem("detail_id");
+    let token = localStorage.getItem("token");
     axios
       .get(API.detailTkp + id_tkp, {
         headers: { Authorization: `Bearer ${token}` },
@@ -234,7 +223,7 @@ class DetailTKP extends React.Component {
   }
 
   _handleDokumenPenunjang = async (value) => {
-    console.log('test', value.desc);
+    let token = localStorage.getItem("token");
     if (value.title === "CV") {
       await axios
         .get(
@@ -251,7 +240,7 @@ class DetailTKP extends React.Component {
             modalPreview: true,
             modalTitle: value.title,
           });
-          console.log('preview', this.state.preview);
+          console.log("preview", this.state.preview);
           this._renderDokumenPenunjang();
         });
     } else if (value.title === "SKCK") {
@@ -283,6 +272,7 @@ class DetailTKP extends React.Component {
   };
 
   _handleDokumenFoto = async (value) => {
+    let token = localStorage.getItem("token");
     await axios
       .get(
         "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" +
@@ -308,6 +298,7 @@ class DetailTKP extends React.Component {
 
   _handleSubmit = () => {
     let id_tkp = localStorage.getItem("detail_id");
+    let token = localStorage.getItem("token");
     var payload = new FormData();
     payload.append("id_tkp", id_tkp);
     payload.append("file_skck", this.state.file_skck);
@@ -692,6 +683,9 @@ class DetailTKP extends React.Component {
       },
     ];
 
+    const namaTkp = dataDetail && dataDetail.nama_lengkap;
+    const typeAuth = localStorage.getItem("typeAuth");
+
     return (
       <div className={classes.root}>
         <HeadBar />
@@ -768,7 +762,7 @@ class DetailTKP extends React.Component {
                         size={96}
                         style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
                       >
-                        <b>U</b>
+                        <b>A</b>
                       </Avatar>
                     </Col>
                     <Col span={6}>
@@ -779,7 +773,7 @@ class DetailTKP extends React.Component {
                           marginTop: 15,
                         }}
                       >
-                        {get(dataDetail, "nama_lengkap")}
+                        {namaTkp}
                       </h2>
                       <p>
                         {dataDetail && dataDetail.t_bidang.kode_bidang} /
@@ -852,19 +846,39 @@ class DetailTKP extends React.Component {
                   Data Pekerjaan
                 </h2>
                 <div className={classes.detailWrapper}>
-                  {listTab2.map((item, idx) => (
-                    <Grid container key={idx}>
-                      <Grid item xs={4}>
-                        <p>{item.title}</p>
-                      </Grid>
-                      <Grid item xs={0}>
-                        <p>:</p>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <p className="desc">{item.desc}</p>
-                      </Grid>
-                    </Grid>
-                  ))}
+                  {typeAuth === "sekretaris" ? (
+                    <>
+                      {listTab2.filter(listTab2 => listTab2.title !== 'Ekspektasi THP').map((item, idx) => (
+                        <Grid container key={idx}>
+                          <Grid item xs={4}>
+                            <p>{item.title}</p>
+                          </Grid>
+                          <Grid item xs={0}>
+                            <p>:</p>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <p className="desc">{item.desc}</p>
+                          </Grid>
+                        </Grid>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {listTab2.map((item, idx) => (
+                        <Grid container key={idx}>
+                          <Grid item xs={4}>
+                            <p>{item.title}</p>
+                          </Grid>
+                          <Grid item xs={0}>
+                            <p>:</p>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <p className="desc">{item.desc}</p>
+                          </Grid>
+                        </Grid>
+                      ))}
+                    </>
+                  )}
                 </div>
               </TabPane>
               <TabPane tab="Dokumen Penunjang" key="3">
