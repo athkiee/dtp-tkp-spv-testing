@@ -762,7 +762,8 @@ class DetailTKP extends React.Component {
                         size={96}
                         style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
                       >
-                        <b>A</b>
+                        {namaTkp && namaTkp.charAt(0).toUpperCase()}
+                        
                       </Avatar>
                     </Col>
                     <Col span={6}>
