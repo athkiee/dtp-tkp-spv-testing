@@ -6,6 +6,7 @@ import {
   EyeTwoTone,
   DownloadOutlined,
 } from "@ant-design/icons";
+import PropTypes from "prop-types";
 import axios from "axios";
 import { ROUTES, API } from "../../../configs";
 
@@ -23,14 +24,14 @@ export default class TableDashboard extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    const token = localStorage.getItem('token');
+  componentDidMount() {
+    const token = localStorage.getItem("token");
     const nik_spv = localStorage.getItem("nik");
-    console.log(token);
-    await axios
-      .get(API.tkpUnderSpv + nik_spv + '/aktif', {
-        headers: { Authorization: `Bearer ${token}`}
-    })
+
+    axios
+      .get(API.tkpUnderSpv + nik_spv + "/aktif", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
         const tkp = response.data.map((tkp) => ({
           key: tkp.id_tkp,
@@ -38,14 +39,24 @@ export default class TableDashboard extends React.Component {
           jobTitle: tkp.t_job_title.nama_job_title,
           roles: tkp.t_job_role.nama_job_role,
           mitra: tkp.t_mitra.nama_mitra,
-        } ));
+        }));
         this.setState({
           dataTKP: tkp,
         });
-        console.log('test', response);
+        console.log("test", response);
       });
-      console.log(localStorage);
-    }
+    console.log(localStorage);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { perPage } = this.props;
+    this.setState({
+      pagination: {
+        ...nextProps.pagination,
+        pageSize: perPage,
+      },
+    });
+  }
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -139,6 +150,7 @@ export default class TableDashboard extends React.Component {
 
   render() {
     const { pagination } = this.state;
+    const { perPage } = this.props;
     const columns = [
       {
         title: "Nama TKP",
@@ -173,7 +185,7 @@ export default class TableDashboard extends React.Component {
         dataIndex: "key",
         fixed: "right",
         render: (key) => (
-          <div >
+          <div>
             <span
               onClick={this._handleOpenDetail.bind(this, key)}
               style={{ marginRight: 15, cursor: "pointer" }}
@@ -217,13 +229,13 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("name"),
       },
       {
-        title:"Supervisor/PIC"
+        title: "Supervisor/PIC",
       },
       {
         title: "Nik SPV",
       },
       {
-        title:"Loker"
+        title: "Loker",
       },
       {
         title: "Job Title",
@@ -233,9 +245,9 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("jobTitle"),
       },
       {
-        title:"Kelompok Pekerjaan"
+        title: "Kelompok Pekerjaan",
       },
-      
+
       {
         title: "Mitra",
         dataIndex: "mitra",
@@ -243,7 +255,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("mitra"),
       },
       {
-        title:"Onboard"
+        title: "Onboard",
       },
       {
         width: 125,
@@ -251,7 +263,7 @@ export default class TableDashboard extends React.Component {
         dataIndex: "key",
         fixed: "right",
         render: (key) => (
-          <div >
+          <div>
             <span
               onClick={this._handleOpenDetail.bind(this, key)}
               style={{ marginRight: 15, cursor: "pointer" }}
@@ -272,14 +284,24 @@ export default class TableDashboard extends React.Component {
         ),
       },
     ];
-    const typeAuth = localStorage.getItem('typeAuth');
+    const typeAuth = localStorage.getItem("typeAuth");
+    console.log('test', pagination);
 
     return (
       <Table
-        columns={ typeAuth === 'sekretaris' ? columnsekbid : columns}
+        columns={typeAuth === "sekretaris" ? columnsekbid : columns}
         dataSource={this.state.dataTKP}
         pagination={pagination}
       />
     );
   }
 }
+
+TableDashboard.defaultProps = {
+  classes: {},
+};
+
+TableDashboard.propTypes = {
+  classes: PropTypes.object,
+  perPage: PropTypes.string.isRequired,
+};
