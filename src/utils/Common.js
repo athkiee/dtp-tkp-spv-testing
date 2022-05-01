@@ -24,7 +24,7 @@ export const getUser = () => {
     no_hp,
     email,
     foto_profil,
-    type
+    type,
     ) => {
     localStorage.setItem('token', token);
     localStorage.setItem('nik', nik);

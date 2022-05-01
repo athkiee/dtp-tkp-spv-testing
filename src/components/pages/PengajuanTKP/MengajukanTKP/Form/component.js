@@ -9,7 +9,7 @@ import { Select, Input, DatePicker, Modal, Breadcrumb } from "antd";
 import { Formik } from "formik";
 import moment from "moment";
 import { ROUTES, API } from "../../../../../configs";
-
+import Button from "@material-ui/core/Button";
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
 const { TextArea } = Input;
@@ -32,6 +32,8 @@ const styles = (theme) => ({
     ...theme.mixins.toolbar,
   },
   submitForm: {
+    width :"150px",
+    height: "40px",
     color: "white",
     borderColor: "#DA1E20",
     borderRadius: 10,
@@ -109,6 +111,7 @@ const styles = (theme) => ({
   fixedHeight: {
     height: 240,
   },
+
 });
 
 class FormPengajuanTKP extends React.Component {
@@ -321,6 +324,29 @@ class FormPengajuanTKP extends React.Component {
     });
   };
 
+  sendNotif = () => {
+    const nik_spv = localStorage.getItem("nik");
+    const data={
+      id_kategori_notifikasi:1,
+      nik_spv_berkaitan:nik_spv,
+      id_tkp_berkaitan:this.state.id_tkp,
+    }
+
+    const token = localStorage.getItem("token");
+    axios
+      .post(API.notification_admin+"tambah",data,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        console.log("send notif berhasil",response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   render() {
     const { classes } = this.props;
     const {
@@ -397,8 +423,11 @@ class FormPengajuanTKP extends React.Component {
       foto_scanktp,
       file_skck,
     };
+
+   
     const optionProvinsi = dataProvinsi.map((d) => (
-      <Option key={d.key} value={d.name}>
+      <Option   
+       key={d.key} value={d.name}>
         {d.name}
       </Option>
     ));
@@ -676,6 +705,7 @@ class FormPengajuanTKP extends React.Component {
                               content: "Pengajuan TKP Anda telah berhasil",
                               onOk() {},
                             });
+                            this.sendNotif()
                             console.log("OK!", values);
                           } else {
                             console.log("File upload gagal!", values);
@@ -848,6 +878,7 @@ class FormPengajuanTKP extends React.Component {
                           Provinsi sesuai KTP{important}
                         </label>
                         <Select
+                      
                           showSearch
                           name={"provinsi_ktp"}
                           className={classes.inputForm}
@@ -1310,8 +1341,19 @@ class FormPengajuanTKP extends React.Component {
                       name={"file_skck"}
                     />
                   </div>
+                  
+                  <div style={{ margin: 20 }}>
+                    <Grid container 
+                      justify="flex-end"
+                    >
+                      <Button className={classes.submitForm} type="submit" disabled={isSubmitting} > SUBMIT</Button>
+                    </Grid>
+                    </div>
+                 
+                       
+                 
 
-                  <input type="submit" disabled={isSubmitting} />
+                 
                 </form>
               )}
             </Formik>

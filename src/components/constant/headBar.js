@@ -15,7 +15,7 @@ import { Menu, MenuItem } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { removeUserSession } from "../../utils/Common";
 import { IMAGES } from "../../configs";
-import Notifications from "./notification/component";
+import NotificationPopover from "./notification/component";
 import Modal from "@material-ui/core/Modal";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
@@ -205,7 +205,7 @@ export default function HeadBar() {
           </Typography>
          
          
-          <Notifications  />
+          <NotificationPopover />
       
           <IconButton
           color="inherit" onClick={handleTest}>
