@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appBarShift: {
     marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    // width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -88,6 +88,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   drawerPaper: {
+    zIndex: theme.zIndex.drawer + 1,
+    borderTopRightRadius:50,
     position: "relative",
     whiteSpace: "nowrap",
     width: drawerWidth,
@@ -95,6 +97,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    overflow: "hidden",
   },
   drawerPaperClose: {
     overflowX: "hidden",
@@ -190,9 +193,10 @@ export default function HeadBar() {
             color="inherit"
             aria-label="open drawer"
             onClick={open ? handleDrawerClose : handleDrawerOpen}
+            style={open ? {marginLeft:drawerWidth} : { marginLeft: -20 }}
           >
             <MenuIcon fontSize="large" style={{
-              color: "#000000",
+              color: "#000000"
             }} />
           </IconButton>
           <Typography
@@ -250,6 +254,8 @@ export default function HeadBar() {
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
         }}
         open={open}
+
+        onMouseEnter={handleDrawerOpen}
       >
         <div  className={classes.toolbarIcon}>
           <img
