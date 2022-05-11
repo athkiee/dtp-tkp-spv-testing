@@ -23,5 +23,8 @@ export default {
     exportCsvUnderSpv: baseUrl + 'tkp/export-csv/tkp-under-spv/',
     exportFileUnderSpv: baseUrl + 'tkp/get-zip/tkp-under-spv/',
     tkpUnderSpv: baseUrl + 'tkp/filter/tkp-under-spv/',
-    detailTkp: baseUrl + 'tkp/'
+    detailTkp: baseUrl + 'tkp/',
+    notification_spv: baseUrl + 'notifikasi_spv/',
+    notification_admin: baseUrl + 'notifikasi_admin/',
+
 }

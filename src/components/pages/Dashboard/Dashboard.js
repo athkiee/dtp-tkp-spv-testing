@@ -91,6 +91,7 @@ const styles = (theme) => ({
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
+    width: "100%",
     flexGrow: 1,
     height: "100vh",
     overflow: "auto",
@@ -102,10 +103,10 @@ const styles = (theme) => ({
     width: "100%",
     height: "auto",
     float: "center",
-    marginLeft: 35,
     marginBottom: 50,
     backgroundColor: "white",
     borderRadius: 10,
+    maxWidth: "95.3%",
   },
   paper: {
     padding: theme.spacing(2),
@@ -212,7 +213,7 @@ class Dashboard extends React.Component {
           <p style={{ marginLeft: 35, marginBottom: 10 }}>
             Kelola data TKP pada halaman ini.
           </p>
-          <Container maxWidth="lg" className={classes.container}>
+          <Container  className={classes.container}>
             <div
               style={{
                 marginBottom: 20,

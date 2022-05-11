@@ -138,7 +138,7 @@ export default class TableDashboard extends React.Component {
         title: "Tanggal",
         dataIndex: "tanggal_pengajuan",
         key: "tanggal_pengajuan",
-        width: "30%",
+        width: "20%",
         sorter: (a, b) =>
           a.tanggal_pengajuan.localeCompare(b.tanggal_pengajuan),
         ...this.getColumnSearchProps("tanggal_pengajuan"),
@@ -147,7 +147,7 @@ export default class TableDashboard extends React.Component {
         title: "Nama Calon TKP",
         dataIndex: "name",
         key: "name",
-        width: "20%",
+        width: "30%",
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
       },

@@ -106,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 35,
     backgroundColor: "white",
     borderRadius: 10,
+    maxWidth: "95.3%",
   },
   paper: {
     padding: theme.spacing(2),
