@@ -99,10 +99,10 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(4),
     width: "100%",
     height: "auto",
-    float: "left",
-    marginLeft: 35,
+    float: "center",
     backgroundColor: "white",
     borderRadius: 10,
+    maxWidth: "95.3%",
   },
   paper: {
     padding: theme.spacing(2),
@@ -159,7 +159,7 @@ export default function DalamProsesPengajuanTKP() {
           Kelola data TKP berstatus Menunggu Konfirmasi dan Wawancara pada tabel
           di bawah ini.
         </p>
-        <Container maxWidth="lg" className={classes.container}>
+        <Container className={classes.container}>
           <TableDashboard />
         </Container>
       </main>

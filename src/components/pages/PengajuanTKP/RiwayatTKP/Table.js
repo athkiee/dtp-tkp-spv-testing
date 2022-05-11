@@ -197,9 +197,114 @@ export default class TableDashboard extends React.Component {
         ),
       },
     ];
+
+    const columnSekbid = [
+      {
+        title: "No",
+        width: "5%",
+        key: "index",
+        render: (text, name, index) => index + 1,
+      },
+      {
+        title: "INT",
+        dataIndex: "int",
+        key: "int",
+
+      },
+      {
+        title: "Bidang",
+        dataIndex: "bidang",
+        key: "bidang",
+        ...this.getColumnSearchProps("bidang"),
+      },
+      {
+        title: "Nama TKP",
+        dataIndex: "name",
+        key: "name",
+        width: "20%",
+        className: "clientName" ? "show" : "hide",
+        sorter: (a, b) => a.name.localeCompare(b.name),
+        ...this.getColumnSearchProps("name"),
+      },
+      {
+        title: "Supervisor/PIC",
+        dataIndex: "supervisor",
+        key: "supervisor",
+        ...this.getColumnSearchProps("supervisor"),
+      },
+      {
+        title:"NIK SPV",
+        dataIndex: "nik_spv",
+        key: "nik_spv",
+        ...this.getColumnSearchProps("nik_spv"),
+      },
+      {
+        title:"Loker",
+        dataIndex: "loker",
+        key: "loker",
+        ...this.getColumnSearchProps("loker"),
+      },
+      {
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        ...this.getColumnSearchProps("status"),
+      },
+
+      
+      {
+        title: "Job Title",
+        dataIndex: "jobTitle",
+        key: "jobTitle",
+        ...this.getColumnSearchProps("jobTitle"),
+      },
+      {
+        title:"Onboard",
+        dataIndex: "onboard",
+        key: "onboard",
+        ...this.getColumnSearchProps("onboard"),
+      },
+      {
+        title:"Perubahan Status Terakhir",
+        dataIndex: "last_status",
+        key: "last_status",
+        ...this.getColumnSearchProps("last_status"),
+      },
+ 
+      {
+        width: 125,
+        title: "Aksi",
+        dataIndex: "key",
+        fixed: "right",
+        render: (key) => (
+          <div>
+            <span
+              onClick={this._handleOpenDetail.bind(this, key)}
+              style={{ marginRight: 15, cursor: "pointer" }}
+            >
+              <EyeTwoTone />
+            </span>
+            <span>
+              <DownloadOutlined
+                onClick={() =>
+                  window.open(
+                    "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_zip_file/216"
+                  )
+                }
+                style={{ color: "#00FF00" }}
+              />
+            </span>
+          </div>
+        ),
+      },
+    ];
+
+    const typeAuth = localStorage.getItem("typeAuth");
     return (
       <Table
-        columns={columns}
+        columns={
+          typeAuth === "sekretaris" ? columnSekbid : columns
+        }
         dataSource={this.state.dataRiwayat}
         pagination={true}
       />

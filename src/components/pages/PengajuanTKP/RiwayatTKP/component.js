@@ -106,10 +106,10 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(4),
     width: "100%",
     height: "auto",
-    float: "left",
-    marginLeft: 35,
+    float: "center",
     backgroundColor: "white",
     borderRadius: 10,
+    maxWidth: "95.3%",
   },
   paper: {
     padding: theme.spacing(2),
@@ -240,7 +240,7 @@ export default function RiwayatTKP() {
         <p style={{ marginLeft: 35, marginBottom: 10 }}>
           Kelola data riwayat TKP pada halaman ini.
         </p>
-        <Container maxWidth="lg" className={classes.container}>
+        <Container  className={classes.container}>
           <div style={{ float: "right", marginBottom: 20 }}>
             <Dropdown overlay={exportData} trigger={["click"]}>
               <a

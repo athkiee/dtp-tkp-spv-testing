@@ -45,9 +45,9 @@ const styles = (theme) => ({
     },
   },
   containerTataCara: {
-    width: "100%",
+    maxWidth: "95.3%",
     height: "auto",
-    float: "left",
+    float: "center",
     marginLeft: 35,
     backgroundColor: "white",
     borderRadius: 10,

@@ -34,9 +34,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   containerTataCara: {
-    width: "100%",
+    maxWidth: "95.3%",
     height: 360,
-    float: "left",
+    float: "center",
     marginLeft: 35,
     backgroundColor: "white",
     borderRadius: 10,
@@ -96,6 +96,8 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
+    
+    
   },
   paper: {
     padding: theme.spacing(2),
