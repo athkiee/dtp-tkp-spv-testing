@@ -34,11 +34,18 @@ export default class TableDashboard extends React.Component {
       })
       .then((response) => {
         const tkp = response.data.map((tkp) => ({
+          index: tkp,
           key: tkp.id_tkp,
           name: tkp.nama_lengkap,
           jobTitle: tkp.t_job_title.nama_job_title,
           roles: tkp.t_job_role.nama_job_role,
           mitra: tkp.t_mitra.nama_mitra,
+          bidang: tkp.t_bidang.kode_bidang,
+          supervisor: tkp.t_supervisor.nama_lengkap,
+          nik_spv: tkp.nik_spv,
+          kelompokPekerjaan: tkp.t_kelompok_pekerjaan.nama_kelompok_pekerjaan,
+          tanggalOnboard: tkp.tanggal_onboard,
+          loker: tkp.t_lokasi_kerja.nama_lokasi_kerja,
         }));
         this.setState({
           dataTKP: tkp,
@@ -209,19 +216,22 @@ export default class TableDashboard extends React.Component {
 
     const columnsekbid = [
       {
+        width:"1%",
         title: "N0",
-        dataIndex: "key",
-        key: "key",
-        sorter: (a, b) => a.name.localeCompare(b.name),
-        ...this.getColumnSearchProps("key"),
+        dataIndex: "index",
+        key: "index",
+        render: (text, name, index) => index + 1,
       },
       {
-        title: "INT",
-      },
-      {
+        width:"2%",
         title: "Bidang",
+        dataIndex: "bidang",
+        key: "bidang",
+        sorter: (a, b) => a.bidang.localeCompare(b.bidang),
+        ...this.getColumnSearchProps("bidang"),
       },
       {
+        width:"10%",
         title: "Nama TKP",
         dataIndex: "name",
         key: "name",
@@ -229,13 +239,27 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("name"),
       },
       {
+        width: "13%",
         title: "Supervisor/PIC",
+        dataIndex: "supervisor",
+        key: "supervisor",
+        sorter: (a, b) => a.supervisor.localeCompare(b.supervisor),
+        ...this.getColumnSearchProps("supervisor"),
       },
       {
+        width: "9%",
         title: "Nik SPV",
+        dataIndex: "nik_spv",
+        key: "nik_spv",
+        sorter: (a, b) => a.nik.localeCompare(b.nik_spv),
+        ...this.getColumnSearchProps("nik_spv"),
       },
       {
         title: "Loker",
+        dataIndex: "loker",
+        key: "loker",
+        sorter: (a, b) => a.loker.localeCompare(b.loker),
+        ...this.getColumnSearchProps("loker"),
       },
       {
         title: "Job Title",
@@ -245,7 +269,12 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("jobTitle"),
       },
       {
+        width: "18%",
         title: "Kelompok Pekerjaan",
+        dataIndex: "kelompokPekerjaan",
+        key: "kelompokPekerjaan",
+        sorter: (a, b) => a.kelompokPekerjaan.localeCompare(b.kelompokPekerjaan),
+        ...this.getColumnSearchProps("kelompokPekerjaan"),
       },
 
       {
@@ -256,9 +285,13 @@ export default class TableDashboard extends React.Component {
       },
       {
         title: "Onboard",
+        dataIndex: "tanggalOnboard",
+        key: "tanggalOnboard",
+        sorter: (a, b) => a.tanggalOnboard.localeCompare(b.tanggalOnboard),
+        ...this.getColumnSearchProps("tanggalOnboard"),
       },
       {
-        width: 125,
+        width: "5%", 
         title: "Aksi",
         dataIndex: "key",
         fixed: "right",

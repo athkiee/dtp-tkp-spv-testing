@@ -33,10 +33,15 @@ export default class TableDashboard extends React.Component {
           name: riwayat.nama_lengkap,
           status: riwayat.t_status_tkp.nama_status_tkp,
           jobTitle: riwayat.t_job_title.nama_job_title,
+          supervisor: riwayat.t_supervisor.nama_lengkap,
+          nik_spv: riwayat.nik_spv,
+          loker: riwayat.t_lokasi_kerja.nama_lokasi_kerja,
+          onboard: riwayat.tanggal_onboard,
         }));
         this.setState({
           dataRiwayat: riwayat,
         });
+        console.log("testriwayat", response);
       });
   }
 
@@ -221,18 +226,20 @@ export default class TableDashboard extends React.Component {
         title: "Nama TKP",
         dataIndex: "name",
         key: "name",
-        width: "20%",
+        width: "13%",
         className: "clientName" ? "show" : "hide",
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
       },
       {
+        width: "13%",
         title: "Supervisor/PIC",
         dataIndex: "supervisor",
         key: "supervisor",
         ...this.getColumnSearchProps("supervisor"),
       },
       {
+        width: "9%",
         title:"NIK SPV",
         dataIndex: "nik_spv",
         key: "nik_spv",
