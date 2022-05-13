@@ -49,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
       color: "red",
       fontWeight: "bold",
     },
-  
   },
   ListItembefore: {
     backgroundColor: "#fff",
@@ -60,8 +59,7 @@ const useStyles = makeStyles((theme) => ({
       color: "black",
       fontWeight: "bold",
     },
-    
-  }
+  },
 }));
 
 export default function SideMenu() {
@@ -69,75 +67,109 @@ export default function SideMenu() {
   const [open, setOpen] = React.useState(true);
   const handleClick = () => {
     setOpen(!open);
-    
   };
   return (
     <div>
-      <ListItem className={
-        window.location.pathname === "/Dashboard" ? classes.ListItemafter : classes.ListItembefore
-      } component={Link} to="/Dashboard">
-        <ListItemIcon className={
-          window.location.pathname === "/Dashboard" ? classes.ListItemafter : classes.ListItembefore
-        } >
-          <HomeOutlinedIcon  />
+      <ListItem
+        className={
+          window.location.pathname === "/Dashboard"
+            ? classes.ListItemafter
+            : classes.ListItembefore
+        }
+        component={Link}
+        to="/Dashboard"
+      >
+        <ListItemIcon
+          className={
+            window.location.pathname === "/Dashboard"
+              ? classes.ListItemafter
+              : classes.ListItembefore
+          }
+        >
+          <HomeOutlinedIcon />
         </ListItemIcon>
         <ListItemText primary="Beranda" />
       </ListItem>
 
-      <ListItem className={
-        open ? classes.ListItemabefore : classes.ListItemafter
-      }  button onClick={handleClick}>
-        <ListItemIcon className={
-          open ? classes.ListItembefore : classes.ListItemafter
-        } >
+      <ListItem
+        className={open ? classes.ListItemabefore : classes.ListItemafter}
+        button
+        onClick={handleClick}
+      >
+        <ListItemIcon
+          className={open ? classes.ListItembefore : classes.ListItemafter}
+        >
           <DescriptionOutlinedIcon />
         </ListItemIcon>
         <ListItemText primary="Pengajuan TKP" />
         {open ? <ExpandMore /> : <ExpandLess />}
-        
       </ListItem>
       <Collapse in={!open} timeout="auto" unmountOnExit>
         <Link to={ROUTES.PENGAJUAN_TKP} style={{ color: "black" }}>
           <List alignItems="center" component="div">
-            <ListItem button className={
-              window.location.pathname === "/pengajuan-tkp/supervisor" ? classes.nestedListafter : classes.nestedListBefore
-            }>
+            <ListItem
+              button
+              className={
+                window.location.pathname === "/pengajuan-tkp/supervisor"
+                  ? classes.nestedListafter
+                  : classes.nestedListBefore
+              }
+            >
               <ListItemText primary="Mengajukan TKP" />
             </ListItem>
           </List>
         </Link>
         <Link to={ROUTES.PENGAJUAN_TKP_DALAM_PROSES} style={{ color: "black" }}>
           <List component="div">
-            <ListItem button className={
-              window.location.pathname === "/pengajuan-tkp/dalam-proses" ? classes.nestedListafter : classes.nestedListBefore
-            }>
+            <ListItem
+              button
+              className={
+                window.location.pathname === "/pengajuan-tkp/dalam-proses"
+                  ? classes.nestedListafter
+                  : classes.nestedListBefore
+              }
+            >
               <ListItemText primary="Dalam Proses"></ListItemText>
             </ListItem>
           </List>
         </Link>
         <Link to={ROUTES.RIWAYAT_TKP} style={{ color: "black" }}>
           <List component="div">
-            <ListItem button className={
-              window.location.pathname === "/riwayat-tkp/" ? classes.nestedListafter : classes.nestedListBefore
-            }>
+            <ListItem
+              button
+              className={
+                window.location.pathname === "/riwayat-tkp/"
+                  ? classes.nestedListafter
+                  : classes.nestedListBefore
+              }
+            >
               <ListItemText primary="Riwayat" />
             </ListItem>
           </List>
         </Link>
       </Collapse>
 
-      <ListItem>
-        <ListItemIcon className={
-          window.location.pathname === "/kelola-evaluasi-tkp" ? classes.ListItemafter : classes.ListItembefore
-        }>
-          <PeopleIcon />
-        </ListItemIcon>
-        <Link to={ROUTES.KELOLA_EVALUASI_TKP} style={{ color: "black" }}>
-          <ListItemText className={
-            window.location.pathname === "/kelola-evaluasi-tkp" ? classes.ListItemafter : classes.ListItembefore
-          }  primary="Evaluasi TKP"></ListItemText>
-        </Link>
-      </ListItem>
+      <Link to={ROUTES.KELOLA_EVALUASI_TKP} style={{ color: "black" }}>
+        <ListItem>
+          <ListItemIcon
+            className={
+              window.location.pathname === "/kelola-evaluasi-tkp"
+                ? classes.ListItemafter
+                : classes.ListItembefore
+            }
+          >
+            <PeopleIcon />
+          </ListItemIcon>
+          <ListItemText
+            className={
+              window.location.pathname === "/kelola-evaluasi-tkp"
+                ? classes.ListItemafter
+                : classes.ListItembefore
+            }
+            primary="Evaluasi TKP"
+          ></ListItemText>
+        </ListItem>
+      </Link>
     </div>
   );
 }

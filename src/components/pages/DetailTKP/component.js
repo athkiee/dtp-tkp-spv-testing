@@ -685,6 +685,8 @@ class DetailTKP extends React.Component {
 
     const namaTkp = dataDetail && dataDetail.nama_lengkap;
     const typeAuth = localStorage.getItem("typeAuth");
+    const nikSpv = localStorage.getItem("nik");
+    const namaSpv = localStorage.getItem("nama");
 
     return (
       <div className={classes.root}>
@@ -716,7 +718,7 @@ class DetailTKP extends React.Component {
                   <p>:</p>
                 </Grid>
                 <Grid item xs={6}>
-                  <p className="desc">Coba</p>
+                  <p className="desc">{namaSpv}</p>
                 </Grid>
               </Grid>
               <Grid container>
@@ -727,7 +729,7 @@ class DetailTKP extends React.Component {
                   <p>:</p>
                 </Grid>
                 <Grid item xs={6}>
-                  <p className="desc">1234567</p>
+                  <p className="desc">{nikSpv}</p>
                 </Grid>
               </Grid>
               <h2
@@ -776,9 +778,8 @@ class DetailTKP extends React.Component {
                       >
                         {namaTkp}
                       </h2>
-                      <p>
-                        {dataDetail && dataDetail.t_bidang.kode_bidang} /
-                        {dataDetail && dataDetail.t_job_role.nama_job_role}
+                      <p style={{ maxWidth: 150, minWidth: 150, width: 150 }}>
+                        {dataDetail && dataDetail.t_bidang.kode_bidang} / {dataDetail && dataDetail.t_job_title_levelling.nama_job_title_levelling}
                       </p>
                     </Col>
                   </Row>
