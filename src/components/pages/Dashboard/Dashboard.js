@@ -15,10 +15,14 @@ import {
 } from "antd";
 import { PushpinOutlined, DownloadOutlined } from "@ant-design/icons";
 import { API } from "../../../configs";
+import axios from "axios";
+import fileDownload from "js-file-download";
+import ModalConfirmation from "../../ModalConfirmation";
+import ModalSuccess from "../../ModalSuccess";
+import ModalLoading from "../../ModalLoading";
 
 const drawerWidth = 240;
 const { Option } = Select;
-const nikSpv = localStorage.getItem("nik");
 
 const styles = (theme) => ({
   root: {
@@ -121,24 +125,31 @@ const styles = (theme) => ({
     paddingLeft: theme.spacing(4),
   },
 });
-
-
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showData: 10
+      showData: 10,
+      dialogConfirmation: false,
+      dialogZip: false,
+      dialogSuccess: false,
+      dialogLoading: false,
     };
   }
 
   _handleFilterData = (value) => {
     this.setState({
-      showData: value
-    })
-  }
+      showData: value,
+    });
+  };
+
   render() {
     const { classes } = this.props;
     const { showData } = this.state;
+    const nikSpv = localStorage.getItem("nik");
+    const token = localStorage.getItem("token");
+    const nama = localStorage.getItem("nama");
+    console.log(token);
 
     const buttonPin = (
       <Menu>
@@ -156,24 +167,62 @@ class Dashboard extends React.Component {
         </Menu.Item>
       </Menu>
     );
-    
+
+    const handleExportCSV = () => {
+      this.setState({ dialogConfirmation: true });
+    };
+
+    const handleExportZip = () => {
+      this.setState({ dialogZip: true });
+    };
+
+    const getDataCSV = async () => {
+      const dataCSV = await axios
+        .get(`${API.getCSVTKPUnderSPV}${nikSpv}/active`, {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        })
+        .then((response) => response)
+        .catch((error) => console.error(error));
+
+      const { status, data } = dataCSV;
+      if (status === 200) {
+        this.setState({ dialogConfirmation: false });
+        fileDownload(data, `tkp-active-under-spv-${nama}.csv`);
+        this.setState({ dialogSuccess: true });
+      }
+    };
+
+    const getDataZip = async () => {
+      this.setState({ dialogZip: false });
+      this.setState({ dialogLoading: true });
+      const dataZip = await axios
+        .get(`${API.getZipTKPUnderSPV}${nikSpv}/active`, {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        })
+        .then((response) => response)
+        .catch((error) => console.error(error));
+
+      const { status, data } = dataZip;
+      if (status === 200) {
+        this.setState({ dialogLoading: false });
+        fileDownload(data, `tkp-active-under-spv-${nama}.zip`);
+        this.setState({ dialogSuccess: true });
+      }
+    };
+
     const exportData = (
       <Menu>
-        <Menu.Item
-          key="0"
-          onClick={() => window.open(API.exportCsvUnderSpv + nikSpv + "/active")}
-        >
+        <Menu.Item key="0" onClick={handleExportCSV}>
           Ekspor Data (.Csv)
         </Menu.Item>
-        <Menu.Item
-          key="1"
-          onClick={() => window.open(API.exportFileUnderSpv + nikSpv + "/active")}
-        >
+        <Menu.Item key="1" onClick={handleExportZip}>
           Ekspor Data (.Zip)
         </Menu.Item>
       </Menu>
     );
-    
+
     const filterShowdata = [
       {
         key: 10,
@@ -192,7 +241,7 @@ class Dashboard extends React.Component {
         value: 100,
       },
     ];
-    
+
     const optionJumlahData = filterShowdata.map((d) => (
       <Option key={d.key}>{d.value}</Option>
     ));
@@ -213,7 +262,7 @@ class Dashboard extends React.Component {
           <p style={{ marginLeft: 35, marginBottom: 10 }}>
             Kelola data TKP pada halaman ini.
           </p>
-          <Container  className={classes.container}>
+          <Container className={classes.container}>
             <div
               style={{
                 marginBottom: 20,
@@ -236,6 +285,7 @@ class Dashboard extends React.Component {
               <div style={{ marginTop: 25 }}>
                 <Dropdown overlay={exportData} trigger={["click"]}>
                   <a
+                    href="_black"
                     className="ant-dropdown-link"
                     onClick={(e) => e.preventDefault()}
                   >
@@ -245,6 +295,43 @@ class Dashboard extends React.Component {
                     </Button>
                   </a>
                 </Dropdown>
+
+                {/* modal dialog confirmation csv */}
+                <ModalConfirmation
+                  title={"Yakin ingin Ekspor Data Hasil Evaluasi (.csv)?"}
+                  description={
+                    "Banyaknya data akan berpengaruh pada proses ekspor."
+                  }
+                  open={this.state.dialogConfirmation}
+                  handleClose={() =>
+                    this.setState({ dialogConfirmation: false })
+                  }
+                  getData={() => getDataCSV()}
+                />
+
+                {/* modal dialog confirmation zip */}
+                <ModalConfirmation
+                  title={"Yakin ingin Ekspor Data Hasil Evaluasi (.zip)?"}
+                  description={
+                    "Banyaknya data akan berpengaruh pada proses ekspor."
+                  }
+                  open={this.state.dialogZip}
+                  handleClose={() => this.setState({ dialogZip: false })}
+                  getData={() => getDataZip()}
+                />
+
+                {/* modal dialog Loading */}
+                <ModalLoading
+                  open={this.state.dialogLoading}
+                  handleClose={() => this.setState({ dialogLoading: false })}
+                />
+
+                {/* modal dialog success */}
+                <ModalSuccess
+                  open={this.state.dialogSuccess}
+                  handleClose={() => this.setState({ dialogSuccess: false })}
+                />
+
                 <Popover placement="bottom" content={buttonPin} trigger="click">
                   <PushpinOutlined
                     style={{
