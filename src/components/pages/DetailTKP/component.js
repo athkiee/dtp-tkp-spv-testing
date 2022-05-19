@@ -194,6 +194,7 @@ class DetailTKP extends React.Component {
       modalPhoto: null,
       preview: "",
       editData: false,
+      dataRiwayat: [],
     };
   }
 
@@ -215,9 +216,9 @@ class DetailTKP extends React.Component {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        const detail = response.data;
+        const riwayat = response.data;
         this.setState({
-          dataRiwayat: detail[0],
+          dataRiwayat: riwayat,
         });
       });
   }
@@ -240,7 +241,6 @@ class DetailTKP extends React.Component {
             modalPreview: true,
             modalTitle: value.title,
           });
-          console.log("preview", this.state.preview);
           this._renderDokumenPenunjang();
         });
     } else if (value.title === "SKCK") {
@@ -312,14 +312,12 @@ class DetailTKP extends React.Component {
       )
       .then(
         (res) => {
-          console.log("resPut", res);
           this._renderModalInfo();
         },
         (err) => {
           console.log("Error : ", err);
         }
       );
-    console.log("payload", payload);
   };
 
   _renderModalUpload = () => {
@@ -460,7 +458,9 @@ class DetailTKP extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { dataDetail, dataRiwayat } = this.state;
+    const { dataDetail } = this.state;
+    let { dataRiwayat } = this.state;
+    console.log("test", dataRiwayat);
     const listTab1 = [
       {
         title: "Nama lengkap sesuai TKP",
@@ -627,61 +627,6 @@ class DetailTKP extends React.Component {
         desc: (dataDetail && dataDetail.t_mitra.nama_mitra) || "-",
       },
     ];
-    const listStatusTerakhir1 = [
-      {
-        title: "Status",
-        desc:
-          (dataRiwayat &&
-            dataRiwayat.t_kategori_status_tkp.nama_kategori_status_tkp) ||
-          "-",
-      },
-      {
-        title: "Onboard",
-        desc: get(dataRiwayat, "tanggal_onboard") || "-",
-      },
-      {
-        title: "Job Title",
-        desc: (dataRiwayat && dataRiwayat.t_job_title.nama_job_title) || "-",
-      },
-      {
-        title: "Mitra",
-        desc: (dataRiwayat && dataRiwayat.t_mitra.nama_mitra) || "-",
-      },
-      {
-        title: "Paket",
-        desc: (dataRiwayat && dataRiwayat.t_paket.keterangan_paket) || "-",
-      },
-      {
-        title: "No. SP",
-        desc: get(dataRiwayat, "no_sp") || "-",
-      },
-    ];
-    const listStatusTerakhir2 = [
-      {
-        title: "Berita Acara Wawancara",
-        desc: get(dataRiwayat, "file_berita_acara_wawancara") || "-",
-      },
-      {
-        title: "Tanggal Habis Kontrak",
-        desc: get(dataRiwayat, "tanggal_habis_kontrak") || "-",
-      },
-      {
-        title: "Keterangan",
-        desc: "-",
-      },
-      {
-        title: "Form Evaluasi",
-        desc: get(dataRiwayat, "file_form_evaluasi") || "-",
-      },
-      {
-        title: "Tanggal Resign",
-        desc: get(dataRiwayat, "tanggal_resign") || "-",
-      },
-      {
-        title: "Surat Resign",
-        desc: get(dataRiwayat, "file_surat_resign") || "-",
-      },
-    ];
 
     const namaTkp = dataDetail && dataDetail.nama_lengkap;
     const typeAuth = localStorage.getItem("typeAuth");
@@ -765,7 +710,6 @@ class DetailTKP extends React.Component {
                         style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
                       >
                         {namaTkp && namaTkp.charAt(0).toUpperCase()}
-                        
                       </Avatar>
                     </Col>
                     <Col span={6}>
@@ -779,7 +723,10 @@ class DetailTKP extends React.Component {
                         {namaTkp}
                       </h2>
                       <p style={{ maxWidth: 150, minWidth: 150, width: 150 }}>
-                        {dataDetail && dataDetail.t_bidang.kode_bidang} / {dataDetail && dataDetail.t_job_title_levelling.nama_job_title_levelling}
+                        {dataDetail && dataDetail.t_bidang.kode_bidang} /{" "}
+                        {dataDetail &&
+                          dataDetail.t_job_title_levelling
+                            .nama_job_title_levelling}
                       </p>
                     </Col>
                   </Row>
@@ -850,19 +797,23 @@ class DetailTKP extends React.Component {
                 <div className={classes.detailWrapper}>
                   {typeAuth === "sekretaris" ? (
                     <>
-                      {listTab2.filter(listTab2 => listTab2.title !== 'Ekspektasi THP').map((item, idx) => (
-                        <Grid container key={idx}>
-                          <Grid item xs={4}>
-                            <p>{item.title}</p>
+                      {listTab2
+                        .filter(
+                          (listTab2) => listTab2.title !== "Ekspektasi THP"
+                        )
+                        .map((item, idx) => (
+                          <Grid container key={idx}>
+                            <Grid item xs={4}>
+                              <p>{item.title}</p>
+                            </Grid>
+                            <Grid item xs={0}>
+                              <p>:</p>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <p className="desc">{item.desc}</p>
+                            </Grid>
                           </Grid>
-                          <Grid item xs={0}>
-                            <p>:</p>
-                          </Grid>
-                          <Grid item xs={6}>
-                            <p className="desc">{item.desc}</p>
-                          </Grid>
-                        </Grid>
-                      ))}
+                        ))}
                     </>
                   ) : (
                     <>
@@ -961,62 +912,122 @@ class DetailTKP extends React.Component {
                   Status Terakhir
                 </h2>
                 <div>
-                  <Collapse
-                    bordered={false}
-                    defaultActiveKey={["1"]}
-                    expandIcon={({ isActive }) => (
-                      <CaretRightOutlined rotate={isActive ? 90 : 0} />
-                    )}
-                    className="site-collapse-custom-collapse"
-                    ghost
-                  >
-                    <Panel
-                      header={
-                        dataDetail &&
-                        dataDetail.t_job_title_levelling
-                          .nama_job_title_levelling
-                      }
-                      key="1"
-                      className="site-collapse-custom-panel"
-                    >
-                      <Row>
-                        <Col span={12}>
-                          <div className={classes.detailWrapper}>
-                            {listStatusTerakhir1.map((item, idx) => (
-                              <Grid container key={idx}>
-                                <Grid item xs={4}>
-                                  <p>{item.title}</p>
-                                </Grid>
-                                <Grid item xs={0}>
-                                  <p>:</p>
-                                </Grid>
-                                <Grid item xs={6}>
-                                  <p className="desc">{item.desc}</p>
-                                </Grid>
-                              </Grid>
-                            ))}
-                          </div>
-                        </Col>
-                        <Col span={12}>
-                          <div className={classes.detailWrapper}>
-                            {listStatusTerakhir2.map((item, idx) => (
-                              <Grid container key={idx}>
-                                <Grid item xs={4}>
-                                  <p>{item.title}</p>
-                                </Grid>
-                                <Grid item xs={0}>
-                                  <p>:</p>
-                                </Grid>
-                                <Grid item xs={6}>
-                                  <p className="desc">{item.desc}</p>
-                                </Grid>
-                              </Grid>
-                            ))}
-                          </div>
-                        </Col>
-                      </Row>
-                    </Panel>
-                  </Collapse>
+                  {dataRiwayat.map((item, idx) => {
+                    const listStatusTerakhir1 = [
+                      {
+                        title: "Status",
+                        desc:
+                          (item &&
+                            item.jenis_perubahan) ||
+                          "-",
+                      },
+                      {
+                        title: "Onboard",
+                        desc: get(item, "tanggal_onboard") || "-",
+                      },
+                      {
+                        title: "Job Title",
+                        desc:
+                          (item && item.t_job_title.nama_job_title) ||
+                          "-",
+                      },
+                      {
+                        title: "Mitra",
+                        desc: (item && item.t_mitra.nama_mitra) || "-",
+                      },
+                      {
+                        title: "Paket",
+                        desc:
+                          (item && item.t_paket.keterangan_paket) ||
+                          "-",
+                      },
+                      {
+                        title: "No. SP",
+                        desc: get(item, "no_sp") || "-",
+                      },
+                    ];
+                    const listStatusTerakhir2 = [
+                      {
+                        title: "Berita Acara Wawancara",
+                        desc:
+                          get(item, "file_berita_acara_wawancara") || "-",
+                      },
+                      {
+                        title: "Tanggal Habis Kontrak",
+                        desc: get(item, "tanggal_habis_kontrak") || "-",
+                      },
+                      {
+                        title: "Keterangan",
+                        desc: "-",
+                      },
+                      {
+                        title: "Form Evaluasi",
+                        desc: get(item, "file_form_evaluasi") || "-",
+                      },
+                      {
+                        title: "Tanggal Resign",
+                        desc: get(item, "tanggal_resign") || "-",
+                      },
+                      {
+                        title: "Surat Resign",
+                        desc: get(item, "file_surat_resign") || "-",
+                      },
+                    ];
+                    return (
+                      <Collapse
+                        bordered={false}
+                        key={idx}
+                        expandIcon={({ isActive }) => (
+                          <CaretRightOutlined rotate={isActive ? 90 : 0} />
+                        )}
+                        className="site-collapse-custom-collapse"
+                        ghost
+                      >
+                        <Panel
+                          header={item && item.t_job_title.nama_job_title}
+                          key="1"
+                          className="site-collapse-custom-panel"
+                        >
+                          <Row>
+                            <Col span={12}>
+                              <div className={classes.detailWrapper}>
+                                {listStatusTerakhir1.map((item, idx) => (
+                                  <Grid container key={idx}>
+                                    <Grid item xs={4}>
+                                      <p>{item.title}</p>
+                                    </Grid>
+                                    <Grid item xs={0}>
+                                      <p>:</p>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                      <p className="desc">{item.desc}</p>
+                                    </Grid>
+                                  </Grid>
+                                ))}
+                              </div>
+                            </Col>
+                            <Col span={12}>
+                              <div className={classes.detailWrapper}>
+                                {listStatusTerakhir2.map((item, idx) => (
+                                  <Grid container key={idx}>
+                                    <Grid item xs={4}>
+                                      <p>{item.title}</p>
+                                    </Grid>
+                                    <Grid item xs={0}>
+                                      <p>:</p>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                      <p className="desc">{item.desc}</p>
+                                    </Grid>
+                                  </Grid>
+                                ))}
+                              </div>
+                            </Col>
+                          </Row>
+                        </Panel>
+                      </Collapse>
+                    );
+                  })}
                 </div>
               </TabPane>
             </Tabs>
