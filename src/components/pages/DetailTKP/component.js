@@ -228,7 +228,7 @@ class DetailTKP extends React.Component {
     if (value.title === "CV") {
       await axios
         .get(
-          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" +
+          "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_file/" +
             value.desc,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -246,7 +246,7 @@ class DetailTKP extends React.Component {
     } else if (value.title === "SKCK") {
       await axios
         .get(
-          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" +
+          "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_file/" +
             value.desc,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -275,7 +275,7 @@ class DetailTKP extends React.Component {
     let token = localStorage.getItem("token");
     await axios
       .get(
-        "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_file/" +
+        "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_file/" +
           value.desc,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -304,7 +304,7 @@ class DetailTKP extends React.Component {
     payload.append("file_skck", this.state.file_skck);
     axios
       .put(
-        "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/documents/upload-skck",
+        "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/documents/upload-skck",
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },

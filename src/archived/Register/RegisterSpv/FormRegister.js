@@ -9,7 +9,7 @@ import axios from 'axios';
 
 const handleGetDATA = async () => {
   try {
-    const resp = await axios.get('http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/bidang_api/');
+    const resp = await axios.get('http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/bidang_api/');
     console.log(resp.data);
 } catch (err) {
     // Handle Error Here
