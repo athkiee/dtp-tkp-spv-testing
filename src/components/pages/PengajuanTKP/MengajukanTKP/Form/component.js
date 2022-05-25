@@ -150,7 +150,7 @@ class FormPengajuanTKP extends React.Component {
       id_bidang: "",
       id_lokasi_kerja: "",
       id_job_title: "",
-      id_kelompok_pekerjaan: "",
+      id_job_title_levelling: "",
       id_job_role: "",
       deskripsi_pekerjaan: "",
       thp: "",
@@ -370,7 +370,7 @@ class FormPengajuanTKP extends React.Component {
       id_bidang,
       id_lokasi_kerja,
       id_job_title,
-      id_kelompok_pekerjaan,
+      id_job_title_levelling,
       id_job_role,
       deskripsi_pekerjaan,
       thp,
@@ -415,7 +415,7 @@ class FormPengajuanTKP extends React.Component {
       id_bidang,
       id_lokasi_kerja,
       id_job_title,
-      id_kelompok_pekerjaan,
+      id_job_title_levelling,
       id_job_role,
       deskripsi_pekerjaan,
       thp,
@@ -467,7 +467,6 @@ class FormPengajuanTKP extends React.Component {
     ));
     const namaSpv = localStorage.getItem("nama");
     const important = <b style={{ color: "#EE2E24" }}>*</b>;
-    // console.log('testing', cv);
 
     return (
       <div className={classes.root}>
@@ -570,7 +569,7 @@ class FormPengajuanTKP extends React.Component {
                 if (!values.id_job_title) {
                   errors.id_job_title = "Job Title Usulan tidak boleh kosong";
                 }
-                if (!values.id_kelompok_pekerjaan) {
+                if (!values.id_job_title_levelling) {
                   errors.id_job_title_levelling =
                     "Job Title Level Usulan tidak boleh kosong";
                 }
@@ -625,6 +624,7 @@ class FormPengajuanTKP extends React.Component {
                 formData.append("id_status_tkp", this.state.id_status_tkp);
                 formData.append("id_bidang", this.state.id_bidang);
                 formData.append("id_job_title", this.state.id_job_title);
+                formData.append("id_job_title_levelling", this.state.id_job_title_levelling);
                 formData.append("id_job_role", this.state.id_job_role);
                 formData.append("id_mitra", this.state.id_mitra);
                 formData.append("id_paket", this.state.id_paket);
@@ -1203,21 +1203,21 @@ class FormPengajuanTKP extends React.Component {
                           Job Title Levelling Usulan{important}
                         </label>
                         <Select
-                          name={"id_kelompok_pekerjaan"}
+                          name={"id_job_title_levelling"}
                           className={classes.inputForm}
                           placeholder=" Pilih Job Title Level Usulan"
                           onChange={this._handleSelect.bind(
                             this,
-                            "id_kelompok_pekerjaan"
+                            "id_job_title_levelling"
                           )}
                           onBlur={handleBlur}
                         >
                           {optionJTlevel}
                         </Select>
                         <p className={classes.negativeCase}>
-                          {errors.id_kelompok_pekerjaan &&
-                            touched.id_kelompok_pekerjaan &&
-                            errors.id_kelompok_pekerjaan}
+                          {errors.id_job_title_levelling &&
+                            touched.id_job_title_levelling &&
+                            errors.id_job_title_levelling}
                         </p>
                       </div>
                     </Grid>
