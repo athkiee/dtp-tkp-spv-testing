@@ -8,6 +8,9 @@ import {
 } from "@ant-design/icons";
 import axios from "axios";
 import { ROUTES } from "../../../../configs";
+import Typography from "@material-ui/core/Typography";
+import CircleIcon from '@mui/icons-material/Circle';
+
 
 export default class TableDashboard extends React.Component {
   constructor(props) {
@@ -33,10 +36,15 @@ export default class TableDashboard extends React.Component {
           name: riwayat.nama_lengkap,
           status: riwayat.t_status_tkp.nama_status_tkp,
           jobTitle: riwayat.t_job_title.nama_job_title,
+          supervisor: riwayat.t_supervisor.nama_lengkap,
+          nik_spv: riwayat.nik_spv,
+          loker: riwayat.t_lokasi_kerja.nama_lokasi_kerja,
+          onboard: riwayat.tanggal_onboard,
         }));
         this.setState({
           dataRiwayat: riwayat,
         });
+        console.log("testriwayat", response);
       });
   }
 
@@ -221,18 +229,20 @@ export default class TableDashboard extends React.Component {
         title: "Nama TKP",
         dataIndex: "name",
         key: "name",
-        width: "20%",
+        width: "13%",
         className: "clientName" ? "show" : "hide",
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
       },
       {
+        width: "13%",
         title: "Supervisor/PIC",
         dataIndex: "supervisor",
         key: "supervisor",
         ...this.getColumnSearchProps("supervisor"),
       },
       {
+        width: "9%",
         title:"NIK SPV",
         dataIndex: "nik_spv",
         key: "nik_spv",
@@ -245,10 +255,25 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("loker"),
       },
       {
+        width: "9%",
         title: "Status",
         dataIndex: "status",
         key: "status",
         ...this.getColumnSearchProps("status"),
+        render: (text) => {
+          if (text === "Diterima") {
+            return <Typography style={{
+              color: "rgba(129, 199, 114, 1)"
+            }}><CircleIcon style={{fontSize:"10px"}} /> {text}</Typography>;
+          } else if (text === "Ditolak") {
+            return <Typography style={{
+              color: "rgba(238, 46, 36, 1)"
+            }}><CircleIcon style={{ fontSize: "10px" }} /> {text}</Typography>;
+          }  else {
+            return <Typography variant="span" 
+              style={{ color: "rgba(173, 173, 173, 1)" }}><CircleIcon style={{ fontSize: "10px" }} /> {text}</Typography>;
+          }
+        }
       },
 
       

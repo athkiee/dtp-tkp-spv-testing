@@ -1,5 +1,7 @@
+
 const tokenSpv = localStorage.getItem("token");
 const baseUrl = "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/";
+
 
 const token = {
   headers: { Authorization: `Bearer ${tokenSpv}` },
@@ -28,4 +30,6 @@ export default {
   notification_admin: baseUrl + "notifikasi_admin/",
   getZipTKPUnderSPV: baseUrl + "tkp/get-zip/tkp-under-spv/",
   getCSVTKPUnderSPV: baseUrl + "tkp/export-csv/tkp-under-spv/",
+  dataspv: baseUrl + 'spv/',
 };
+

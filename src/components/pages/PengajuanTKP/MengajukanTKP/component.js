@@ -1,19 +1,24 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { Button, Breadcrumb } from "antd";
-import TextField from "@material-ui/core/TextField";
+import { Button, Breadcrumb,  Select, } from "antd";
 import HeadBar from "../../../constant/headBar";
-import { ROUTES } from "../../../../configs";
-
+import { ROUTES,API } from "../../../../configs";
+import axios from "axios";
+import { withStyles } from "@material-ui/core/styles";
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme) => ({
   root: {
     display: "flex",
   },
   toolbar: {
     paddingRight: 24,
+  },
+  negativeCase: {
+    color: "#EE2E24",
   },
   toolbarIcon: {
     display: "flex",
@@ -96,8 +101,8 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-    
-    
+
+
   },
   paper: {
     padding: theme.spacing(2),
@@ -108,19 +113,67 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-}));
+});
+
 
 const _handleBreadcumbs = () => {
   window.location = ROUTES.DASHBOARD()
+
+};
+
+
+
+
+
+
+
+
+ class MengajukanTKP extends React.Component {
+
+  
+constructor(props) {
+  super(props);
+  this.state = {
+    nama_supervisor: "",
+    nik_supervisor: "",
+    data: [],
+
+  }
 }
 
 
-export default function MengajukanTKP() {
-  const classes = useStyles();
-  const namaSpv = localStorage.getItem("nama");
-  const nikSpv = localStorage.getItem("nik");
+
+  async componentDidMount() {
+    axios.get(API.dataspv, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    })
+
+    .then((res) => {
+      const data = res.data.map((item) => ({
+        nik_spv: item.nik_spv,
+        nama_spv: item.nama_lengkap,
+      })
+      );
+      this.setState({
+        data,
+      });
+
+      console.log(res, "ini data");
+    })
+  }
+
   
 
+
+  render(){
+    const typeAuth = localStorage.getItem("typeAuth");
+    const { classes } = this.props;
+    const data = this.state.data;
+
+   
+  
   return (
     <div className={classes.root}>
       <HeadBar />
@@ -150,47 +203,94 @@ export default function MengajukanTKP() {
           Ajukan data diri TKP secara lengkap dengan mengisi kolom di bawah ini.
         </p>
         <Container className={classes.containerTataCara}>
-          <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15 }}>
+          <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15, paddingTop:15 }}>
             Data Supervisor
           </h2>
           <p>
             Silahkan mengisi Data Supervisor di bawah ini untuk membuka formulir
             TKP
           </p>
-          <div style={{ marginBottom: 40 }}>
-            <label className="form-label">Nama Supervisor</label>
-            <TextField
-              id="outlined-basic"
-              variant="outlined"
-              className="form-input"
-              type="text"
-              name="name"
-              value={namaSpv}
-              disabled
+
+          <label className="form-label">Nama Supervisor</label>
+          <div style={{ marginBottom: 20 }}>
+
+            <Autocomplete
+              freeSolo
+              id="free-solo-2-demo"
+              disableClearable
+              options={data.map((option) => option.nama_spv)}
+              renderInput={(params) => (
+                sessionStorage.setItem("nama_spv", params.inputProps.value),
+                <TextField
+                  {...params}
+                  label="--"
+                  
+                  InputProps={{
+                    ...params.InputProps,
+                    type: 'search',
+                  }}
+                  onSelect={(e) => {
+                    this.setState({
+                      nama_supervisor: e.target.value,
+                    });
+                  }}
+                  />
+              )}
+
             />
           </div>
-          <div style={{ marginBottom: 40 }}>
-            <label className="form-label">NIK Supervisor</label>
-            <TextField
-              id="outlined-basic"
-              variant="outlined"
-              className="form-input"
-              type="number"
-              name="nik"
-              value={nikSpv}
-              disabled
+          <label className="form-label">NIK Supervisor</label>
+          <div style={{ marginBottom: 20 }}>
+            
+           
+            <Autocomplete
+              freeSolo
+              id="free-solo-2-demo"
+              disableClearable
+              options={data.map((option) => option.nik_spv)}
+              renderInput={(params) => (
+                sessionStorage.setItem("nik_spv", params.inputProps.value),
+                <TextField
+                  {...params}
+                  label="--"
+                  InputProps={{
+                    ...params.InputProps,
+                    type: 'search',
+                  }}
+
+                  onSelect={(e) => {
+                    this.setState({
+                      nik_supervisor: e.target.value,
+
+                    });
+                  }}
+
+
+                />
+              )}
             />
           </div>
           <Button
-            type="primary"
-            onClick={() => (window.location = ROUTES.PENGAJUAN_TKP_FORM())}
+            type="submit"
+            onClick={
+              () => (window.location = ROUTES.PENGAJUAN_TKP_FORM())}
             className={classes.submitForm}
+            disabled={typeAuth === "supervisor" ? false : 
+              
+              this.state.nama_supervisor === "" || this.state.nik_supervisor === "" ? true : false
+          }
+          
           >
             <strong>SUBMIT</strong>
           </Button>
+           
         </Container>
         <Container maxWidth="lg" className={classes.container}></Container>
       </main>
     </div>
   );
+          }
 }
+
+export default withStyles(useStyles)(MengajukanTKP);
+
