@@ -37,7 +37,7 @@ export default class TableDashboard extends React.Component {
           index: tkp,
           key: tkp.id_tkp,
           name: tkp.nama_lengkap,
-          jobTitle: tkp.t_job_title.nama_job_title,
+          jobTitle: tkp.t_job_title_levelling.nama_job_title_levelling,
           roles: tkp.t_job_role.nama_job_role,
           mitra: tkp.t_mitra.nama_mitra,
           bidang: tkp.t_bidang.kode_bidang,
@@ -203,7 +203,7 @@ export default class TableDashboard extends React.Component {
               <DownloadOutlined
                 onClick={() =>
                   window.open(
-                    "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_zip_file/216"
+                    "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
                   )
                 }
                 style={{ color: "#00FF00" }}
@@ -307,7 +307,7 @@ export default class TableDashboard extends React.Component {
               <DownloadOutlined
                 onClick={() =>
                   window.open(
-                    "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_zip_file/216"
+                    "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
                   )
                 }
                 style={{ color: "#00FF00" }}

@@ -188,7 +188,7 @@ const exportData = (
       key="0"
       onClick={() =>
         window.open(
-          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/export-csv/tkp-under-spv/" +
+          "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/export-csv/tkp-under-spv/" +
             nikSpv
         )
       }
@@ -199,7 +199,7 @@ const exportData = (
       key="1"
       onClick={() =>
         window.open(
-          "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get-zip/tkp-under-spv/" +
+          "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get-zip/tkp-under-spv/" +
             nikSpv
         )
       }

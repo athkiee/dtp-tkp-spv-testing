@@ -26,7 +26,7 @@ export default class TableDashboard extends React.Component {
     const token = localStorage.getItem('token');
     const nik_spv = localStorage.getItem("nik");
     axios
-      .get("http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/filter/tkp-under-spv/" + nik_spv, {
+      .get("http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/filter/tkp-under-spv/" + nik_spv, {
         headers: { Authorization: `Bearer ${token}` }
     })
       .then((response) => {
@@ -195,7 +195,7 @@ export default class TableDashboard extends React.Component {
               <DownloadOutlined
                 onClick={() =>
                   window.open(
-                    "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_zip_file/216"
+                    "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
                   )
                 }
                 style={{ color: "#00FF00" }}
@@ -313,7 +313,7 @@ export default class TableDashboard extends React.Component {
               <DownloadOutlined
                 onClick={() =>
                   window.open(
-                    "http://ec2-34-238-164-78.compute-1.amazonaws.com:4004/tkp/get_zip_file/216"
+                    "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
                   )
                 }
                 style={{ color: "#00FF00" }}
