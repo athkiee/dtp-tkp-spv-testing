@@ -1,13 +1,13 @@
 import React from "react";
 import Container from "@material-ui/core/Container";
-import { Button, Breadcrumb,  Select, } from "antd";
+import { Button, Breadcrumb, Select } from "antd";
 import HeadBar from "../../../constant/headBar";
-import { ROUTES,API } from "../../../../configs";
+import { ROUTES, API } from "../../../../configs";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 const drawerWidth = 240;
 
 const useStyles = (theme) => ({
@@ -101,8 +101,6 @@ const useStyles = (theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-
-
   },
   paper: {
     padding: theme.spacing(2),
@@ -115,182 +113,178 @@ const useStyles = (theme) => ({
   },
 });
 
-
 const _handleBreadcumbs = () => {
-  window.location = ROUTES.DASHBOARD()
-
+  window.location = ROUTES.DASHBOARD();
 };
 
-
-
-
-
-
-
-
- class MengajukanTKP extends React.Component {
-
-  
-constructor(props) {
-  super(props);
-  this.state = {
-    nama_supervisor: "",
-    nik_supervisor: "",
-    data: [],
-
+class MengajukanTKP extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      nama_supervisor: "",
+      nik_supervisor: "",
+      data: [],
+    };
   }
-}
-
-
 
   async componentDidMount() {
-    axios.get(API.dataspv, {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    })
-
-    .then((res) => {
-      const data = res.data.map((item) => ({
-        nik_spv: item.nik_spv,
-        nama_spv: item.nama_lengkap,
+    axios
+      .get(API.dataspv, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
       })
-      );
-      this.setState({
-        data,
-      });
 
-      console.log(res, "ini data");
-    })
+      .then((res) => {
+        const data = res.data.map((item) => ({
+          nik_spv: item.nik_spv,
+          nama_spv: item.nama_lengkap,
+        }));
+        this.setState({
+          data,
+        });
+
+        console.log(res, "ini data");
+      });
   }
 
-  
-
-
-  render(){
+  render() {
     const typeAuth = localStorage.getItem("typeAuth");
     const { classes } = this.props;
+    const { nama_supervisor, nik_supervisor } = this.state;
     const data = this.state.data;
+    const findNIK = data.find((obj) => obj.nama_spv === nama_supervisor);
+    const matchesNIK = findNIK && findNIK.nik_spv;
 
-   
-  
-  return (
-    <div className={classes.root}>
-      <HeadBar />
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
-          <Breadcrumb.Item style={{ cursor: "pointer" }}>
-            <a onClick={_handleBreadcumbs}>Beranda</a>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item style={{ cursor: "pointer" }}>
-            <a>Pengajuan TKP</a>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item
-            style={{
-              cursor: "pointer",
-              fontColor: "#DA1E20 !important",
-              fontWeight: "bold",
-            }}
-          >
-            <a>Ajukan TKP</a>
-          </Breadcrumb.Item>
-        </Breadcrumb>
-        <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
-          <strong>Ajukan TKP</strong>
-        </h1>
-        <p style={{ marginLeft: 35, marginBottom: 10 }}>
-          Ajukan data diri TKP secara lengkap dengan mengisi kolom di bawah ini.
-        </p>
-        <Container className={classes.containerTataCara}>
-          <h2 style={{ color: "#DA1E20", fontWeight: "bold", marginTop: 15, paddingTop:15 }}>
-            Data Supervisor
-          </h2>
-          <p>
-            Silahkan mengisi Data Supervisor di bawah ini untuk membuka formulir
-            TKP
+    return (
+      <div className={classes.root}>
+        <HeadBar />
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
+            <Breadcrumb.Item style={{ cursor: "pointer" }}>
+              <a onClick={_handleBreadcumbs}>Beranda</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item style={{ cursor: "pointer" }}>
+              <a>Pengajuan TKP</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item
+              style={{
+                cursor: "pointer",
+                fontColor: "#DA1E20 !important",
+                fontWeight: "bold",
+              }}
+            >
+              <a>Ajukan TKP</a>
+            </Breadcrumb.Item>
+          </Breadcrumb>
+          <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
+            <strong>Ajukan TKP</strong>
+          </h1>
+          <p style={{ marginLeft: 35, marginBottom: 10 }}>
+            Ajukan data diri TKP secara lengkap dengan mengisi kolom di bawah
+            ini.
           </p>
+          <Container className={classes.containerTataCara}>
+            <h2
+              style={{
+                color: "#DA1E20",
+                fontWeight: "bold",
+                marginTop: 15,
+                paddingTop: 15,
+              }}
+            >
+              Data Supervisor
+            </h2>
+            <p>
+              Silahkan mengisi Data Supervisor di bawah ini untuk membuka
+              formulir TKP
+            </p>
 
-          <label className="form-label">Nama Supervisor</label>
-          <div style={{ marginBottom: 20 }}>
-
-            <Autocomplete
-              freeSolo
-              id="free-solo-2-demo"
-              disableClearable
-              options={data.map((option) => option.nama_spv)}
-              renderInput={(params) => (
-                sessionStorage.setItem("nama_spv", params.inputProps.value),
-                <TextField
-                  {...params}
-                  label="--"
-                  
-                  InputProps={{
-                    ...params.InputProps,
-                    type: 'search',
-                  }}
-                  onSelect={(e) => {
-                    this.setState({
-                      nama_supervisor: e.target.value,
-                    });
-                  }}
-                  />
-              )}
-
-            />
-          </div>
-          <label className="form-label">NIK Supervisor</label>
-          <div style={{ marginBottom: 20 }}>
-            
-           
-            <Autocomplete
-              freeSolo
-              id="free-solo-2-demo"
-              disableClearable
-              options={data.map((option) => option.nik_spv)}
-              renderInput={(params) => (
-                sessionStorage.setItem("nik_spv", params.inputProps.value),
-                <TextField
-                  {...params}
-                  label="--"
-                  InputProps={{
-                    ...params.InputProps,
-                    type: 'search',
-                  }}
-
-                  onSelect={(e) => {
-                    this.setState({
-                      nik_supervisor: e.target.value,
-
-                    });
-                  }}
-
-
-                />
-              )}
-            />
-          </div>
-          <Button
-            type="submit"
-            onClick={
-              () => (window.location = ROUTES.PENGAJUAN_TKP_FORM())}
-            className={classes.submitForm}
-            disabled={typeAuth === "supervisor" ? false : 
-              
-              this.state.nama_supervisor === "" || this.state.nik_supervisor === "" ? true : false
-          }
-          
-          >
-            <strong>SUBMIT</strong>
-          </Button>
-           
-        </Container>
-        <Container maxWidth="lg" className={classes.container}></Container>
-      </main>
-    </div>
-  );
-          }
+            <label className="form-label">Nama Supervisor</label>
+            <div style={{ marginBottom: 20 }}>
+              <Autocomplete
+                freeSolo
+                id="free-solo-2-demo"
+                disableClearable
+                options={data.map((option) => option.nama_spv)}
+                renderInput={(params) => (
+                  sessionStorage.setItem("nama_spv", params.inputProps.value),
+                  (
+                    <TextField
+                      {...params}
+                      label="--"
+                      InputProps={{
+                        ...params.InputProps,
+                        type: "search",
+                      }}
+                      onSelect={(e) => {
+                        this.setState({
+                          nama_supervisor: e.target.value,
+                          nik_supervisor: matchesNIK,
+                        });
+                      }}
+                    />
+                  )
+                )}
+              />
+            </div>
+            <label className="form-label">NIK Supervisor</label>
+            <div style={{ marginBottom: 20 }}>
+              <Autocomplete
+                freeSolo
+                id="free-solo-2-demo"
+                disableClearable
+                value={nik_supervisor}
+                options={data.map((option) => option.nik_spv)}
+                renderInput={(params) => (
+                  matchesNIK === ""
+                    ? sessionStorage.setItem("nik_spv", params.inputProps.value)
+                    : sessionStorage.setItem("nik_spv", matchesNIK),
+                  (
+                    <TextField
+                      {...params}
+                      label="--"
+                      InputProps={{
+                        ...params.InputProps,
+                        type: "search",
+                      }}
+                      onSelect={(e) => {
+                        matchesNIK === ""
+                          ? this.setState({
+                              nik_supervisor: e.target.value,
+                              nik_supervisor: matchesNIK,
+                            })
+                          : this.setState({
+                              nik_supervisor: matchesNIK,
+                            });
+                      }}
+                    />
+                  )
+                )}
+              />
+            </div>
+            <Button
+              type="submit"
+              onClick={() => (window.location = ROUTES.PENGAJUAN_TKP_FORM())}
+              className={classes.submitForm}
+              disabled={
+                typeAuth === "supervisor"
+                  ? false
+                  : this.state.nama_supervisor === "" ||
+                    this.state.nik_supervisor === ""
+                  ? true
+                  : false
+              }
+            >
+              <strong>SUBMIT</strong>
+            </Button>
+          </Container>
+          <Container maxWidth="lg" className={classes.container}></Container>
+        </main>
+      </div>
+    );
+  }
 }
 
 export default withStyles(useStyles)(MengajukanTKP);
-
