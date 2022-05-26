@@ -49,7 +49,7 @@
     "react-select": "^4.3.1",
     "recharts": "^2.1.2",
     "web-vitals": "^1.1.2",
-    "yup": "^0.32.9"
+    "yup": "^0.32.11"
   },
   "homepage": "http://dtptkp.github.io/",
   "scripts": {

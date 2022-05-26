@@ -10,6 +10,7 @@ import { Formik } from "formik";
 import moment from "moment";
 import { ROUTES, API } from "../../../../../configs";
 import Button from "@material-ui/core/Button";
+
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
 const { TextArea } = Input;
@@ -324,6 +325,8 @@ class FormPengajuanTKP extends React.Component {
     });
   };
 
+  
+
   sendNotif = () => {
     const nik_spv = localStorage.getItem("nik");
     const data={
@@ -348,6 +351,7 @@ class FormPengajuanTKP extends React.Component {
   }
 
   render() {
+    const typeAuth = localStorage.getItem("typeAuth");
     const { classes } = this.props;
     const {
       nik_spv,
@@ -515,6 +519,9 @@ class FormPengajuanTKP extends React.Component {
                 }
                 if (!values.tempat_lahir) {
                   errors.tempat_lahir = "Tempat lahir tidak boleh kosong";
+                }
+                if (!values.tanggal_lahir) {
+                  errors.tanggal_lahir = "Tanggal lahir tidak boleh kosong";
                 }
                 if (!values.alamat_ktp) {
                   errors.alamat_ktp =
@@ -707,6 +714,8 @@ class FormPengajuanTKP extends React.Component {
                             });
                             this.sendNotif()
                             console.log("OK!", values);
+                            sessionStorage.removeItem('nama_spv')
+                            sessionStorage.removeItem('nik_spv')
                           } else {
                             console.log("File upload gagal!", values);
                           }
@@ -742,7 +751,9 @@ class FormPengajuanTKP extends React.Component {
                       className={classes.inputForm}
                       type="text"
                       name="name"
-                      value={namaSpv}
+                      value={
+                        typeAuth === "sekretaris" ? sessionStorage.getItem('nama_spv') : namaSpv
+                      }
                       disabled
                     />
                   </div>
@@ -754,7 +765,9 @@ class FormPengajuanTKP extends React.Component {
                       className={classes.inputForm}
                       type="number"
                       name="nik_spv"
-                      value={values.nik_spv}
+                      value={
+                        typeAuth==="sekretaris"?sessionStorage.getItem("nik_spv"):values.nik_spv
+                      }
                       disabled
                     />
                   </div>
@@ -847,7 +860,16 @@ class FormPengajuanTKP extends React.Component {
                             values.tanggal_lahir &&
                             moment(tanggal_lahir, "DD/MM/YYYY")
                           }
+                            
                         />
+                        <p className={classes.negativeCase}>
+                          {
+                            errors.tanggal_lahir && touched.tanggal_lahir && errors.tanggal_lahir
+                          }
+                          {
+                            (values.tanggal_lahir && moment(tanggal_lahir, "DD/MM/YYYY").isAfter(moment().subtract(18, "years"))) && "Minimal usia 18 tahun" 
+                          }
+                        </p>
                       </div>
                     </Grid>
                   </Grid>

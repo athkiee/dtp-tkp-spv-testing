@@ -8,6 +8,9 @@ import {
 } from "@ant-design/icons";
 import axios from "axios";
 import { ROUTES } from "../../../../configs";
+import Typography from "@material-ui/core/Typography";
+import CircleIcon from '@mui/icons-material/Circle';
+
 
 export default class TableDashboard extends React.Component {
   constructor(props) {
@@ -252,10 +255,25 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("loker"),
       },
       {
+        width: "9%",
         title: "Status",
         dataIndex: "status",
         key: "status",
         ...this.getColumnSearchProps("status"),
+        render: (text) => {
+          if (text === "Diterima") {
+            return <Typography style={{
+              color: "rgba(129, 199, 114, 1)"
+            }}><CircleIcon style={{fontSize:"10px"}} /> {text}</Typography>;
+          } else if (text === "Ditolak") {
+            return <Typography style={{
+              color: "rgba(238, 46, 36, 1)"
+            }}><CircleIcon style={{ fontSize: "10px" }} /> {text}</Typography>;
+          }  else {
+            return <Typography variant="span" 
+              style={{ color: "rgba(173, 173, 173, 1)" }}><CircleIcon style={{ fontSize: "10px" }} /> {text}</Typography>;
+          }
+        }
       },
 
       

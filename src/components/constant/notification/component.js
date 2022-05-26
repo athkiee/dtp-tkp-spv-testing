@@ -15,6 +15,7 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import WebAssetOffOutlinedIcon from '@mui/icons-material/WebAssetOffOutlined';
 import axios from "axios";
 import { API } from "../../../configs";
+import { ThirtyFpsSharp } from '@mui/icons-material';
 
 
 export default class NotificationPopover extends React.Component {
@@ -65,6 +66,7 @@ export default class NotificationPopover extends React.Component {
                 }));
                 this.setState({
                     data: data,
+                    
                 });
                 console.log("testingnotif", response);
             });
@@ -91,6 +93,8 @@ export default class NotificationPopover extends React.Component {
             );
     }
 
+   
+
     handleread = async (key) => {
         const token = localStorage.getItem("token");
         const data = {
@@ -103,24 +107,24 @@ export default class NotificationPopover extends React.Component {
             })
             .then((response) => {
                 console.log("testread", response);
+                
+                
             });
 
 
     }
 
+      
+
+    
+
    
 
     handleaksi = (key) => {
+
         this.handleread(key);
-        this.handleClose();
-
-        // if (id === 1) {
-        //     window.location.href = "/pengajuan-tkp/dalam-proses";
-            
-
-        // } else if (id === 2) {
-        //     window.location.href = "/pengajuan-tkp/dalam-proses";
-        // }
+        this.handleClose(key);
+       
     }
 
     render() {
@@ -180,6 +184,7 @@ export default class NotificationPopover extends React.Component {
                                   onClick={() => {
                                             notif.status=1;
                                             this.handleaksi(notif.key);
+                                            window.location.href = notif.aksi;
                                   }}
                                    
                                    style={{ textDecoration: "none",

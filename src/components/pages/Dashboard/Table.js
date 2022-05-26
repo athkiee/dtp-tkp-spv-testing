@@ -291,7 +291,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("tanggalOnboard"),
       },
       {
-        width: "5%", 
+        width: 125, 
         title: "Aksi",
         dataIndex: "key",
         fixed: "right",
