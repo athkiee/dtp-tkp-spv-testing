@@ -1,13 +1,12 @@
 import React from "react";
 import Container from "@material-ui/core/Container";
-import { Button, Breadcrumb, Select } from "antd";
+import { Button, Breadcrumb } from "antd";
 import HeadBar from "../../../constant/headBar";
 import { ROUTES, API } from "../../../../configs";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 const drawerWidth = 240;
 
 const useStyles = (theme) => ({
@@ -155,8 +154,10 @@ class MengajukanTKP extends React.Component {
     const data = this.state.data;
     const findNIK = data.find((obj) => obj.nama_spv === nama_supervisor);
     const matchesNIK = findNIK && findNIK.nik_spv;
+    
 
     return (
+     
       <div className={classes.root}>
         <HeadBar />
         <main className={classes.content}>
@@ -200,7 +201,7 @@ class MengajukanTKP extends React.Component {
               Silahkan mengisi Data Supervisor di bawah ini untuk membuka
               formulir TKP
             </p>
-
+              
             <label className="form-label">Nama Supervisor</label>
             <div style={{ marginBottom: 20 }}>
               <Autocomplete
@@ -236,7 +237,7 @@ class MengajukanTKP extends React.Component {
                 id="free-solo-2-demo"
                 disableClearable
                 value={nik_supervisor}
-                options={data.map((option) => option.nik_spv)}
+                options={matchesNIK ? [matchesNIK] : []}
                 renderInput={(params) => (
                   matchesNIK === ""
                     ? sessionStorage.setItem("nik_spv", params.inputProps.value)
@@ -248,7 +249,13 @@ class MengajukanTKP extends React.Component {
                       InputProps={{
                         ...params.InputProps,
                         type: "search",
+                      
                       }}
+                      disabled = {
+                        matchesNIK === "" ? true : false
+                      }
+                      
+
                       onSelect={(e) => {
                         matchesNIK === ""
                           ? this.setState({
@@ -263,7 +270,9 @@ class MengajukanTKP extends React.Component {
                   )
                 )}
               />
+            
             </div>
+          
             <Button
               type="submit"
               onClick={() => (window.location = ROUTES.PENGAJUAN_TKP_FORM())}
@@ -271,10 +280,7 @@ class MengajukanTKP extends React.Component {
               disabled={
                 typeAuth === "supervisor"
                   ? false
-                  : this.state.nama_supervisor === "" ||
-                    this.state.nik_supervisor === ""
-                  ? true
-                  : false
+                  : nama_supervisor === "" || nik_supervisor !== matchesNIK
               }
             >
               <strong>SUBMIT</strong>
