@@ -313,7 +313,9 @@ class MengajukanTKP extends React.Component {
               disabled={
                 typeAuth === "supervisor"
                   ? false
-                  : nama_supervisor === "" || nik_supervisor !== matchesNIK
+                  : nama_supervisor === "" || nik_supervisor !== matchesNIK ? true:false
+
+                  
               }
             >
               <strong>SUBMIT</strong>

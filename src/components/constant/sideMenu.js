@@ -12,6 +12,9 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import { ROUTES } from "../../configs/";
 
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -65,9 +68,21 @@ const useStyles = makeStyles((theme) => ({
 export default function SideMenu() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+
   const handleClick = () => {
     setOpen(!open);
   };
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open1 = Boolean(anchorEl);
   return (
     <div>
       <ListItem
@@ -85,9 +100,11 @@ export default function SideMenu() {
               ? classes.ListItemafter
               : classes.ListItembefore
           }
+          
         >
           <HomeOutlinedIcon />
         </ListItemIcon>
+       
         <ListItemText primary="Beranda" />
       </ListItem>
 
@@ -98,9 +115,37 @@ export default function SideMenu() {
       >
         <ListItemIcon
           className={open ? classes.ListItembefore : classes.ListItemafter}
+          aria-owns={open ? 'mouse-over-popover' : undefined}
+          aria-haspopup="true"
+          onMouseEnter={handlePopoverOpen}
+          onMouseLeave={handlePopoverClose}
         >
           <DescriptionOutlinedIcon />
         </ListItemIcon>
+        <Popover
+          id="mouse-over-popover"
+          sx={{
+            pointerEvents: 'none',
+          }}
+          open={open1}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          onClose={handlePopoverClose}
+          disableRestoreFocus
+        >
+          <Typography sx={{ p: 1 }}>Mengajukan TKP</Typography>
+          <Typography sx={{ p: 1 }}>Dalam Proses</Typography>
+          <Typography sx={{ p: 1 }}>Riwayat </Typography>
+
+        </Popover>
+
         <ListItemText primary="Pengajuan TKP" />
         {open ? <ExpandMore /> : <ExpandLess />}
       </ListItem>

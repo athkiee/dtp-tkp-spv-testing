@@ -6,11 +6,18 @@ import HeadBar from "../../../constant/headBar";
 import { Breadcrumb, Menu, Popover, Checkbox, Dropdown, Button } from "antd";
 import { ROUTES } from "../../../../configs";
 import { PushpinOutlined, DownloadOutlined } from "@ant-design/icons";
+import {withStyles} from '@material-ui/core/styles';
+import { API } from "../../../../configs";
+import axios from "axios";
+import fileDownload from "js-file-download";
+import ModalConfirmation from "../../../ModalConfirmation";
+import ModalSuccess from "../../../ModalSuccess";
+import ModalLoading from "../../../ModalLoading";
 
 const drawerWidth = 240;
 const nikSpv = localStorage.getItem("nik");
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme) => ({
   '@global': {
     ' .ant-popover-inner':{
       overflow: 'scroll',
@@ -120,7 +127,7 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-}));
+});
 
 const _handleBreadcumbs = () => {
   window.location = ROUTES.DASHBOARD();
@@ -182,35 +189,79 @@ const buttonPin = (
   </Menu>
 );
 
-const exportData = (
-  <Menu>
-    <Menu.Item
-      key="0"
-      onClick={() =>
-        window.open(
-          "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/export-csv/tkp-under-spv/" +
-            nikSpv
-        )
-      }
-    >
-      Ekspor Data (.Csv)
-    </Menu.Item>
-    <Menu.Item
-      key="1"
-      onClick={() =>
-        window.open(
-          "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get-zip/tkp-under-spv/" +
-            nikSpv
-        )
-      }
-    >
-      Ekspor Data (.Zip)
-    </Menu.Item>
-  </Menu>
-);
 
-export default function RiwayatTKP() {
-  const classes = useStyles();
+
+ class RiwayatTKP extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dialogConfirmation: false,
+      dialogZip: false,
+      dialogSuccess: false,
+      dialogLoading: false,
+    }
+  }
+
+ 
+  render() {
+    const { classes } = this.props;
+    const nikSpv = localStorage.getItem("nik");
+    const token = localStorage.getItem("token");
+    const nama = localStorage.getItem("nama");
+    const handleExportCSV = () => {
+      this.setState({ dialogConfirmation: true });
+    };
+
+    const handleExportZip = () => {
+      this.setState({ dialogZip: true });
+    };
+
+    const getDataCSV = async () => {
+      const dataCSV = await axios
+        .get(`${API.getCSVTKPUnderSPV}${nikSpv}`, {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        })
+        .then((response) => response)
+        .catch((error) => console.error(error));
+
+      const { status, data } = dataCSV;
+      if (status === 200) {
+        this.setState({ dialogConfirmation: false });
+        fileDownload(data, `tkp-active-under-spv-${nama}.csv`);
+        this.setState({ dialogSuccess: true });
+      }
+    };
+
+    const getDataZip = async () => {
+      this.setState({ dialogZip: false });
+      this.setState({ dialogLoading: true });
+      const dataZip = await axios
+        .get(`${API.getZipTKPUnderSPV}${nikSpv}`, {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        })
+        .then((response) => response)
+        .catch((error) => console.error(error));
+
+      const { status, data } = dataZip;
+      if (status === 200) {
+        this.setState({ dialogLoading: false });
+        fileDownload(data, `tkp-active-under-spv-${nama}.zip`);
+        this.setState({ dialogSuccess: true });
+      }
+    };
+
+    const exportData = (
+      <Menu>
+        <Menu.Item key="0" onClick={handleExportCSV}>
+          Ekspor Data (.Csv)
+        </Menu.Item>
+        <Menu.Item key="1" onClick={handleExportZip}>
+          Ekspor Data (.Zip)
+        </Menu.Item>
+      </Menu>
+    );
 
   return (
     <div className={classes.root}>
@@ -253,6 +304,42 @@ export default function RiwayatTKP() {
                 </Button>
               </a>
             </Dropdown>
+            {/* modal dialog confirmation csv */}
+            <ModalConfirmation
+              title={"Yakin ingin Ekspor Data Hasil Evaluasi (.csv)?"}
+              description={
+                "Banyaknya data akan berpengaruh pada proses ekspor."
+              }
+              open={this.state.dialogConfirmation}
+              handleClose={() =>
+                this.setState({ dialogConfirmation: false })
+              }
+              getData={() => getDataCSV()}
+            />
+
+            {/* modal dialog confirmation zip */}
+            <ModalConfirmation
+              title={"Yakin ingin Ekspor Data Hasil Evaluasi (.zip)?"}
+              description={
+                "Banyaknya data akan berpengaruh pada proses ekspor."
+              }
+              open={this.state.dialogZip}
+              handleClose={() => this.setState({ dialogZip: false })}
+              getData={() => getDataZip()}
+            />
+
+            {/* modal dialog Loading */}
+            <ModalLoading
+              open={this.state.dialogLoading}
+              handleClose={() => this.setState({ dialogLoading: false })}
+            />
+
+            {/* modal dialog success */}
+            <ModalSuccess
+              open={this.state.dialogSuccess}
+              handleClose={() => this.setState({ dialogSuccess: false })}
+            />
+
             <Popover
               placement="bottom"
               content={buttonPin}
@@ -272,3 +359,5 @@ export default function RiwayatTKP() {
     </div>
   );
 }
+ }
+export default withStyles(useStyles)(RiwayatTKP);

@@ -184,7 +184,7 @@ export default class TableDashboard extends React.Component {
       <Table
         columns={columns}
         dataSource={this.state.dataDP}
-        pagination={pagination}
+        pagination={true}
       />
     );
   }
