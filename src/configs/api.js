@@ -22,8 +22,6 @@ export default {
   allJobRoles: baseUrl + "job_role/",
   registerTkp: baseUrl + "tkp/register",
   registerFileTkp: baseUrl + "register-file-upload",
-  exportCsvUnderSpv: baseUrl + "tkp/export-csv/tkp-under-spv/",
-  exportFileUnderSpv: baseUrl + "tkp/get-zip/tkp-under-spv/",
   tkpUnderSpv: baseUrl + "tkp/filter/tkp-under-spv/",
   detailTkp: baseUrl + "tkp/",
   notification_spv: baseUrl + "notifikasi_spv/",
