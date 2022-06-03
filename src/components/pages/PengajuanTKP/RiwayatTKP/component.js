@@ -314,7 +314,7 @@ class RiwayatTKP extends React.Component {
           </Breadcrumb.Item>
         </Breadcrumb>
           <h1 style={{ marginLeft: 35, marginTop: 10, fontSize: 20 }}>
-            <strong>Basis Data TKP</strong>
+            <strong>Riwayat</strong>
           </h1>
           <p style={{ marginLeft: 35, marginBottom: 10 }}>
             Kelola data TKP pada halaman ini.

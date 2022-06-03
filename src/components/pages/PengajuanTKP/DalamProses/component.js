@@ -6,6 +6,7 @@ import TableDashboard from "./Table";
 import { Breadcrumb } from "antd";
 import HeadBar from "../../../constant/headBar";
 import { ROUTES } from "../../../../configs";
+import TableDalamProses from "./Table";
 
 const drawerWidth = 240;
 
@@ -160,7 +161,7 @@ export default function DalamProsesPengajuanTKP() {
           di bawah ini.
         </p>
         <Container className={classes.container}>
-          <TableDashboard />
+          <TableDalamProses />
         </Container>
       </main>
     </div>

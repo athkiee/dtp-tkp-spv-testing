@@ -144,7 +144,10 @@ export default class TableRiwayat extends React.Component {
   render() {
     const { filterStat } = this.props;
     const { dataRiwayat } = this.state;
-    const sourceData = filterStat !== '' ? dataRiwayat.filter(obj => obj.status === filterStat) : dataRiwayat;
+    const sourceData =
+      filterStat !== ""
+        ? dataRiwayat.filter((obj) => obj.status === filterStat)
+        : dataRiwayat;
     const columns = [
       {
         title: "No",
@@ -181,6 +184,38 @@ export default class TableRiwayat extends React.Component {
         key: "status",
         sorter: (a, b) => a.status.localeCompare(b.status),
         ...this.getColumnSearchProps("status"),
+        render: (text) => {
+          if (text === "Diterima") {
+            return (
+              <Typography
+                style={{
+                  color: "rgba(129, 199, 114, 1)",
+                }}
+              >
+                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+              </Typography>
+            );
+          } else if (text === "Ditolak") {
+            return (
+              <Typography
+                style={{
+                  color: "rgba(238, 46, 36, 1)",
+                }}
+              >
+                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+              </Typography>
+            );
+          } else {
+            return (
+              <Typography
+                variant="span"
+                style={{ color: "rgba(173, 173, 173, 1)" }}
+              >
+                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+              </Typography>
+            );
+          }
+        },
       },
       {
         width: 125,
@@ -327,22 +362,26 @@ export default class TableRiwayat extends React.Component {
         fixed: "right",
         render: (key) => (
           <div>
-            <span
-              onClick={this._handleOpenDetail.bind(this, key)}
-              style={{ marginRight: 15, cursor: "pointer" }}
-            >
-              <EyeTwoTone />
-            </span>
-            <span>
-              <DownloadOutlined
-                onClick={() =>
-                  window.open(
-                    "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
-                  )
-                }
-                style={{ color: "#00FF00" }}
-              />
-            </span>
+            <Tooltip placement="bottom" title={"Lihat Detail"}>
+              <span
+                onClick={this._handleOpenDetail.bind(this, key)}
+                style={{ marginRight: 15, cursor: "pointer" }}
+              >
+                <EyeTwoTone />
+              </span>
+            </Tooltip>
+            <Tooltip placement="bottom" title={"Unduh Data"}>
+              <span>
+                <DownloadOutlined
+                  onClick={() =>
+                    window.open(
+                      "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
+                    )
+                  }
+                  style={{ color: "#00FF00" }}
+                />
+              </span>
+            </Tooltip>
           </div>
         ),
       },

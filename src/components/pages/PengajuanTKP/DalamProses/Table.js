@@ -1,21 +1,24 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Table, Input, Button, Space } from "antd";
-import { SearchOutlined, EyeTwoTone } from "@ant-design/icons";
+import { Table, Input, Button, Space, Tooltip } from "antd";
+import {
+  SearchOutlined,
+  EyeTwoTone,
+  DownloadOutlined,
+} from "@ant-design/icons";
 import axios from "axios";
 import { ROUTES, API } from "../../../../configs";
+import Typography from "@material-ui/core/Typography";
+import CircleIcon from "@mui/icons-material/Circle";
+import PropTypes from "prop-types";
 
-export default class TableDashboard extends React.Component {
+export default class TableDalamProses extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       searchText: "",
       searchedColumn: "",
       dataDP: [],
-      pagination: {
-        current: 1,
-        pageSize: 3,
-      },
     };
   }
 
@@ -126,41 +129,46 @@ export default class TableDashboard extends React.Component {
 
   _handleOpenDetail = (key) => {
     window.location = ROUTES.DETAIL_TKP(key);
-    localStorage.setItem("detail", key);
+    localStorage.setItem("detail_id", key);
   };
 
   render() {
-    console.log("coba", this.state.dataDP);
-    const { pagination } = this.state;
-
+    const { dataDP } = this.state;
     const columns = [
       {
-        title: "Tanggal",
-        dataIndex: "tanggal_pengajuan",
-        key: "tanggal_pengajuan",
-        width: "20%",
-        sorter: (a, b) =>
-          a.tanggal_pengajuan.localeCompare(b.tanggal_pengajuan),
-        ...this.getColumnSearchProps("tanggal_pengajuan"),
+        title: "No",
+        width: "5%",
+        key: "index",
+        render: (text, name, index) => index + 1,
       },
       {
-        title: "Nama Calon TKP",
+        title: "Nama TKP",
         dataIndex: "name",
         key: "name",
-        width: "30%",
+        width: "20%",
+        className: "clientName" ? "show" : "hide",
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
       },
       {
-        title: "Job Role",
-        dataIndex: "roles",
-        key: "roles",
-        ...this.getColumnSearchProps("roles"),
+        title: "Bidang",
+        dataIndex: "bidang",
+        key: "bidang",
+        sorter: (a, b) => a.bidang.localeCompare(b.bidang),
+        ...this.getColumnSearchProps("bidang"),
+      },
+      {
+        title: "Job Title",
+        dataIndex: "jobTitle",
+        key: "jobTitle",
+        sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
+        ...this.getColumnSearchProps("jobTitle"),
       },
       {
         title: "Status",
         dataIndex: "status",
         key: "status",
+        sorter: (a, b) => a.status.localeCompare(b.status),
         ...this.getColumnSearchProps("status"),
       },
       {
@@ -170,22 +178,182 @@ export default class TableDashboard extends React.Component {
         fixed: "right",
         render: (key) => (
           <div>
+            <Tooltip placement="bottom" title={"Lihat Detail"}>
+              <span
+                onClick={this._handleOpenDetail.bind(this, key)}
+                style={{ marginRight: 15, cursor: "pointer" }}
+              >
+                <EyeTwoTone />
+              </span>
+            </Tooltip>
+            <Tooltip placement="bottom" title={"Unduh Data"}>
+              <span>
+                <DownloadOutlined
+                  onClick={() =>
+                    window.open(
+                      "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
+                    )
+                  }
+                  style={{ color: "#00FF00" }}
+                />
+              </span>
+            </Tooltip>
+          </div>
+        ),
+      },
+    ];
+
+    const columnSekbid = [
+      {
+        title: "No",
+        width: "5%",
+        key: "index",
+        render: (text, name, index) => index + 1,
+      },
+      {
+        title: "INT",
+        dataIndex: "int",
+        key: "int",
+      },
+      {
+        title: "Bidang",
+        dataIndex: "bidang",
+        key: "bidang",
+        ...this.getColumnSearchProps("bidang"),
+      },
+      {
+        title: "Nama TKP",
+        dataIndex: "name",
+        key: "name",
+        width: "13%",
+        className: "clientName" ? "show" : "hide",
+        sorter: (a, b) => a.name.localeCompare(b.name),
+        ...this.getColumnSearchProps("name"),
+      },
+      {
+        width: "13%",
+        title: "Supervisor/PIC",
+        dataIndex: "supervisor",
+        key: "supervisor",
+        ...this.getColumnSearchProps("supervisor"),
+      },
+      {
+        width: "9%",
+        title: "NIK SPV",
+        dataIndex: "nik_spv",
+        key: "nik_spv",
+        ...this.getColumnSearchProps("nik_spv"),
+      },
+      {
+        title: "Loker",
+        dataIndex: "loker",
+        key: "loker",
+        ...this.getColumnSearchProps("loker"),
+      },
+      {
+        width: "9%",
+        title: "Status",
+        dataIndex: "status",
+        key: "status",
+        ...this.getColumnSearchProps("status"),
+        render: (text) => {
+          if (text === "Diterima") {
+            return (
+              <Typography
+                style={{
+                  color: "rgba(129, 199, 114, 1)",
+                }}
+              >
+                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+              </Typography>
+            );
+          } else if (text === "Ditolak") {
+            return (
+              <Typography
+                style={{
+                  color: "rgba(238, 46, 36, 1)",
+                }}
+              >
+                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+              </Typography>
+            );
+          } else {
+            return (
+              <Typography
+                variant="span"
+                style={{ color: "rgba(173, 173, 173, 1)" }}
+              >
+                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+              </Typography>
+            );
+          }
+        },
+      },
+
+      {
+        title: "Job Title",
+        dataIndex: "jobTitle",
+        key: "jobTitle",
+        ...this.getColumnSearchProps("jobTitle"),
+      },
+      {
+        title: "Onboard",
+        dataIndex: "onboard",
+        key: "onboard",
+        ...this.getColumnSearchProps("onboard"),
+      },
+      {
+        title: "Perubahan Status Terakhir",
+        dataIndex: "last_status",
+        key: "last_status",
+        ...this.getColumnSearchProps("last_status"),
+      },
+
+      {
+        width: 125,
+        title: "Aksi",
+        dataIndex: "key",
+        fixed: "right",
+        render: (key) => (
+          <div>
             <span
               onClick={this._handleOpenDetail.bind(this, key)}
-              style={{ cursor: "pointer" }}
+              style={{ marginRight: 15, cursor: "pointer" }}
             >
               <EyeTwoTone />
+            </span>
+            <span>
+              <DownloadOutlined
+                onClick={() =>
+                  window.open(
+                    "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
+                  )
+                }
+                style={{ color: "#00FF00" }}
+              />
             </span>
           </div>
         ),
       },
     ];
+
+    const typeAuth = localStorage.getItem("typeAuth");
     return (
       <Table
-        columns={columns}
-        dataSource={this.state.dataDP}
-        pagination={pagination}
+        columns={typeAuth === "sekretaris" ? columnSekbid : columns}
+        dataSource={dataDP}
+        pagination={true}
       />
     );
   }
 }
+
+TableDalamProses.defaultProps = {
+  classes: {},
+};
+
+TableDalamProses.propTypes = {
+  classes: PropTypes.object,
+  perPage: PropTypes.string.isRequired,
+  filterStat: PropTypes.string.isRequired,
+};
