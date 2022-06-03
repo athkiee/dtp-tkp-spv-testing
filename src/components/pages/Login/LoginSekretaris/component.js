@@ -76,13 +76,15 @@ function LoginSekre(props) {
       })
       .catch((error, response) => {
         setLoading(false);
-        alert('username atau Password salah');
-
-
-        // else setError("Something went wrong. Please try again later.");
-        // setError(response.data.errors[0].message);
+    
+      
+        setError("Username dan Password tidak sesuai");
+     
       });
   };
+
+
+
 
   return (
     <div className="form-container">
@@ -91,6 +93,7 @@ function LoginSekre(props) {
         <img className="login-img" src={IMAGES.LANDING} alt="" />
       </div>
       <div className="form-content-right">
+        
         <form className="login-form" noValidate>
           <div className="form-inputs">
             <h2 style={{ marginBottom: 0 }}>Selamat datang di</h2>
@@ -98,6 +101,7 @@ function LoginSekre(props) {
             <h1 style={{ marginBottom: 40 }}>Tenaga Kerja Penunjang</h1>
           </div>
           <div className="form-inputs">
+            
             <label className="form-label">Username</label>
             <TextField
               className="form-input"
@@ -105,6 +109,7 @@ function LoginSekre(props) {
               placeholder="Masukkan username anda"
               {...username}
             />
+            {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
           </div>
           <div className="form-inputs">
             <label className="form-label">Password</label>
@@ -150,7 +155,7 @@ function LoginSekre(props) {
            </Grid>
             </Grid>
           </div>
-          {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
+          
           <button
             className="form-input-btn"
             type="submit"

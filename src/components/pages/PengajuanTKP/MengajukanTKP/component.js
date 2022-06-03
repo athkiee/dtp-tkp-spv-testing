@@ -154,6 +154,8 @@ class MengajukanTKP extends React.Component {
     const data = this.state.data;
     const findNIK = data.find((obj) => obj.nama_spv === nama_supervisor);
     const matchesNIK = findNIK && findNIK.nik_spv;
+    const matchesNama = findNIK && findNIK.nama_spv;
+
     const namaSpv = localStorage.getItem("nama");
     const nikSpv = localStorage.getItem("nik");
     
@@ -310,10 +312,10 @@ class MengajukanTKP extends React.Component {
               type="submit"
               onClick={() => (window.location = ROUTES.PENGAJUAN_TKP_FORM())}
               className={classes.submitForm}
-              disabled={
+                                disabled={
                 typeAuth === "supervisor"
                   ? false
-                  : nama_supervisor === "" || nik_supervisor !== matchesNIK ? true:false
+                  : nama_supervisor === "" || nik_supervisor !== matchesNIK || nama_supervisor !== matchesNama
 
                   
               }
