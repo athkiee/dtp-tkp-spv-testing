@@ -1,6 +1,6 @@
 import React from "react";
 import Container from "@material-ui/core/Container";
-import { Button, Breadcrumb, Select } from "antd";
+import { Button, Breadcrumb } from "antd";
 import HeadBar from "../../../constant/headBar";
 import { ROUTES, API } from "../../../../configs";
 import axios from "axios";
@@ -155,8 +155,14 @@ class MengajukanTKP extends React.Component {
     const data = this.state.data;
     const findNIK = data.find((obj) => obj.nama_spv === nama_supervisor);
     const matchesNIK = findNIK && findNIK.nik_spv;
+    const matchesNama = findNIK && findNIK.nama_spv;
+
+    const namaSpv = localStorage.getItem("nama");
+    const nikSpv = localStorage.getItem("nik");
+    
 
     return (
+     
       <div className={classes.root}>
         <HeadBar />
         <main className={classes.content}>
@@ -200,81 +206,120 @@ class MengajukanTKP extends React.Component {
               Silahkan mengisi Data Supervisor di bawah ini untuk membuka
               formulir TKP
             </p>
-
+              
             <label className="form-label">Nama Supervisor</label>
             <div style={{ marginBottom: 20 }}>
-              <Autocomplete
-                freeSolo
-                id="free-solo-2-demo"
-                disableClearable
-                options={data.map((option) => option.nama_spv)}
-                renderInput={(params) => (
-                  sessionStorage.setItem("nama_spv", params.inputProps.value),
-                  (
-                    <TextField
-                      {...params}
-                      label="--"
-                      InputProps={{
-                        ...params.InputProps,
-                        type: "search",
-                      }}
-                      onSelect={(e) => {
-                        this.setState({
-                          nama_supervisor: e.target.value,
-                          nik_supervisor: matchesNIK,
-                        });
-                      }}
-                    />
-                  )
-                )}
-              />
+              {
+                typeAuth === "supervisor" ?(
+                  <TextField
+                    label={
+                      namaSpv
+                    }
+                    id="filled-hidden-label-small"
+                    disabled
+                    onChange={namaSpv}
+                    variant="outlined"
+                    style={{ width: "100%" }}
+                  />
+
+                ) : (<Autocomplete
+                  freeSolo
+                  id="free-solo-2-demo"
+                  disableClearable
+                  options={data.map((option) => option.nama_spv)}
+                  renderInput={(params) => (
+                    sessionStorage.setItem("nama_spv", params.inputProps.value),
+                    (
+                      <TextField
+                        {...params}
+                        label="--"
+                        InputProps={{
+                          ...params.InputProps,
+                          type: "search",
+                        }}
+                        onSelect={(e) => {
+                          this.setState({
+                            nama_supervisor: e.target.value,
+                            nik_supervisor: matchesNIK,
+                          });
+                        }}
+                      />
+                    )
+                  )}
+                />)
+              }
+             
             </div>
             <label className="form-label">NIK Supervisor</label>
             <div style={{ marginBottom: 20 }}>
-              <Autocomplete
-                freeSolo
-                id="free-solo-2-demo"
-                disableClearable
-                value={nik_supervisor}
-                options={data.map((option) => option.nik_spv)}
-                renderInput={(params) => (
-                  matchesNIK === ""
-                    ? sessionStorage.setItem("nik_spv", params.inputProps.value)
-                    : sessionStorage.setItem("nik_spv", matchesNIK),
-                  (
-                    <TextField
-                      {...params}
-                      label="--"
-                      InputProps={{
-                        ...params.InputProps,
-                        type: "search",
-                      }}
-                      onSelect={(e) => {
-                        matchesNIK === ""
-                          ? this.setState({
+              {
+                typeAuth === "supervisor" ?(
+                  <TextField
+                    label={
+                      nikSpv
+                    }
+                    id="filled-hidden-label-small"
+                    disabled
+                    onChange={nikSpv}
+                    variant="outlined"
+                    style={{ width: "100%" }}
+                  />
+                ) : (<Autocomplete
+                  freeSolo
+                  id="free-solo-2-demo"
+                  disableClearable
+                  value={nik_supervisor}
+                  options={matchesNIK ? [matchesNIK] : []}
+                  renderInput={(params) => (
+                    matchesNIK === ""
+                      ? sessionStorage.setItem("nik_spv", params.inputProps.value)
+                      : sessionStorage.setItem("nik_spv", matchesNIK),
+                    (
+                      <TextField
+                        {...params}
+                        id="filled-hidden-label-small"
+                        label="--"
+                        InputProps={{
+                          ...params.InputProps,
+                          type: "search",
+
+                        }}
+                        disabled={
+                          matchesNIK === "" ? true : false
+                        }
+
+
+                        onSelect={(e) => {
+                          matchesNIK === ""
+                            ? this.setState({
                               nik_supervisor: e.target.value,
                               nik_supervisor: matchesNIK,
                             })
-                          : this.setState({
+                            : this.setState({
                               nik_supervisor: matchesNIK,
                             });
-                      }}
-                    />
-                  )
-                )}
-              />
+                        }}
+                      />
+                    )
+                  )}
+                />)
+
+              }
+              
+            
             </div>
+          
+
             <Button
               type="submit"
               onClick={() => (window.location = ROUTES.PENGAJUAN_TKP_FORM())}
               className={classes.submitForm}
-              disabled={
+                                disabled={
                 typeAuth === "supervisor"
                   ? false
-                  : this.state.nama_supervisor === "" ||
-                    this.state.nik_supervisor === ""
-                  ? true
-                  : false
+                  : nama_supervisor === "" || nik_supervisor !== matchesNIK || nama_supervisor !== matchesNama
+
+         
               }
             >
               <strong>SUBMIT</strong>

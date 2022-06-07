@@ -238,6 +238,7 @@ class RiwayatTKP extends React.Component {
       </Menu>
     );
 
+
     const filterShowdata = [
       {
         key: 10,
@@ -290,6 +291,7 @@ class RiwayatTKP extends React.Component {
     const optionStatus = filterStatus.map((d) => (
       <Option key={d.key}>{d.value}</Option>
     ));
+
 
     return (
       <div className={classes.root}>
@@ -420,3 +422,4 @@ class RiwayatTKP extends React.Component {
 }
 
 export default withStyles(styles, { withTheme: true })(RiwayatTKP);
+

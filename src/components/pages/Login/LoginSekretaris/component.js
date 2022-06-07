@@ -13,6 +13,8 @@ import Button from "@material-ui/core/Button";
 import FromControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
+import Cookies from "js-cookie";
+import { RememberMe } from "@mui/icons-material";
 
 
 
@@ -41,6 +43,7 @@ function LoginSekre(props) {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  
 
 
 
@@ -76,13 +79,49 @@ function LoginSekre(props) {
       })
       .catch((error, response) => {
         setLoading(false);
-        alert('username atau Password salah');
-
-
-        // else setError("Something went wrong. Please try again later.");
-        // setError(response.data.errors[0].message);
+    
+      
+        setError("Username dan Password tidak sesuai");
+     
       });
   };
+
+  // set remember me expired 30 day
+  // const handleRememberMe = () => {
+  //   Cookies.set("username", username.value, { expires: 30 });
+  //   Cookies.set("password", password.value, { expires: 30 });
+  // };
+
+
+
+// set remember me to cookie
+  const handleRememberMe = () => {
+    if (checked) {
+      Cookies.set("rememberMe", "true");
+      Cookies.set("username", username.value);
+      Cookies.set("password", password.value);
+    } else {
+      Cookies.set("rememberMe", "false");
+      Cookies.remove("username");
+      Cookies.remove("password");
+    }
+  }
+
+  const handleRememberMeChecked = () => {
+    if (Cookies.get("rememberMe") === "true") {
+      setChecked(true);
+      username.onChange(Cookies.get("username"));
+      password.onChange(Cookies.get("password"));
+    } else {
+      setChecked(false);
+      username.onChange("");
+      password.onChange("");
+
+    }
+
+  }
+
+
 
   return (
     <div className="form-container">
@@ -91,6 +130,7 @@ function LoginSekre(props) {
         <img className="login-img" src={IMAGES.LANDING} alt="" />
       </div>
       <div className="form-content-right">
+        
         <form className="login-form" noValidate>
           <div className="form-inputs">
             <h2 style={{ marginBottom: 0 }}>Selamat datang di</h2>
@@ -98,6 +138,7 @@ function LoginSekre(props) {
             <h1 style={{ marginBottom: 40 }}>Tenaga Kerja Penunjang</h1>
           </div>
           <div className="form-inputs">
+            
             <label className="form-label">Username</label>
             <TextField
               className="form-input"
@@ -105,17 +146,18 @@ function LoginSekre(props) {
               placeholder="Masukkan username anda"
               {...username}
             />
+            {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
           </div>
           <div className="form-inputs">
             <label className="form-label">Password</label>
             <TextField
               className="form-input"
+              id="password"
               type={values.showPassword ? "text" : "password"}
-              onChange={handlePasswordChange("password")}
-              value={values.password}
+              {...password}
               name="password"
               placeholder="Masukkan Password Anda"
-              {...password}
+              
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -136,7 +178,10 @@ function LoginSekre(props) {
                   control={
                     <Checkbox 
                       style={{ color: '#D51100' }}
-                    value="Remember"
+                    value="RememberMe"
+                    onChange={
+                      handleRememberMe
+                    }
                     />
                   }
                   label="Ingat Saya"
@@ -150,7 +195,7 @@ function LoginSekre(props) {
            </Grid>
             </Grid>
           </div>
-          {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
+          
           <button
             className="form-input-btn"
             type="submit"
