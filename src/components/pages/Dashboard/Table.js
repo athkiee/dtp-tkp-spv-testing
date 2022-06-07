@@ -1,6 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Table, Input, Button, Space } from "antd";
+import { Table, Input, Button, Space, Tooltip } from "antd";
 import {
   SearchOutlined,
   EyeTwoTone,
@@ -50,9 +50,7 @@ export default class TableDashboard extends React.Component {
         this.setState({
           dataTKP: tkp,
         });
-        console.log("test", response);
       });
-    console.log(localStorage);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -184,6 +182,7 @@ export default class TableDashboard extends React.Component {
         title: "Mitra",
         dataIndex: "mitra",
         key: "mitra",
+        sorter: (a, b) => a.mitra.localeCompare(b.mitra),
         ...this.getColumnSearchProps("mitra"),
       },
       {
@@ -193,22 +192,26 @@ export default class TableDashboard extends React.Component {
         fixed: "right",
         render: (key) => (
           <div>
-            <span
-              onClick={this._handleOpenDetail.bind(this, key)}
-              style={{ marginRight: 15, cursor: "pointer" }}
-            >
-              <EyeTwoTone />
-            </span>
-            <span>
-              <DownloadOutlined
-                onClick={() =>
-                  window.open(
-                    "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
-                  )
-                }
-                style={{ color: "#00FF00" }}
-              />
-            </span>
+            <Tooltip placement="bottom" title={"Lihat Detail"}>
+              <span
+                onClick={this._handleOpenDetail.bind(this, key)}
+                style={{ marginRight: 15, cursor: "pointer" }}
+              >
+                <EyeTwoTone />
+              </span>
+            </Tooltip>
+            <Tooltip placement="bottom" title={"Unduh Data"}>
+              <span>
+                <DownloadOutlined
+                  onClick={() =>
+                    window.open(
+                      "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
+                    )
+                  }
+                  style={{ color: "#00FF00" }}
+                />
+              </span>
+            </Tooltip>
           </div>
         ),
       },
@@ -216,14 +219,14 @@ export default class TableDashboard extends React.Component {
 
     const columnsekbid = [
       {
-        width:"1%",
+        width: "1%",
         title: "N0",
         dataIndex: "index",
         key: "index",
         render: (text, name, index) => index + 1,
       },
       {
-        width:"2%",
+        width: "2%",
         title: "Bidang",
         dataIndex: "bidang",
         key: "bidang",
@@ -231,7 +234,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("bidang"),
       },
       {
-        width:"10%",
+        width: "10%",
         title: "Nama TKP",
         dataIndex: "name",
         key: "name",
@@ -273,7 +276,8 @@ export default class TableDashboard extends React.Component {
         title: "Kelompok Pekerjaan",
         dataIndex: "kelompokPekerjaan",
         key: "kelompokPekerjaan",
-        sorter: (a, b) => a.kelompokPekerjaan.localeCompare(b.kelompokPekerjaan),
+        sorter: (a, b) =>
+          a.kelompokPekerjaan.localeCompare(b.kelompokPekerjaan),
         ...this.getColumnSearchProps("kelompokPekerjaan"),
       },
 
@@ -291,7 +295,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("tanggalOnboard"),
       },
       {
-        width: 125, 
+        width: 125,
         title: "Aksi",
         dataIndex: "key",
         fixed: "right",
@@ -318,7 +322,6 @@ export default class TableDashboard extends React.Component {
       },
     ];
     const typeAuth = localStorage.getItem("typeAuth");
-    console.log('test', pagination);
 
     return (
       <Table

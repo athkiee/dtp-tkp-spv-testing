@@ -13,6 +13,7 @@ import { CaretRightOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import { Avatar } from "antd";
 import { API } from "../../../configs";
+import moment from "moment";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -182,6 +183,13 @@ const styles = (theme) => ({
     fontFamily: "Roboto",
     color: "#a0a0a0",
   },
+  headPanel: {
+    display: 'flex'
+  },
+  headPanel2: {
+    marginLeft: 50,
+    padding: 10
+  }
 });
 
 class DetailTKP extends React.Component {
@@ -201,6 +209,7 @@ class DetailTKP extends React.Component {
   async componentDidMount() {
     let id_tkp = localStorage.getItem("detail_id");
     let token = localStorage.getItem("token");
+    console.log('huhuhu', id_tkp);
     axios
       .get(API.detailTkp + id_tkp, {
         headers: { Authorization: `Bearer ${token}` },
@@ -456,11 +465,32 @@ class DetailTKP extends React.Component {
     });
   };
 
+  _renderPanelHeader = (value) => {
+    console.log('panel', value);
+    const { classes } = this.props;
+    const coba = moment(value.tanggal_perubahan).format('MMMM YYYY');
+    return (
+      <div className={classes.headPanel}>
+        <div>
+          <h3><b>{value.t_job_title_levelling.nama_job_title_levelling}</b></h3>
+          <p style={{ color: '#E17F93'}}><b>{value.jenis_perubahan}</b></p>
+        </div>
+        <div className={classes.headPanel2}>
+          <h3 style={{ color: "#DA1E20" }}>{coba} - {value.tanggal_habis_kontrak || 'Sekarang'}</h3>
+        </div>
+      </div>
+    );
+  };
+
   render() {
     const { classes } = this.props;
     const { dataDetail } = this.state;
+    console.log('mana', dataDetail);
     let { dataRiwayat } = this.state;
-    console.log("test", dataRiwayat);
+    const startOnboard = moment(get(dataDetail, "tanggal_onboard")).format('MMMM YYYY');
+    const TL = moment(get(dataDetail, "tanggal_lahir")).format('DD MMMM YYYY') !== 'Invalid date' ? moment(get(dataDetail, "tanggal_lahir")).format('DD MMMM YYYY') :
+    '-';
+
     const listTab1 = [
       {
         title: "Nama lengkap sesuai TKP",
@@ -472,7 +502,7 @@ class DetailTKP extends React.Component {
       },
       {
         title: "Tempat, Tanggal Lahir",
-        desc: get(dataDetail, "tanggal_lahir") || "-",
+        desc: get(dataDetail, "tempat_lahir") + `, ${TL}` || "-",
       },
       {
         title: "Alamat Lengkap sesuai KTP",
@@ -587,7 +617,7 @@ class DetailTKP extends React.Component {
       },
       {
         title: "Onboard",
-        desc: get(dataDetail, "tanggal_onboard") || "-",
+        desc: startOnboard !== 'Invalid date' ? startOnboard : '-' || "-",
       },
       {
         title: "Job Title Ketetapan Wawancara",
@@ -620,7 +650,7 @@ class DetailTKP extends React.Component {
       },
       {
         title: "Mulai Onboard",
-        desc: get(dataDetail, "tanggal_onboard") || "-",
+        desc: startOnboard !== 'Invalid date' ? startOnboard : '-' || "-",
       },
       {
         title: "Mitra",
@@ -916,20 +946,15 @@ class DetailTKP extends React.Component {
                     const listStatusTerakhir1 = [
                       {
                         title: "Status",
-                        desc:
-                          (item &&
-                            item.jenis_perubahan) ||
-                          "-",
+                        desc: (item && item.jenis_perubahan) || "-",
                       },
                       {
                         title: "Onboard",
-                        desc: get(item, "tanggal_onboard") || "-",
+                        desc: startOnboard !== 'Invalid date' ? startOnboard : '-' || "-",
                       },
                       {
                         title: "Job Title",
-                        desc:
-                          (item && item.t_job_title.nama_job_title) ||
-                          "-",
+                        desc: (item && item.t_job_title.nama_job_title) || "-",
                       },
                       {
                         title: "Mitra",
@@ -937,9 +962,7 @@ class DetailTKP extends React.Component {
                       },
                       {
                         title: "Paket",
-                        desc:
-                          (item && item.t_paket.keterangan_paket) ||
-                          "-",
+                        desc: (item && item.t_paket.keterangan_paket) || "-",
                       },
                       {
                         title: "No. SP",
@@ -949,8 +972,7 @@ class DetailTKP extends React.Component {
                     const listStatusTerakhir2 = [
                       {
                         title: "Berita Acara Wawancara",
-                        desc:
-                          get(item, "file_berita_acara_wawancara") || "-",
+                        desc: get(item, "file_berita_acara_wawancara") || "-",
                       },
                       {
                         title: "Tanggal Habis Kontrak",
@@ -981,10 +1003,11 @@ class DetailTKP extends React.Component {
                           <CaretRightOutlined rotate={isActive ? 90 : 0} />
                         )}
                         className="site-collapse-custom-collapse"
+                        expandIconPosition={'right'}
                         ghost
                       >
                         <Panel
-                          header={item && item.t_job_title.nama_job_title}
+                          header={this._renderPanelHeader(item)}
                           key="1"
                           className="site-collapse-custom-panel"
                         >

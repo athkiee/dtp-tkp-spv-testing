@@ -238,6 +238,7 @@ class RiwayatTKP extends React.Component {
       </Menu>
     );
 
+
     const filterShowdata = [
       {
         key: 10,
@@ -291,28 +292,29 @@ class RiwayatTKP extends React.Component {
       <Option key={d.key}>{d.value}</Option>
     ));
 
+
     return (
       <div className={classes.root}>
         <HeadBar />
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
-            <Breadcrumb.Item style={{ cursor: "pointer" }}>
-              <a onClick={this._handleBreadcumbs}>Beranda</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item style={{ cursor: "pointer" }}>
-              <a>Pengajuan TKP</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item
-              style={{
-                cursor: "pointer",
-                fontColor: "#DA1E20 !important",
-                fontWeight: "bold",
-              }}
-            >
-              <a>Riwayat</a>
-            </Breadcrumb.Item>
-          </Breadcrumb>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a onClick={this._handleBreadcumbs}>Beranda</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a>Pengajuan TKP</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item
+            style={{
+              cursor: "pointer",
+              fontColor: "#DA1E20 !important",
+              fontWeight: "bold",
+            }}
+          >
+            <a>Riwayat</a>
+          </Breadcrumb.Item>
+        </Breadcrumb>
           <h1 style={{ marginLeft: 35, marginTop: 10, fontSize: 20 }}>
             <strong>Riwayat</strong>
           </h1>
@@ -420,3 +422,4 @@ class RiwayatTKP extends React.Component {
 }
 
 export default withStyles(styles, { withTheme: true })(RiwayatTKP);
+
