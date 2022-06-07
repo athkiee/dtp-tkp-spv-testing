@@ -13,6 +13,8 @@ import Button from "@material-ui/core/Button";
 import FromControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
+import Cookies from "js-cookie";
+import { RememberMe } from "@mui/icons-material";
 
 
 
@@ -41,6 +43,7 @@ function LoginSekre(props) {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  
 
 
 
@@ -83,6 +86,40 @@ function LoginSekre(props) {
       });
   };
 
+  // set remember me expired 30 day
+  // const handleRememberMe = () => {
+  //   Cookies.set("username", username.value, { expires: 30 });
+  //   Cookies.set("password", password.value, { expires: 30 });
+  // };
+
+
+
+// set remember me to cookie
+  const handleRememberMe = () => {
+    if (checked) {
+      Cookies.set("rememberMe", "true");
+      Cookies.set("username", username.value);
+      Cookies.set("password", password.value);
+    } else {
+      Cookies.set("rememberMe", "false");
+      Cookies.remove("username");
+      Cookies.remove("password");
+    }
+  }
+
+  const handleRememberMeChecked = () => {
+    if (Cookies.get("rememberMe") === "true") {
+      setChecked(true);
+      username.onChange(Cookies.get("username"));
+      password.onChange(Cookies.get("password"));
+    } else {
+      setChecked(false);
+      username.onChange("");
+      password.onChange("");
+
+    }
+
+  }
 
 
 
@@ -115,12 +152,12 @@ function LoginSekre(props) {
             <label className="form-label">Password</label>
             <TextField
               className="form-input"
+              id="password"
               type={values.showPassword ? "text" : "password"}
-              onChange={handlePasswordChange("password")}
-              value={values.password}
+              {...password}
               name="password"
               placeholder="Masukkan Password Anda"
-              {...password}
+              
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -141,7 +178,10 @@ function LoginSekre(props) {
                   control={
                     <Checkbox 
                       style={{ color: '#D51100' }}
-                    value="Remember"
+                    value="RememberMe"
+                    onChange={
+                      handleRememberMe
+                    }
                     />
                   }
                   label="Ingat Saya"
