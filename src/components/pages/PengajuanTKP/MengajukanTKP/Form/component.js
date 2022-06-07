@@ -592,9 +592,14 @@ class FormPengajuanTKP extends React.Component {
                 }
                 if (!values.cv) {
                   errors.cv = "CV tidak boleh kosong";
+                }else if(values.cv.fileSize > 100){
+                  errors.cv = "CV tidak boleh lebih dari 1 MB";
                 }
                 if (!values.foto_scanktp) {
                   errors.foto_scanktp = "Scan KTP tidak boleh kosong";
+
+                }else if(values.foto_scanktp.size> 2){
+                  errors.foto_scanktp = "Scan KTP tidak boleh lebih dari 2MB"
                 }
                 if (!values.email) {
                   errors.email = "Email Aktif tidak boleh kosong";
@@ -621,6 +626,7 @@ class FormPengajuanTKP extends React.Component {
                 ) {
                   errors.akun_trello = "Akun Trello/Jira tidak valid";
                 }
+
                 return errors;
               }}
               onSubmit={async (values, { setSubmitting }) => {
@@ -1325,6 +1331,10 @@ class FormPengajuanTKP extends React.Component {
                       onBlur={handleBlur}
                       value={this.state.cv}
                       name={"cv"}
+                      // max file
+                      maxFile={1}
+                      // max size
+                      maxSize={1000000}
                     />
                     <p className={classes.negativeCase}>
                       {errors.cv && touched.cv && errors.cv}
@@ -1334,6 +1344,7 @@ class FormPengajuanTKP extends React.Component {
                     <label className="form-label">Scan KTP{important}</label>
                     <DragAndDrop
                       acceptFiles=".jpg,.jpeg,.png"
+
                       uploadType="KTP"
                       onChange={this._handleFilesFromDrag.bind(
                         this,

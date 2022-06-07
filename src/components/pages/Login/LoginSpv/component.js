@@ -75,9 +75,9 @@ function LoginSupervisor(props) {
       })
       .catch((error, response) => {
         setLoading(false);
-        alert('NIK atau Password salah');
 
-
+        setError(error.response.data.message);
+        
         // else setError("Something went wrong. Please try again later.");
         // setError(response.data.errors[0].message);
       });
@@ -105,6 +105,7 @@ function LoginSupervisor(props) {
               placeholder="Masukkan NIK anda"
               {...nik}
             />
+            {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}
           </div>
           <div className="form-inputs">
             <label className="form-label">Password</label>
@@ -150,7 +151,7 @@ function LoginSupervisor(props) {
            </Grid>
             </Grid>
           </div>
-          {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
+         
           <button
             className="form-input-btn"
             type="submit"

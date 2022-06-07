@@ -183,8 +183,8 @@ export default class NotificationPopover extends React.Component {
                               <Link
                                   onClick={() => {
                                             notif.status=1;
+                                            window.location.href = notif.aksi
                                             this.handleaksi(notif.key);
-                                            window.location.href = notif.aksi;
                                   }}
                                    
                                    style={{ textDecoration: "none",
@@ -235,6 +235,7 @@ export default class NotificationPopover extends React.Component {
                                     <Link
                                         onClick={() => {
                                             this.handleaksi(notif.key);
+                                            window.location.href = notif.aksi
                                         }}
 
                                         style={{
