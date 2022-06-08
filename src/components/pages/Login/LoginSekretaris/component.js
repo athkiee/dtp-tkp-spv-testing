@@ -20,8 +20,8 @@ import { RememberMe } from "@mui/icons-material";
 
 function LoginSekre(props) {
   const [loading, setLoading] = useState(false);
-  const username = useFormInput("");
-  const password = useFormInput("");
+  const username = useFormInput(Cookies.get("username") || "");
+  const password = useFormInput(Cookies.get("password") || "");
   const [error, setError] = useState(null);
   let history = useHistory();
   const [values, setValues] = useState({ password:"", showPassword: false });
@@ -97,31 +97,29 @@ function LoginSekre(props) {
 // set remember me to cookie
   const handleRememberMe = () => {
     if (checked) {
-      Cookies.set("rememberMe", "true");
+      Cookies.set("rememberMe", true);
       Cookies.set("username", username.value);
       Cookies.set("password", password.value);
     } else {
-      Cookies.set("rememberMe", "false");
+      Cookies.set("rememberMe", false);
       Cookies.remove("username");
       Cookies.remove("password");
     }
+    console.log('asda', Cookies.get("rememberMe"));
   }
 
-  const handleRememberMeChecked = () => {
-    if (Cookies.get("rememberMe") === "true") {
-      setChecked(true);
-      username.onChange(Cookies.get("username"));
-      password.onChange(Cookies.get("password"));
-    } else {
-      setChecked(false);
-      username.onChange("");
-      password.onChange("");
+  // const handleRememberMeChecked = () => {
+  //   if (Cookies.get("rememberMe") === "true") {
+  //     setChecked(true);
+  //     username.onChange(Cookies.get("username"));
+  //     password.onChange(Cookies.get("password"));
+  //   } else {
+  //     setChecked(false);
+  //     username.onChange("");
+  //     password.onChange("");
+  //   }
 
-    }
-
-  }
-
-
+  // }
 
   return (
     <div className="form-container">
@@ -178,7 +176,7 @@ function LoginSekre(props) {
                   control={
                     <Checkbox 
                       style={{ color: '#D51100' }}
-                    value="RememberMe"
+                    checked={Cookies.get('rememberMe') || false}
                     onChange={
                       handleRememberMe
                     }
