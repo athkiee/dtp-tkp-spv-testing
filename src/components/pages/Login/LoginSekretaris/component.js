@@ -95,7 +95,8 @@ function LoginSekre(props) {
 
 
 // set remember me to cookie
-  const handleRememberMe = () => {
+  const handleRememberMe = (e) => {
+    const checked = e.target.value;
     if (checked) {
       Cookies.set("rememberMe", true);
       Cookies.set("username", username.value);
