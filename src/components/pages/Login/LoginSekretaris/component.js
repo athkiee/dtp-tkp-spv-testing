@@ -95,6 +95,7 @@ function LoginSekre(props) {
 
 
 // set remember me to cookie
+
   const handleRememberMe = (e) => {
     const checked = e.target.value;
     if (checked) {
@@ -121,6 +122,8 @@ function LoginSekre(props) {
   //   }
 
   // }
+
+
 
   return (
     <div className="form-container">
@@ -177,7 +180,9 @@ function LoginSekre(props) {
                   control={
                     <Checkbox 
                       style={{ color: '#D51100' }}
+
                     checked={Cookies.get('rememberMe') || false}
+
                     onChange={
                       handleRememberMe
                     }
