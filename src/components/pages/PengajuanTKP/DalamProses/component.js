@@ -1,16 +1,29 @@
 import React from "react";
-import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import TableDashboard from "./Table";
-import { Breadcrumb } from "antd";
-import HeadBar from "../../../constant/headBar";
-import { ROUTES } from "../../../../configs";
+import { withStyles } from "@material-ui/core/styles";
 import TableDalamProses from "./Table";
+import HeadBar from "../../../constant/headBar";
+import {
+  Select,
+  Breadcrumb,
+  Menu,
+  Popover,
+  Checkbox,
+  Button,
+  Dropdown,
+} from "antd";
+import { PushpinOutlined, DownloadOutlined } from "@ant-design/icons";
+import { API, ROUTES } from "../../../../configs";
+import axios from "axios";
+import fileDownload from "js-file-download";
+import ModalConfirmation from "../../../ModalConfirmation";
+import ModalSuccess from "../../../ModalSuccess";
+import ModalLoading from "../../../ModalLoading";
 
 const drawerWidth = 240;
+const { Option } = Select;
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   root: {
     display: "flex",
   },
@@ -24,24 +37,11 @@ const useStyles = makeStyles((theme) => ({
     padding: "0 8px",
     ...theme.mixins.toolbar,
   },
-  downloadForm: {
-    color: "#DA1E20",
-    borderColor: "#DA1E20",
-    marginLeft: 15,
-    borderRadius: 10,
-    backgroundColor: "white",
-    "&:hover": {
-      backgroundColor: "#DA1E20",
-      borderColor: "#DA1E20",
-    },
-  },
-  containerTataCara: {
-    width: 550,
-    height: 180,
-    float: "left",
-    margin: 35,
-    backgroundColor: "white",
-    borderRadius: 10,
+  filterJumlahdata: {
+    display: "block",
+    borderRadius: 2,
+    height: 38,
+    width: 73,
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -77,6 +77,10 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
+  navLogo: {
+    width: 294,
+    height: 152,
+  },
   drawerPaperClose: {
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
@@ -90,6 +94,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
+    width: "100%",
     flexGrow: 1,
     height: "100vh",
     overflow: "auto",
@@ -101,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "auto",
     float: "center",
+    marginBottom: 50,
     backgroundColor: "white",
     borderRadius: 10,
     maxWidth: "95.3%",
@@ -114,31 +120,143 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-}));
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
+});
+class DalamProsesPengajuanTKP extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showData: 10,
+      dialogConfirmation: false,
+      dialogZip: false,
+      dialogSuccess: false,
+      dialogLoading: false,
+    };
+  }
 
-const _handleBreadcumbs = () => {
-  window.location = ROUTES.DASHBOARD()
-}
-
-export default function DalamProsesPengajuanTKP() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  _handleFilterData = (value) => {
+    this.setState({
+      showData: value,
+    });
   };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  return (
-    <div className={classes.root}>
-      <HeadBar />
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
+  _handleBreadcumbs = () => {
+    window.location = ROUTES.DASHBOARD()
+  }
+
+  render() {
+    const { classes } = this.props;
+    const { showData } = this.state;
+    const nikSpv = localStorage.getItem("nik");
+    const token = localStorage.getItem("token");
+    const nama = localStorage.getItem("nama");
+    console.log(token);
+
+    const buttonPin = (
+      <Menu>
+        <Menu.Item key="0">
+          <Checkbox>Nama TKP</Checkbox>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <Checkbox>Job Title</Checkbox>
+        </Menu.Item>
+        <Menu.Item key="2">
+          <Checkbox>Job Role</Checkbox>
+        </Menu.Item>
+        <Menu.Item key="3">
+          <Checkbox>Mitra</Checkbox>
+        </Menu.Item>
+      </Menu>
+    );
+
+    const handleExportCSV = () => {
+      this.setState({ dialogConfirmation: true });
+    };
+
+    const handleExportZip = () => {
+      this.setState({ dialogZip: true });
+    };
+
+    const getDataCSV = async () => {
+      const dataCSV = await axios
+        .get(`${API.getCSVTKPUnderSPV}${nikSpv}/dalam-proses`, {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        })
+        .then((response) => response)
+        .catch((error) => console.error(error));
+
+      const { status, data } = dataCSV;
+      if (status === 200) {
+        this.setState({ dialogConfirmation: false });
+        fileDownload(data, `tkp-active-under-spv-${nama}.csv`);
+        this.setState({ dialogSuccess: true });
+      }
+    };
+
+    const getDataZip = async () => {
+      this.setState({ dialogZip: false });
+      this.setState({ dialogLoading: true });
+      const dataZip = await axios
+        .get(`${API.getZipTKPUnderSPV}${nikSpv}/dalam-proses`, {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        })
+        .then((response) => response)
+        .catch((error) => console.error(error));
+
+      const { status, data } = dataZip;
+      if (status === 200) {
+        this.setState({ dialogLoading: false });
+        fileDownload(data, `tkp-active-under-spv-${nama}.zip`);
+        this.setState({ dialogSuccess: true });
+      }
+    };
+
+    const exportData = (
+      <Menu>
+        <Menu.Item key="0" onClick={handleExportCSV}>
+          Ekspor Data (.Csv)
+        </Menu.Item>
+        <Menu.Item key="1" onClick={handleExportZip}>
+          Ekspor Data (.Zip)
+        </Menu.Item>
+      </Menu>
+    );
+
+    const filterShowdata = [
+      {
+        key: 10,
+        value: 10,
+      },
+      {
+        key: 25,
+        value: 25,
+      },
+      {
+        key: 50,
+        value: 50,
+      },
+      {
+        key: 100,
+        value: 100,
+      },
+    ];
+
+    const optionJumlahData = filterShowdata.map((d) => (
+      <Option key={d.key}>{d.value}</Option>
+    ));
+
+    return (
+      <div className={classes.root}>
+        <HeadBar />
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
           <Breadcrumb.Item style={{ cursor: "pointer" }}>
-            <a onClick={_handleBreadcumbs}>Beranda</a>
+            <a onClick={this._handleBreadcumbs}>Beranda</a>
           </Breadcrumb.Item>
           <Breadcrumb.Item style={{ cursor: "pointer" }}>
             <a>Pengajuan TKP</a>
@@ -153,17 +271,98 @@ export default function DalamProsesPengajuanTKP() {
             <a>Dalam Proses</a>
           </Breadcrumb.Item>
         </Breadcrumb>
-        <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
-          <strong>Dalam Proses</strong>
-        </h1>
-        <p style={{ marginLeft: 35, marginBottom: 10 }}>
-          Kelola data TKP berstatus Menunggu Konfirmasi dan Wawancara pada tabel
-          di bawah ini.
-        </p>
-        <Container className={classes.container}>
-          <TableDalamProses />
-        </Container>
-      </main>
-    </div>
-  );
+          <h1 style={{ marginLeft: 35, marginTop: 10, fontSize: 20 }}>
+            <strong>Dalam Proses</strong>
+          </h1>
+          <p style={{ marginLeft: 35, marginBottom: 10 }}>
+            Kelola data TKP berstatus Menunggu Konfirmasi dan Wawancara pada tabel di bawah ini.
+          </p>
+          <Container className={classes.container}>
+            <div
+              style={{
+                marginBottom: 20,
+                marginLeft: "auto",
+                marginRight: "auto",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <div>
+                <label className="form-label">Jumlah Data</label>
+                <Select
+                  className={classes.filterJumlahdata}
+                  placeholder="10"
+                  onChange={this._handleFilterData}
+                >
+                  {optionJumlahData}
+                </Select>
+              </div>
+              <div style={{ marginTop: 25 }}>
+                <Dropdown overlay={exportData} trigger={["click"]}>
+                  <a
+                    href="_black"
+                    className="ant-dropdown-link"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    <Button style={{ marginRight: 20 }}>
+                      Ekspor Data
+                      <DownloadOutlined style={{ marginLeft: 40 }} />
+                    </Button>
+                  </a>
+                </Dropdown>
+
+                {/* modal dialog confirmation csv */}
+                <ModalConfirmation
+                  title={"Yakin ingin Ekspor Data Hasil Evaluasi (.csv)?"}
+                  description={
+                    "Banyaknya data akan berpengaruh pada proses ekspor."
+                  }
+                  open={this.state.dialogConfirmation}
+                  handleClose={() =>
+                    this.setState({ dialogConfirmation: false })
+                  }
+                  getData={() => getDataCSV()}
+                />
+
+                {/* modal dialog confirmation zip */}
+                <ModalConfirmation
+                  title={"Yakin ingin Ekspor Data Hasil Evaluasi (.zip)?"}
+                  description={
+                    "Banyaknya data akan berpengaruh pada proses ekspor."
+                  }
+                  open={this.state.dialogZip}
+                  handleClose={() => this.setState({ dialogZip: false })}
+                  getData={() => getDataZip()}
+                />
+
+                {/* modal dialog Loading */}
+                <ModalLoading
+                  open={this.state.dialogLoading}
+                  handleClose={() => this.setState({ dialogLoading: false })}
+                />
+
+                {/* modal dialog success */}
+                <ModalSuccess
+                  open={this.state.dialogSuccess}
+                  handleClose={() => this.setState({ dialogSuccess: false })}
+                />
+
+                <Popover placement="bottom" content={buttonPin} trigger="click">
+                  <PushpinOutlined
+                    style={{
+                      fontSize: 24,
+                      color: "#DA1E20",
+                    }}
+                  />
+                </Popover>
+              </div>
+            </div>
+            <TableDalamProses perPage={showData} />
+          </Container>
+        </main>
+      </div>
+    );
+  }
 }
+
+export default withStyles(styles, { withTheme: true })(DalamProsesPengajuanTKP);

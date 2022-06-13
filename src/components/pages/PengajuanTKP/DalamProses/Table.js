@@ -6,11 +6,11 @@ import {
   EyeTwoTone,
   DownloadOutlined,
 } from "@ant-design/icons";
+import PropTypes from "prop-types";
 import axios from "axios";
-import { ROUTES, API } from "../../../../configs";
 import Typography from "@material-ui/core/Typography";
 import CircleIcon from "@mui/icons-material/Circle";
-import PropTypes from "prop-types";
+import { ROUTES, API } from "../../../../configs";
 
 export default class TableDalamProses extends React.Component {
   constructor(props) {
@@ -18,28 +18,54 @@ export default class TableDalamProses extends React.Component {
     this.state = {
       searchText: "",
       searchedColumn: "",
-      dataDP: [],
+      dataTKP: [],
+      pagination: {
+        current: 1,
+        pageSize: 10,
+      },
     };
   }
 
-  async componentDidMount() {
-    const nik_spv = localStorage.getItem("nik");
+  componentDidMount() {
     const token = localStorage.getItem("token");
-    await axios
+    const nik_spv = localStorage.getItem("nik");
+
+    axios
       .get(API.tkpUnderSpv + nik_spv + "/dalam-proses", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        const dalamProses = response.data.map((dalamProses) => ({
-          key: dalamProses.id_tkp,
-          name: dalamProses.nama_lengkap,
-          status: dalamProses.t_status_tkp.nama_status_tkp,
-          roles: dalamProses.t_job_role.nama_job_role,
+        const tkp = response.data.map((tkp) => ({
+          index: tkp,
+          key: tkp.id_tkp,
+          tanggal_pengajuan: tkp.tanggal_pengajuan,
+          name: tkp.nama_lengkap,
+          jobTitle: tkp.t_job_title_levelling.nama_job_title_levelling,
+          roles: tkp.t_job_role.nama_job_role,
+          mitra: tkp.t_mitra.nama_mitra,
+          bidang: tkp.t_bidang.kode_bidang,
+          supervisor: tkp.t_supervisor.nama_lengkap,
+          nik_spv: tkp.nik_spv,
+          kelompokPekerjaan: tkp.t_kelompok_pekerjaan.nama_kelompok_pekerjaan,
+          tanggalOnboard: tkp.tanggal_onboard,
+          loker: tkp.t_lokasi_kerja.nama_lokasi_kerja,
+          status: tkp.t_status_tkp.nama_status_tkp,
         }));
         this.setState({
-          dataDP: dalamProses,
+          dataTKP: tkp,
         });
+        console.log("asdasd", response);
       });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { perPage } = this.props;
+    this.setState({
+      pagination: {
+        ...nextProps.pagination,
+        pageSize: perPage,
+      },
+    });
   }
 
   getColumnSearchProps = (dataIndex) => ({
@@ -133,128 +159,42 @@ export default class TableDalamProses extends React.Component {
   };
 
   render() {
-    const { dataDP } = this.state;
+    const { pagination } = this.state;
+    const { perPage } = this.props;
     const columns = [
       {
         title: "No",
-        width: "5%",
+        width: "10%",
         key: "index",
         render: (text, name, index) => index + 1,
       },
       {
-        title: "Nama TKP",
+        title: "Tanggal Pengajuan",
+        dataIndex: "tanggal_pengajuan",
+        key: "tanggal_pengajuan",
+        sorter: (a, b) =>
+          a.tanggal_pengajuan.localeCompare(b.tanggal_pengajuan),
+        ...this.getColumnSearchProps("tanggal_pengajuan"),
+      },
+      {
+        title: "Nama Calon TKP",
         dataIndex: "name",
         key: "name",
-        width: "20%",
-        className: "clientName" ? "show" : "hide",
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
       },
       {
-        title: "Bidang",
-        dataIndex: "bidang",
-        key: "bidang",
-        sorter: (a, b) => a.bidang.localeCompare(b.bidang),
-        ...this.getColumnSearchProps("bidang"),
-      },
-      {
-        title: "Job Title",
-        dataIndex: "jobTitle",
-        key: "jobTitle",
-        sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
-        ...this.getColumnSearchProps("jobTitle"),
+        title: "Job Role",
+        dataIndex: "roles",
+        key: "roles",
+        sorter: (a, b) => a.roles.localeCompare(b.roles),
+        ...this.getColumnSearchProps("roles"),
       },
       {
         title: "Status",
         dataIndex: "status",
         key: "status",
         sorter: (a, b) => a.status.localeCompare(b.status),
-        ...this.getColumnSearchProps("status"),
-      },
-      {
-        width: 125,
-        title: "Aksi",
-        dataIndex: "key",
-        fixed: "right",
-        render: (key) => (
-          <div>
-            <Tooltip placement="bottom" title={"Lihat Detail"}>
-              <span
-                onClick={this._handleOpenDetail.bind(this, key)}
-                style={{ marginRight: 15, cursor: "pointer" }}
-              >
-                <EyeTwoTone />
-              </span>
-            </Tooltip>
-            <Tooltip placement="bottom" title={"Unduh Data"}>
-              <span>
-                <DownloadOutlined
-                  onClick={() =>
-                    window.open(
-                      "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
-                    )
-                  }
-                  style={{ color: "#00FF00" }}
-                />
-              </span>
-            </Tooltip>
-          </div>
-        ),
-      },
-    ];
-
-    const columnSekbid = [
-      {
-        title: "No",
-        width: "5%",
-        key: "index",
-        render: (text, name, index) => index + 1,
-      },
-      {
-        title: "INT",
-        dataIndex: "int",
-        key: "int",
-      },
-      {
-        title: "Bidang",
-        dataIndex: "bidang",
-        key: "bidang",
-        ...this.getColumnSearchProps("bidang"),
-      },
-      {
-        title: "Nama TKP",
-        dataIndex: "name",
-        key: "name",
-        width: "13%",
-        className: "clientName" ? "show" : "hide",
-        sorter: (a, b) => a.name.localeCompare(b.name),
-        ...this.getColumnSearchProps("name"),
-      },
-      {
-        width: "13%",
-        title: "Supervisor/PIC",
-        dataIndex: "supervisor",
-        key: "supervisor",
-        ...this.getColumnSearchProps("supervisor"),
-      },
-      {
-        width: "9%",
-        title: "NIK SPV",
-        dataIndex: "nik_spv",
-        key: "nik_spv",
-        ...this.getColumnSearchProps("nik_spv"),
-      },
-      {
-        title: "Loker",
-        dataIndex: "loker",
-        key: "loker",
-        ...this.getColumnSearchProps("loker"),
-      },
-      {
-        width: "9%",
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
         ...this.getColumnSearchProps("status"),
         render: (text) => {
           if (text === "Diterima") {
@@ -289,26 +229,115 @@ export default class TableDalamProses extends React.Component {
           }
         },
       },
+      {
+        width: 125,
+        title: "Aksi",
+        dataIndex: "key",
+        fixed: "right",
+        render: (key) => (
+          <div>
+            <Tooltip placement="bottom" title={"Lihat Detail"}>
+              <span
+                onClick={this._handleOpenDetail.bind(this, key)}
+                style={{ marginRight: 15, cursor: "pointer" }}
+              >
+                <EyeTwoTone />
+              </span>
+            </Tooltip>
+            <Tooltip placement="bottom" title={"Unduh Data"}>
+              <span>
+                <DownloadOutlined
+                  onClick={() =>
+                    window.open(
+                      "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
+                    )
+                  }
+                  style={{ color: "#00FF00" }}
+                />
+              </span>
+            </Tooltip>
+          </div>
+        ),
+      },
+    ];
 
+    const columnsekbid = [
+      {
+        width: "1%",
+        title: "No",
+        dataIndex: "index",
+        key: "index",
+        render: (text, name, index) => index + 1,
+      },
+      {
+        width: "2%",
+        title: "Bidang",
+        dataIndex: "bidang",
+        key: "bidang",
+        sorter: (a, b) => a.bidang.localeCompare(b.bidang),
+        ...this.getColumnSearchProps("bidang"),
+      },
+      {
+        width: "10%",
+        title: "Nama TKP",
+        dataIndex: "name",
+        key: "name",
+        sorter: (a, b) => a.name.localeCompare(b.name),
+        ...this.getColumnSearchProps("name"),
+      },
+      {
+        width: "13%",
+        title: "Supervisor/PIC",
+        dataIndex: "supervisor",
+        key: "supervisor",
+        sorter: (a, b) => a.supervisor.localeCompare(b.supervisor),
+        ...this.getColumnSearchProps("supervisor"),
+      },
+      {
+        width: "9%",
+        title: "Nik SPV",
+        dataIndex: "nik_spv",
+        key: "nik_spv",
+        sorter: (a, b) => a.nik.localeCompare(b.nik_spv),
+        ...this.getColumnSearchProps("nik_spv"),
+      },
+      {
+        title: "Loker",
+        dataIndex: "loker",
+        key: "loker",
+        sorter: (a, b) => a.loker.localeCompare(b.loker),
+        ...this.getColumnSearchProps("loker"),
+      },
       {
         title: "Job Title",
         dataIndex: "jobTitle",
         key: "jobTitle",
+        sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
         ...this.getColumnSearchProps("jobTitle"),
       },
       {
-        title: "Onboard",
-        dataIndex: "onboard",
-        key: "onboard",
-        ...this.getColumnSearchProps("onboard"),
-      },
-      {
-        title: "Perubahan Status Terakhir",
-        dataIndex: "last_status",
-        key: "last_status",
-        ...this.getColumnSearchProps("last_status"),
+        width: "18%",
+        title: "Kelompok Pekerjaan",
+        dataIndex: "kelompokPekerjaan",
+        key: "kelompokPekerjaan",
+        sorter: (a, b) =>
+          a.kelompokPekerjaan.localeCompare(b.kelompokPekerjaan),
+        ...this.getColumnSearchProps("kelompokPekerjaan"),
       },
 
+      {
+        title: "Mitra",
+        dataIndex: "mitra",
+        key: "mitra",
+        ...this.getColumnSearchProps("mitra"),
+      },
+      {
+        title: "Onboard",
+        dataIndex: "tanggalOnboard",
+        key: "tanggalOnboard",
+        sorter: (a, b) => a.tanggalOnboard.localeCompare(b.tanggalOnboard),
+        ...this.getColumnSearchProps("tanggalOnboard"),
+      },
       {
         width: 125,
         title: "Aksi",
@@ -336,13 +365,14 @@ export default class TableDalamProses extends React.Component {
         ),
       },
     ];
-
     const typeAuth = localStorage.getItem("typeAuth");
+
     return (
       <Table
-        columns={typeAuth === "sekretaris" ? columnSekbid : columns}
-        dataSource={dataDP}
-        pagination={true}
+        columns={typeAuth === "sekretaris" ? columnsekbid : columns}
+        dataSource={this.state.dataTKP}
+        pagination={pagination}
+        scroll={{ x: 1300 }}
       />
     );
   }
@@ -355,5 +385,4 @@ TableDalamProses.defaultProps = {
 TableDalamProses.propTypes = {
   classes: PropTypes.object,
   perPage: PropTypes.string.isRequired,
-  filterStat: PropTypes.string.isRequired,
 };
