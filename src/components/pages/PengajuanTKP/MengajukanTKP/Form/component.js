@@ -591,19 +591,13 @@ class FormPengajuanTKP extends React.Component {
                 if (!values.thp) {
                   errors.thp = "Ekspektasi THP tidak boleh kosong";
                 }
-                if (!values.cv) {
-                  if (values.cv.size > 200000) {
-                    errors.cv = "CV tidak boleh lebih dari 2 MB";
-                    if(values.cv.fileType !== 'application/pdf'){
-                      errors.cv = "CV harus berupa file PDF";
-                    }
-                  }
+                if (!values.cv.size > 2000) {
                   errors.cv = "CV tidak boleh kosong";
                 } 
                 if (!values.foto_scanktp) {
                   errors.foto_scanktp = "Scan KTP tidak boleh kosong";
                 } else if (values.foto_scanktp.size > 2) {
-                  errors.foto_scanktp = "Scan KTP tidak boleh lebih dari 2MB";
+                  errors.foto_scanktp = "Scan KTP tidak boleh lebih dari 2MBs";
                 }
                 if (!values.email) {
                   errors.email = "Email Aktif tidak boleh kosong";
