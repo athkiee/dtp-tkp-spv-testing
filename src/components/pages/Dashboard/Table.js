@@ -220,7 +220,7 @@ export default class TableDashboard extends React.Component {
     const columnsekbid = [
       {
         
-        width: "4%",
+        // width: "4%",
         title: "N0",
         dataIndex: "index",
         key: "index",
@@ -228,7 +228,7 @@ export default class TableDashboard extends React.Component {
         sorter: (a, b) => a.index - b.index,
       },
       {
-        width: "8%",
+        // width: "8%",
         title: "Bidang",
         dataIndex: "bidang",
         key: "bidang",
@@ -236,7 +236,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("bidang"),
       },
       {
-        width: "13%",
+        // width: "13%",
         title: "Nama TKP",
         dataIndex: "name",
         key: "name",
@@ -244,7 +244,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("name"),
       },
       {
-        width: "13%",
+        // width: "13%",
         title: "Supervisor/PIC",
         dataIndex: "supervisor",
         key: "supervisor",
@@ -252,7 +252,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("supervisor"),
       },
       {
-        width: "10%",
+        // width: "10%",
         title: "Nik SPV",
         dataIndex: "nik_spv",
         key: "nik_spv",
@@ -260,7 +260,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("nik_spv"),
       },
       {
-        width: "9%",
+        // width: "9%",
         title: "Loker",
         dataIndex: "loker",
         key: "loker",
@@ -268,7 +268,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("loker"),
       },
       {
-        width: "10%",
+        // width: "10%",
         title: "Job Title",
         dataIndex: "jobTitle",
         key: "jobTitle",
@@ -276,7 +276,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("jobTitle"),
       },
       {
-        width: "18%",
+        // width: "18%",
         title: "Kelompok Pekerjaan",
         dataIndex: "kelompokPekerjaan",
         key: "kelompokPekerjaan",
@@ -286,7 +286,7 @@ export default class TableDashboard extends React.Component {
       },
 
       {
-        width: "6%",
+        // width: "6%",
         title: "Mitra",
         dataIndex: "mitra",
         key: "mitra",
@@ -294,7 +294,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("mitra"),
       },
       {
-        width: "7%",
+        // width: "7%",
         title: "Onboard",
         dataIndex: "tanggalOnboard",
         key: "tanggalOnboard",
@@ -302,7 +302,7 @@ export default class TableDashboard extends React.Component {
         ...this.getColumnSearchProps("tanggalOnboard"),
       },
       {
-        width: "5%",
+        // width: "5%",
         title: "Aksi",
         dataIndex: "key",
         fixed: "right",
