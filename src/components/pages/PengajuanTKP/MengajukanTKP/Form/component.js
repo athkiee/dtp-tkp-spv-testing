@@ -10,6 +10,7 @@ import { Formik } from "formik";
 import moment from "moment";
 import { ROUTES, API } from "../../../../../configs";
 import Button from "@material-ui/core/Button";
+import * as Yup from "yup";
 
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
@@ -171,6 +172,11 @@ class FormPengajuanTKP extends React.Component {
       status_tkp: "Menunggu Konfirmasi",
     };
   }
+
+ 
+
+
+  
 
   componentDidMount() {
     axios
@@ -716,7 +722,11 @@ class FormPengajuanTKP extends React.Component {
                             sessionStorage.removeItem("nama_spv");
                             sessionStorage.removeItem("nik_spv");
                           } else {
-                            console.log("File upload gagal!", values);
+                            const error = res.data.error;
+                            Modal.error({
+                              content: error,
+                              onOk() {},
+                            });
                           }
                         });
                     }
@@ -1328,10 +1338,6 @@ class FormPengajuanTKP extends React.Component {
                       onBlur={handleBlur}
                       value={this.state.cv}
                       name={"cv"}
-                      // max file
-                      maxFile={1}
-                      // max size
-                      maxSize={1000000}
                     />
                     <p className={classes.noteModal}>
                       Format file berupa PDF dengan maksimal ukuran 2 MB
@@ -1343,7 +1349,9 @@ class FormPengajuanTKP extends React.Component {
                   <div style={{ margin: 20 }}>
                     <label className="form-label">Scan KTP{important}</label>
                     <DragAndDrop
-                      acceptFiles=".jpg,.jpeg,.png"
+
+                      // acceptFiles=".jpg,.jpeg,.png"
+
                       uploadType="KTP"
                       onChange={this._handleFilesFromDrag.bind(
                         this,
@@ -1366,7 +1374,7 @@ class FormPengajuanTKP extends React.Component {
                   <div style={{ margin: 20 }}>
                     <label className="form-label">SKCK</label>
                     <DragAndDrop
-                      acceptFiles="application/pdf"
+                      // acceptFiles="application/pdf"
                       uploadType="SKCK"
                       onChange={this._handleFilesFromDrag.bind(
                         this,
@@ -1376,8 +1384,10 @@ class FormPengajuanTKP extends React.Component {
                       value={this.state.file_skck}
                       name={"file_skck"}
                     />
+
                     <p className={classes.noteModal}>
                       Format file berupa PDF dengan maksimal ukuran 2 MB
+
                     </p>
                   </div>
 
