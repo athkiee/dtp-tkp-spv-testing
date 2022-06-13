@@ -256,7 +256,6 @@ export default class TableRiwayat extends React.Component {
     const columnSekbid = [
       {
         title: "No",
-        width: "5%",
         key: "index",
         render: (text, name, index) => index + 1,
       },
@@ -275,20 +274,17 @@ export default class TableRiwayat extends React.Component {
         title: "Nama TKP",
         dataIndex: "name",
         key: "name",
-        width: "13%",
         className: "clientName" ? "show" : "hide",
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
       },
       {
-        width: "13%",
         title: "Supervisor/PIC",
         dataIndex: "supervisor",
         key: "supervisor",
         ...this.getColumnSearchProps("supervisor"),
       },
       {
-        width: "9%",
         title: "NIK SPV",
         dataIndex: "nik_spv",
         key: "nik_spv",
@@ -301,7 +297,6 @@ export default class TableRiwayat extends React.Component {
         ...this.getColumnSearchProps("loker"),
       },
       {
-        width: "9%",
         title: "Status",
         dataIndex: "status",
         key: "status",
@@ -397,7 +392,7 @@ export default class TableRiwayat extends React.Component {
         columns={typeAuth === "sekretaris" ? columnSekbid : columns}
         dataSource={sourceData}
         pagination={true}
-        scroll={{ x: 1300 }}
+        scroll={{ x: "max-content" }}
 
       />
     );
