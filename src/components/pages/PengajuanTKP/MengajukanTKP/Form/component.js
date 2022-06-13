@@ -34,7 +34,7 @@ const styles = (theme) => ({
     ...theme.mixins.toolbar,
   },
   submitForm: {
-    width :"150px",
+    width: "150px",
     height: "40px",
     color: "white",
     borderColor: "#DA1E20",
@@ -82,6 +82,13 @@ const styles = (theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
+  noteModal: {
+    marginTop: "8px",
+    fontSize: "10px",
+    lineHeight: "12px",
+    fontFamily: "Roboto",
+    color: "#000000",
+  },
   drawerPaperClose: {
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
@@ -113,7 +120,6 @@ const styles = (theme) => ({
   fixedHeight: {
     height: 240,
   },
-
 });
 
 class FormPengajuanTKP extends React.Component {
@@ -271,29 +277,25 @@ class FormPengajuanTKP extends React.Component {
   };
 
   _onChangeJobTitle = (key, roles) => {
-    axios
-      .get(API.allJobTitleLevelling + key)
-      .then((response) => {
-        const jtLevel = response.data.map((jtLevel) => ({
-          key: jtLevel.id_job_title_levelling,
-          name: jtLevel.nama_job_title_levelling,
-        }));
-        this.setState({
-          datajtLevel: jtLevel,
-          id_job_title: key,
-        });
+    axios.get(API.allJobTitleLevelling + key).then((response) => {
+      const jtLevel = response.data.map((jtLevel) => ({
+        key: jtLevel.id_job_title_levelling,
+        name: jtLevel.nama_job_title_levelling,
+      }));
+      this.setState({
+        datajtLevel: jtLevel,
+        id_job_title: key,
       });
-    axios
-      .get(API.allJobRoles + roles.roles)
-      .then((response) => {
-        const jobRole = response.data.map((jobRole) => ({
-          key: jobRole.id_job_role,
-          name: jobRole.nama_job_role,
-        }));
-        this.setState({
-          datajobRole: jobRole,
-        });
+    });
+    axios.get(API.allJobRoles + roles.roles).then((response) => {
+      const jobRole = response.data.map((jobRole) => ({
+        key: jobRole.id_job_role,
+        name: jobRole.nama_job_role,
+      }));
+      this.setState({
+        datajobRole: jobRole,
       });
+    });
   };
 
   _handleChange = (event) => {
@@ -331,30 +333,26 @@ class FormPengajuanTKP extends React.Component {
     });
   };
 
-  
-
   sendNotif = () => {
     const nik_spv = localStorage.getItem("nik");
-    const data={
-      id_kategori_notifikasi:1,
-      nik_spv_berkaitan:nik_spv,
-      id_tkp_berkaitan:this.state.id_tkp,
-    }
+    const data = {
+      id_kategori_notifikasi: 1,
+      nik_spv_berkaitan: nik_spv,
+      id_tkp_berkaitan: this.state.id_tkp,
+    };
 
     const token = localStorage.getItem("token");
     axios
-      .post(API.notification_admin+"tambah",data,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .post(API.notification_admin + "tambah", data, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
-        console.log("send notif berhasil",response);
+        console.log("send notif berhasil", response);
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   render() {
     const typeAuth = localStorage.getItem("typeAuth");
@@ -434,10 +432,8 @@ class FormPengajuanTKP extends React.Component {
       file_skck,
     };
 
-   
     const optionProvinsi = dataProvinsi.map((d) => (
-      <Option   
-       key={d.key} value={d.name}>
+      <Option key={d.key} value={d.name}>
         {d.name}
       </Option>
     ));
@@ -518,9 +514,8 @@ class FormPengajuanTKP extends React.Component {
                 }
                 if (!values.no_ktp) {
                   errors.no_ktp = "Nomor KTP tidak boleh kosong";
-                }
-                else if (values.no_ktp.length !== 16) {
-                  errors.no_ktp = "Nomor KTP harus berjumlah 16 karakter"
+                } else if (values.no_ktp.length !== 16) {
+                  errors.no_ktp = "Nomor KTP harus berjumlah 16 karakter";
                 }
                 if (!values.tempat_lahir) {
                   errors.tempat_lahir = "Tempat lahir tidak boleh kosong";
@@ -598,21 +593,13 @@ class FormPengajuanTKP extends React.Component {
                 }
                 if (!values.cv) {
                   errors.cv = "CV tidak boleh kosong";
-                } else if (values.cv.size > 2000000 || values.cv.type !== "application/pdf"){
-                  errors.cv = "Format CV berupa PDF dengan maksimal ukuran 2MB ";
+                } else if (values.cv.fileSize > 100) {
+                  errors.cv = "CV tidak boleh lebih dari 1 MB";
                 }
                 if (!values.foto_scanktp) {
                   errors.foto_scanktp = "Scan KTP tidak boleh kosong";
-
-                }else if(values.foto_scanktp.size> 2000000 ){
-                  if(values.foto_scanktp.type !== "image/jpeg" && values.foto_scanktp.type !== "image/png" && values.foto_scanktp.type !== "image/jpg"){
-                  errors.foto_scanktp = "Format Scan KTP berupa JPG atau JPEG dengan maksimal ukuran 2MB ";}
-                  errors.foto_scanktp = "Format Scan KTP berupa JPG atau JPEG dengan maksimal ukuran 2MB ";
-                }
-                if(values.file_skck.size>2000000){
-                  if(values.file_skck.type !== "aplication/pdf"){
-                  errors.file_skck = "Format Scan SKCK berupa PDF dengan maksimal ukuran 2MB ";
-                }
+                } else if (values.foto_scanktp.size > 2) {
+                  errors.foto_scanktp = "Scan KTP tidak boleh lebih dari 2MB";
                 }
                 if (!values.email) {
                   errors.email = "Email Aktif tidak boleh kosong";
@@ -650,7 +637,10 @@ class FormPengajuanTKP extends React.Component {
                 formData.append("id_status_tkp", this.state.id_status_tkp);
                 formData.append("id_bidang", this.state.id_bidang);
                 formData.append("id_job_title", this.state.id_job_title);
-                formData.append("id_job_title_levelling", this.state.id_job_title_levelling);
+                formData.append(
+                  "id_job_title_levelling",
+                  this.state.id_job_title_levelling
+                );
                 formData.append("id_job_role", this.state.id_job_role);
                 formData.append("id_mitra", this.state.id_mitra);
                 formData.append("id_paket", this.state.id_paket);
@@ -708,33 +698,29 @@ class FormPengajuanTKP extends React.Component {
                     headers: {
                       "Content-Type":
                         "multipart/form-data; boundary=--------------------------somestring123abcdefg",
-                      Authorization: `Bearer ${token}`
+                      Authorization: `Bearer ${token}`,
                     },
                   })
                   .then((response) => {
                     if (response.status === 200) {
                       axios
-                        .post(
-                          API.registerFileTkp,
-                          "lol",
-                          {
-                            headers: {
-                              "Content-Type":
-                                "multipart/form-data; boundary=--------------------------somestring123abcdefg",
-                              Authorization: `Bearer ${token}`
-                            },
-                          }
-                        )
+                        .post(API.registerFileTkp, "lol", {
+                          headers: {
+                            "Content-Type":
+                              "multipart/form-data; boundary=--------------------------somestring123abcdefg",
+                            Authorization: `Bearer ${token}`,
+                          },
+                        })
                         .then((res) => {
                           if (res.status == 200) {
                             Modal.success({
                               content: "Pengajuan TKP Anda telah berhasil",
                               onOk() {},
                             });
-                            this.sendNotif()
+                            this.sendNotif();
                             console.log("OK!", values);
-                            sessionStorage.removeItem('nama_spv')
-                            sessionStorage.removeItem('nik_spv')
+                            sessionStorage.removeItem("nama_spv");
+                            sessionStorage.removeItem("nik_spv");
                           } else {
                             const error = res.data.error;
                             Modal.error({
@@ -775,7 +761,9 @@ class FormPengajuanTKP extends React.Component {
                       type="text"
                       name="name"
                       value={
-                        typeAuth === "sekretaris" ? sessionStorage.getItem('nama_spv') : namaSpv
+                        typeAuth === "sekretaris"
+                          ? sessionStorage.getItem("nama_spv")
+                          : namaSpv
                       }
                       disabled
                     />
@@ -789,7 +777,9 @@ class FormPengajuanTKP extends React.Component {
                       type="number"
                       name="nik_spv"
                       value={
-                        typeAuth==="sekretaris"?sessionStorage.getItem("nik_spv"):values.nik_spv
+                        typeAuth === "sekretaris"
+                          ? sessionStorage.getItem("nik_spv")
+                          : values.nik_spv
                       }
                       disabled
                     />
@@ -883,15 +873,16 @@ class FormPengajuanTKP extends React.Component {
                             values.tanggal_lahir &&
                             moment(tanggal_lahir, "DD/MM/YYYY")
                           }
-                            
                         />
                         <p className={classes.negativeCase}>
-                          {
-                            errors.tanggal_lahir && touched.tanggal_lahir && errors.tanggal_lahir
-                          }
-                          {
-                            (values.tanggal_lahir && moment(tanggal_lahir, "DD/MM/YYYY").isAfter(moment().subtract(18, "years"))) && "Minimal usia 18 tahun" 
-                          }
+                          {errors.tanggal_lahir &&
+                            touched.tanggal_lahir &&
+                            errors.tanggal_lahir}
+                          {values.tanggal_lahir &&
+                            moment(tanggal_lahir, "DD/MM/YYYY").isAfter(
+                              moment().subtract(18, "years")
+                            ) &&
+                            "Minimal usia 18 tahun"}
                         </p>
                       </div>
                     </Grid>
@@ -923,7 +914,6 @@ class FormPengajuanTKP extends React.Component {
                           Provinsi sesuai KTP{important}
                         </label>
                         <Select
-                      
                           showSearch
                           name={"provinsi_ktp"}
                           className={classes.inputForm}
@@ -1349,6 +1339,9 @@ class FormPengajuanTKP extends React.Component {
                       value={this.state.cv}
                       name={"cv"}
                     />
+                    <p className={classes.noteModal}>
+                      Format file berupa PDF dengan maksimal ukuran 2 MB
+                    </p>
                     <p className={classes.negativeCase}>
                       {errors.cv && touched.cv && errors.cv}
                     </p>
@@ -1356,6 +1349,7 @@ class FormPengajuanTKP extends React.Component {
                   <div style={{ margin: 20 }}>
                     <label className="form-label">Scan KTP{important}</label>
                     <DragAndDrop
+
                       // acceptFiles=".jpg,.jpeg,.png"
 
                       uploadType="KTP"
@@ -1367,6 +1361,10 @@ class FormPengajuanTKP extends React.Component {
                       value={this.state.foto_scanktp}
                       name={"foto_scanktp"}
                     />
+                    <p className={classes.noteModal}>
+                      Format foto berupa JPG atau JPEG dengan maksimal ukuran
+                      2MB
+                    </p>
                     <p className={classes.negativeCase}>
                       {errors.foto_scanktp &&
                         touched.foto_scanktp &&
@@ -1386,23 +1384,25 @@ class FormPengajuanTKP extends React.Component {
                       value={this.state.file_skck}
                       name={"file_skck"}
                     />
-                    <p className={classes.negativeCase}>
-                      {errors.file_skck && touched.file_skck && errors.file_skck}
+
+                    <p className={classes.noteModal}>
+                      Format file berupa PDF dengan maksimal ukuran 2 MB
+
                     </p>
                   </div>
-                  
-                  <div style={{ margin: 20 }}>
-                    <Grid container 
-                      justify="flex-end"
-                    >
-                      <Button className={classes.submitForm} type="submit" disabled={isSubmitting} > SUBMIT</Button>
-                    </Grid>
-                    </div>
-                 
-                       
-                 
 
-                 
+                  <div style={{ margin: 20 }}>
+                    <Grid container justify="flex-end">
+                      <Button
+                        className={classes.submitForm}
+                        type="submit"
+                        disabled={isSubmitting}
+                      >
+                        {" "}
+                        SUBMIT
+                      </Button>
+                    </Grid>
+                  </div>
                 </form>
               )}
             </Formik>

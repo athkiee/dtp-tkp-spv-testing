@@ -392,11 +392,7 @@ export default class TableRiwayat extends React.Component {
         columns={typeAuth === "sekretaris" ? columnSekbid : columns}
         dataSource={sourceData}
         pagination={true}
-        scroll={{ x: "max-content" }}
-        rowClassName="editable-row"
-        size="middle"
-        bordered={true}
-        rowKey={(perPage) => perPage.key}
+        scroll={{ x: 1300 }}
 
       />
     );
