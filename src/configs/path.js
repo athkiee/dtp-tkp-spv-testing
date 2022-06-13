@@ -11,7 +11,7 @@ function Path() {
   return (
     <Router>
       <Route exact path={ROUTES.LANDING_PAGE()} component={pages.LandingPage} />
-      <Route path={ROUTES.LOGIN_SPV()} component={LoginSpv} />
+      <Route path={ROUTES.LOGIN_SPV()}  component={LoginSpv}/>
       <Route path={ROUTES.LOGIN_SEKRETARIS()} component={LoginSekretaris} />
       <Route path={ROUTES.DASHBOARD()} component={Dashboard} />
       <Route path={ROUTES.KELOLA_EVALUASI_TKP()} component={pages.EvaluasiTKP} />

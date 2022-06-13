@@ -143,11 +143,15 @@ export default class TableRiwayat extends React.Component {
 
   render() {
     const { filterStat } = this.props;
+    const { perPage } = this.props;
     const { dataRiwayat } = this.state;
     const sourceData =
       filterStat !== ""
-        ? dataRiwayat.filter((obj) => obj.status === filterStat)
+        ? dataRiwayat.filter((obj) => obj.status === filterStat).splice( 0, perPage )
         : dataRiwayat;
+  
+      
+
     const columns = [
       {
         title: "No",
@@ -393,6 +397,12 @@ export default class TableRiwayat extends React.Component {
         columns={typeAuth === "sekretaris" ? columnSekbid : columns}
         dataSource={sourceData}
         pagination={true}
+        scroll={{ x: "max-content" }}
+        rowClassName="editable-row"
+        size="middle"
+        bordered={true}
+        rowKey={(perPage) => perPage.key}
+
       />
     );
   }
