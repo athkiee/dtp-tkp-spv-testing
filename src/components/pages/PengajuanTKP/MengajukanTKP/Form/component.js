@@ -591,14 +591,28 @@ class FormPengajuanTKP extends React.Component {
                 if (!values.thp) {
                   errors.thp = "Ekspektasi THP tidak boleh kosong";
                 }
-                if (!values.cv.size > 2000) {
+                if (!values.cv) {
                   errors.cv = "CV tidak boleh kosong";
-                } 
+                  
+                } else if(values.cv.size > 2000000){
+                  errors.cv = "CV tidak boleh lebih dari 2MB";
+                } else if(values.cv.type !== 'application/pdf'){
+                  errors.cv = "CV harus berupa file PDF";
+                }
                 if (!values.foto_scanktp) {
                   errors.foto_scanktp = "Scan KTP tidak boleh kosong";
-                } else if (values.foto_scanktp.size > 2) {
+                } else if (values.foto_scanktp.size > 2000000) {
                   errors.foto_scanktp = "Scan KTP tidak boleh lebih dari 2MBs";
+                } else if (values.foto_scanktp.type !== 'image/jpeg' && values.foto_scanktp.type !== 'image/png' && values.foto_scanktp.type !== 'image/jpg') {
+                  errors.foto_scanktp = "Scan KTP harus berupa file gambar";
                 }
+                if(values.file_skck.size > 2000000){
+                  errors.file_skck = "Scan SKCK tidak boleh lebih dari 2MB";
+                  if (values.file_skck.type !== 'aplication/pdf') {
+                    errors.file_skck = "Scan SKCK harus berupa file PDF";
+                  }
+                }
+                
                 if (!values.email) {
                   errors.email = "Email Aktif tidak boleh kosong";
                 } else if (
@@ -1373,6 +1387,11 @@ class FormPengajuanTKP extends React.Component {
                     <p className={errors.file_skck?classes.negativeCase:classes.noteModal}>
                       Format file berupa PDF dengan maksimal ukuran 2 MB
 
+                    </p>
+                    <p>
+                      {errors.file_skck &&
+                        touched.file_skck &&
+                        errors.file_skck}
                     </p>
                   </div>
 
