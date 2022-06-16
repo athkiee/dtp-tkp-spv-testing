@@ -86,6 +86,7 @@ const styles = (theme) => ({
     fontWeight: 700,
     fontSize: 24,
     justifyContent: "right",
+    cursor: 'pointer'
   },
   buttonOke: {
     width: 216,
@@ -378,7 +379,7 @@ class DetailTKP extends React.Component {
   _renderModalInfo = () => {
     Modal.success({
       content: "Unggah SKCK Berhasil",
-      onOk() {},
+      onOk() { window.location.reload() },
     });
     this._handleCloseModal();
   };

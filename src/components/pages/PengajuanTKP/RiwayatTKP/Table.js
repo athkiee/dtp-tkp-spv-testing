@@ -11,6 +11,7 @@ import { ROUTES } from "../../../../configs";
 import Typography from "@material-ui/core/Typography";
 import CircleIcon from "@mui/icons-material/Circle";
 import PropTypes from "prop-types";
+import fileDownload from "js-file-download";
 
 export default class TableRiwayat extends React.Component {
   constructor(props) {
@@ -141,6 +142,23 @@ export default class TableRiwayat extends React.Component {
     localStorage.setItem("detail_id", key);
   };
 
+  _getDataTkp = async (key) => {
+    const token = localStorage.getItem("token");
+    console.log('haha', key);
+    const dataTkp = await axios
+      .get(`http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` + key, {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: "blob",
+      })
+      .then((response) => response)
+      .catch((error) => console.error(error));
+
+    const { status, data } = dataTkp;
+    if (status === 200) {
+      fileDownload(data, `${key}.zip`);
+    }
+  };
+
   render() {
     const { filterStat } = this.props;
     const { dataRiwayat } = this.state;
@@ -235,11 +253,7 @@ export default class TableRiwayat extends React.Component {
             <Tooltip placement="bottom" title={"Unduh Data"}>
               <span>
                 <DownloadOutlined
-                  onClick={() =>
-                    window.open(
-                      "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
-                    )
-                  }
+                  onClick={this._getDataTkp.bind(this, key)}
                   style={{ color: "#00FF00" }}
                 />
               </span>
@@ -373,11 +387,7 @@ export default class TableRiwayat extends React.Component {
             <Tooltip placement="bottom" title={"Unduh Data"}>
               <span>
                 <DownloadOutlined
-                  onClick={() =>
-                    window.open(
-                      "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
-                    )
-                  }
+                  onClick={this._getDataTkp.bind(this, key)}
                   style={{ color: "#00FF00" }}
                 />
               </span>

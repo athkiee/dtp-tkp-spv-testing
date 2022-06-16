@@ -191,7 +191,7 @@ class DalamProsesPengajuanTKP extends React.Component {
       const { status, data } = dataCSV;
       if (status === 200) {
         this.setState({ dialogConfirmation: false });
-        fileDownload(data, `tkp-active-under-spv-${nama}.csv`);
+        fileDownload(data, `tkp-onprocess-under-spv-${nama}.csv`);
         this.setState({ dialogSuccess: true });
       }
     };
@@ -210,7 +210,7 @@ class DalamProsesPengajuanTKP extends React.Component {
       const { status, data } = dataZip;
       if (status === 200) {
         this.setState({ dialogLoading: false });
-        fileDownload(data, `tkp-active-under-spv-${nama}.zip`);
+        fileDownload(data, `tkp-onprocess-under-spv-${nama}.zip`);
         this.setState({ dialogSuccess: true });
       }
     };
