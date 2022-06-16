@@ -3,6 +3,7 @@ import "./styles/Landing.css";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../../configs";
 import { IMAGES } from "../../../configs";
+import { Button} from "antd";
 
 class LandingPage extends React.Component {
   render() {
@@ -22,12 +23,12 @@ class LandingPage extends React.Component {
               <h3><b> Pilih Peran Anda </b></h3>
             </div>
             <div className="form-inputs">
-            <Link className="button-landing" role="button" to={ROUTES.LOGIN_SPV()}>
+              <Button danger  onClick={() => (window.location = ROUTES.LOGIN_SPV())}>
               Supervisor
-            </Link>
-            <Link className="button-landing" role="button" to={ROUTES.LOGIN_SEKRETARIS()}>
+            </Button>
+              <Button danger onClick={() => (window.location = ROUTES.LOGIN_SEKRETARIS()) }>
               Sekretaris
-            </Link>
+            </Button>
             </div>
           </form>
         </div>

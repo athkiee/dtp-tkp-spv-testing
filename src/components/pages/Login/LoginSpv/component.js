@@ -13,17 +13,18 @@ import Button from "@material-ui/core/Button";
 import FromControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
+import Cookies from "js-cookie";
 
 
 
 function LoginSupervisor(props) {
   const [loading, setLoading] = useState(false);
-  const nik = useFormInput("");
-  const password = useFormInput("");
+  const nik = useFormInput(Cookies.get('nik'));
+  const password = useFormInput(Cookies.get('passwordspv'));
   const [error, setError] = useState(null);
   let history = useHistory();
   const [values, setValues] = useState({ password:"", showPassword: false });
-  const [checked, setChecked] = useState({});
+  const [checked, setChecked] = useState(Cookies.get('rememberme'));
 
   const handleCheckStyle = () => {
     setChecked(!checked);
@@ -83,6 +84,24 @@ function LoginSupervisor(props) {
       });
   };
 
+  // set remember me to cookie
+  const handleRememberMe = (e) => {
+    const checked = e.target.checked;
+    if (checked) {
+      Cookies.set("rememberme", "true", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
+      Cookies.set("nik", nik.value, { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
+      Cookies.set("passwordspv", password.value, { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
+    }
+    else {
+      Cookies.set("rememberme", "false", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
+      Cookies.remove("nik", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
+      Cookies.remove("passwordspv", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
+    }
+  }
+
+ 
+
+
   return (
     <div className="form-container">
       <span className="close-btn">×</span>
@@ -137,7 +156,10 @@ function LoginSupervisor(props) {
                   control={
                     <Checkbox 
                       style={{ color: '#D51100' }}
-                    value="Remember"
+                      value="rememberme"
+                      onChange={handleRememberMe}
+                      defaultChecked={Cookies.get('rememberme') === "true"}
+
                     />
                   }
                   label="Ingat Saya"
@@ -161,9 +183,6 @@ function LoginSupervisor(props) {
           >
             Login
           </button>
-          <span className="form-input-login">
-            Belum punya akun? <Link to="/supervisor/register">Register</Link>
-          </span>
         </form>
       </div>
     </div>

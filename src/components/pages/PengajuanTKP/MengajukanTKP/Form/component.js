@@ -10,6 +10,7 @@ import { Formik } from "formik";
 import moment from "moment";
 import { ROUTES, API } from "../../../../../configs";
 import Button from "@material-ui/core/Button";
+import * as Yup from "yup";
 
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
@@ -171,6 +172,11 @@ class FormPengajuanTKP extends React.Component {
       status_tkp: "Menunggu Konfirmasi",
     };
   }
+
+ 
+
+
+  
 
   componentDidMount() {
     axios
@@ -587,14 +593,26 @@ class FormPengajuanTKP extends React.Component {
                 }
                 if (!values.cv) {
                   errors.cv = "CV tidak boleh kosong";
-                } else if (values.cv.fileSize > 100) {
-                  errors.cv = "CV tidak boleh lebih dari 1 MB";
+                  
+                } else if(values.cv.size > 2000000){
+                  errors.cv = "CV tidak boleh lebih dari 2MB";
+                } else if(values.cv.type !== 'application/pdf'){
+                  errors.cv = "CV harus berupa file PDF";
                 }
                 if (!values.foto_scanktp) {
                   errors.foto_scanktp = "Scan KTP tidak boleh kosong";
-                } else if (values.foto_scanktp.size > 2) {
-                  errors.foto_scanktp = "Scan KTP tidak boleh lebih dari 2MB";
+                } else if (values.foto_scanktp.size > 2000000) {
+                  errors.foto_scanktp = "Scan KTP tidak boleh lebih dari 2MBs";
+                } else if (values.foto_scanktp.type !== 'image/jpeg' && values.foto_scanktp.type !== 'image/png' && values.foto_scanktp.type !== 'image/jpg') {
+                  errors.foto_scanktp = "Scan KTP harus berupa file gambar";
                 }
+                if(values.file_skck.size > 2000000){
+                  errors.file_skck = "Scan SKCK tidak boleh lebih dari 2MB";
+                  if (values.file_skck.type !== 'aplication/pdf') {
+                    errors.file_skck = "Scan SKCK harus berupa file PDF";
+                  }
+                }
+                
                 if (!values.email) {
                   errors.email = "Email Aktif tidak boleh kosong";
                 } else if (
@@ -716,7 +734,11 @@ class FormPengajuanTKP extends React.Component {
                             sessionStorage.removeItem("nama_spv");
                             sessionStorage.removeItem("nik_spv");
                           } else {
-                            console.log("File upload gagal!", values);
+                            const error = res.data.error;
+                            Modal.error({
+                              content: error,
+                              onOk() {},
+                            });
                           }
                         });
                     }
@@ -1321,29 +1343,20 @@ class FormPengajuanTKP extends React.Component {
                   </h2>
                   <div style={{ margin: 20 }}>
                     <label className="form-label">CV{important}</label>
-                    <DragAndDrop
-                      acceptFiles="application/pdf"
+                    <DragAndDrop              
                       uploadType="Creative CV"
                       onChange={this._handleFilesFromDrag.bind(this.file, "cv")}
                       onBlur={handleBlur}
                       value={this.state.cv}
                       name={"cv"}
-                      // max file
-                      maxFile={1}
-                      // max size
-                      maxSize={1000000}
                     />
-                    <p className={classes.noteModal}>
+                    <p className={errors.cv? classes.negativeCase:classes.noteModal}>
                       Format file berupa PDF dengan maksimal ukuran 2 MB
-                    </p>
-                    <p className={classes.negativeCase}>
-                      {errors.cv && touched.cv && errors.cv}
                     </p>
                   </div>
                   <div style={{ margin: 20 }}>
                     <label className="form-label">Scan KTP{important}</label>
                     <DragAndDrop
-                      acceptFiles=".jpg,.jpeg,.png"
                       uploadType="KTP"
                       onChange={this._handleFilesFromDrag.bind(
                         this,
@@ -1353,20 +1366,14 @@ class FormPengajuanTKP extends React.Component {
                       value={this.state.foto_scanktp}
                       name={"foto_scanktp"}
                     />
-                    <p className={classes.noteModal}>
+                    <p className={errors.foto_scanktp ? classes.negativeCase:classes.noteModal}>
                       Format foto berupa JPG atau JPEG dengan maksimal ukuran
                       2MB
-                    </p>
-                    <p className={classes.negativeCase}>
-                      {errors.foto_scanktp &&
-                        touched.foto_scanktp &&
-                        errors.foto_scanktp}
                     </p>
                   </div>
                   <div style={{ margin: 20 }}>
                     <label className="form-label">SKCK</label>
                     <DragAndDrop
-                      acceptFiles="application/pdf"
                       uploadType="SKCK"
                       onChange={this._handleFilesFromDrag.bind(
                         this,
@@ -1376,8 +1383,15 @@ class FormPengajuanTKP extends React.Component {
                       value={this.state.file_skck}
                       name={"file_skck"}
                     />
-                    <p className={classes.noteModal}>
+
+                    <p className={errors.file_skck?classes.negativeCase:classes.noteModal}>
                       Format file berupa PDF dengan maksimal ukuran 2 MB
+
+                    </p>
+                    <p>
+                      {errors.file_skck &&
+                        touched.file_skck &&
+                        errors.file_skck}
                     </p>
                   </div>
 

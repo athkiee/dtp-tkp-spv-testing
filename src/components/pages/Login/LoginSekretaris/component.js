@@ -14,22 +14,22 @@ import FromControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Cookies from "js-cookie";
-import { RememberMe } from "@mui/icons-material";
 
 
 
 function LoginSekre(props) {
   const [loading, setLoading] = useState(false);
-  const username = useFormInput(Cookies.get("username") || "");
-  const password = useFormInput(Cookies.get("password") || "");
+  const username = useFormInput(Cookies.get('username'));
+  const password = useFormInput(Cookies.get('password'));
   const [error, setError] = useState(null);
   let history = useHistory();
   const [values, setValues] = useState({ password:"", showPassword: false });
-  const [checked, setChecked] = useState({});
+  const [checked, setChecked] = useState(Cookies.get('rememberMe'));
 
   const handleCheckStyle = () => {
     setChecked(!checked);
   };
+ 
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
@@ -42,10 +42,6 @@ function LoginSekre(props) {
   const handlePasswordChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
-
-  
-
-
 
   const handleLogin = () => {
     setError(null);
@@ -86,43 +82,22 @@ function LoginSekre(props) {
       });
   };
 
-  // set remember me expired 30 day
-  // const handleRememberMe = () => {
-  //   Cookies.set("username", username.value, { expires: 30 });
-  //   Cookies.set("password", password.value, { expires: 30 });
-  // };
-
 
 
 // set remember me to cookie
-
   const handleRememberMe = (e) => {
-    const checked = e.target.value;
+    const checked = e.target.checked;
     if (checked) {
-      Cookies.set("rememberMe", true);
-      Cookies.set("username", username.value);
-      Cookies.set("password", password.value);
-    } else {
-      Cookies.set("rememberMe", false);
-      Cookies.remove("username");
-      Cookies.remove("password");
+      Cookies.set("rememberMe", "true",{ expires: 30 , path: '/login/sekretaris', samesite: 'strict', secure: true});
+      Cookies.set("username", username.value, { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure:true });
+      Cookies.set("password", password.value, { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true });
     }
-    console.log('asda', Cookies.get("rememberMe"));
+     else {
+      Cookies.set("rememberMe", "false", { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true });
+      Cookies.remove("username", { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true });
+      Cookies.remove("password", { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true });
+    }
   }
-
-  // const handleRememberMeChecked = () => {
-  //   if (Cookies.get("rememberMe") === "true") {
-  //     setChecked(true);
-  //     username.onChange(Cookies.get("username"));
-  //     password.onChange(Cookies.get("password"));
-  //   } else {
-  //     setChecked(false);
-  //     username.onChange("");
-  //     password.onChange("");
-  //   }
-
-  // }
-
 
 
   return (
@@ -180,12 +155,9 @@ function LoginSekre(props) {
                   control={
                     <Checkbox 
                       style={{ color: '#D51100' }}
-
-                    checked={Cookies.get('rememberMe') || false}
-
-                    onChange={
-                      handleRememberMe
-                    }
+                      value="RememberMe"
+                      onChange={handleRememberMe}
+                      defaultChecked={Cookies.get('rememberMe') === "true"}
                     />
                   }
                   label="Ingat Saya"
@@ -209,9 +181,6 @@ function LoginSekre(props) {
           >
             Login
           </button>
-          <span className="form-input-login">
-            Belum punya akun? <Link to="/supervisor/register">Register</Link>
-          </span>
         </form>
       </div>
     </div>

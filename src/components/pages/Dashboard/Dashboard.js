@@ -342,7 +342,7 @@ class Dashboard extends React.Component {
                 </Popover>
               </div>
             </div>
-            <TableDashboard perPage={showData} />
+            <TableDashboard perPage={showData}  />
           </Container>
         </main>
       </div>
