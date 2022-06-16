@@ -140,6 +140,7 @@ export default class TableRiwayat extends React.Component {
   _handleOpenDetail = (key) => {
     window.location = ROUTES.DETAIL_TKP(key);
     localStorage.setItem("detail_id", key);
+    sessionStorage.setItem("previousPath", window.location.pathname);
   };
 
   _getDataTkp = async (key) => {

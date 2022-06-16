@@ -13,6 +13,7 @@ export const getUser = () => {
   // remove the token and user from the session storage
   export const removeUserSession = () => {
     localStorage.clear();
+    sessionStorage.clear();
   }
    
   // set the token and user from the session storage

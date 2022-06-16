@@ -157,6 +157,7 @@ export default class TableDalamProses extends React.Component {
   _handleOpenDetail = (key) => {
     window.location = ROUTES.DETAIL_TKP(key);
     localStorage.setItem("detail_id", key);
+    sessionStorage.setItem("previousPath", window.location.pathname);
   };
 
   render() {
@@ -185,11 +186,11 @@ export default class TableDalamProses extends React.Component {
         ...this.getColumnSearchProps("name"),
       },
       {
-        title: "Job Role",
-        dataIndex: "roles",
-        key: "roles",
-        sorter: (a, b) => a.roles.localeCompare(b.roles),
-        ...this.getColumnSearchProps("roles"),
+        title: "Job Title",
+        dataIndex: "jobTitle",
+        key: "jobTitle",
+        sorter: (a, b) => a.roles.localeCompare(b.jobTitle),
+        ...this.getColumnSearchProps("jobTitle"),
       },
       {
         title: "Status",

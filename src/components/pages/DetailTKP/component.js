@@ -11,13 +11,15 @@ import PDFViewer from "pdf-viewer-reactjs";
 import { Collapse } from "antd";
 import { CaretRightOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
-import { Avatar } from "antd";
-import { API } from "../../../configs";
+import { Avatar, Breadcrumb } from "antd";
+import { API, ROUTES } from "../../../configs";
 import moment from "moment";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const drawerWidth = 240;
+
+const previousPath = sessionStorage.getItem("previousPath");
 
 const styles = (theme) => ({
   root: {
@@ -71,7 +73,7 @@ const styles = (theme) => ({
     fontWeight: 700,
     fontSize: 24,
     justifyContent: "center",
-    cursor: 'pointer'
+    cursor: "pointer",
   },
   buttonSimpan: {
     width: 216,
@@ -85,7 +87,7 @@ const styles = (theme) => ({
     fontWeight: 700,
     fontSize: 24,
     justifyContent: "right",
-    cursor: 'pointer'
+    cursor: "pointer",
   },
   buttonOke: {
     width: 216,
@@ -184,13 +186,15 @@ const styles = (theme) => ({
     color: "#a0a0a0",
   },
   headPanel: {
-    display: 'flex'
+    display: "flex",
   },
   headPanel2: {
     marginLeft: 50,
-    padding: 10
-  }
+    padding: 10,
+  },
 });
+
+const pathname = sessionStorage.getItem("previousPath");
 
 class DetailTKP extends React.Component {
   constructor(props) {
@@ -209,7 +213,6 @@ class DetailTKP extends React.Component {
   async componentDidMount() {
     let id_tkp = localStorage.getItem("detail_id");
     let token = localStorage.getItem("token");
-    console.log('huhuhu', id_tkp);
     axios
       .get(API.detailTkp + id_tkp, {
         headers: { Authorization: `Bearer ${token}` },
@@ -378,7 +381,9 @@ class DetailTKP extends React.Component {
   _renderModalInfo = () => {
     Modal.success({
       content: "Unggah SKCK Berhasil",
-      onOk() { window.location.reload() },
+      onOk() {
+        window.location.reload();
+      },
     });
     this._handleCloseModal();
   };
@@ -444,7 +449,7 @@ class DetailTKP extends React.Component {
           >
             {modalTitle}
           </h2>
-          <img src={preview} alt='preview' />
+          <img src={preview} alt="preview" />
           <button
             className={classes.buttonUnduh}
             onClick={() => window.open(preview)}
@@ -454,6 +459,111 @@ class DetailTKP extends React.Component {
         </Modal>
       </div>
     );
+  };
+
+  _handleOpenBreadcumbs = () => {
+    if (previousPath === "/Dashboard") {
+      window.location = ROUTES.DASHBOARD();
+    } else if (previousPath === "/pengajuan-tkp/dalam-proses") {
+      window.location = ROUTES.PENGAJUAN_TKP_DALAM_PROSES();
+    } else {
+      window.location = ROUTES.PENGAJUAN_TKP_RIWAYAT();
+    }
+  };
+
+  _renderBreadcrumbs = () => {
+    if (pathname === "/Dashboard") {
+      return (
+        <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a href="#Beranda" onClick={this._handleOpenBreadcumbs}>
+              Beranda
+            </a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item
+            style={{
+              cursor: "pointer",
+              color: "#DA1E20 !important",
+              fontWeight: "bold",
+            }}
+          >
+            <a href="#Beranda">Detail TKP</a>
+          </Breadcrumb.Item>
+        </Breadcrumb>
+      );
+    } else if (pathname === "/pengajuan-tkp/dalam-proses") {
+      return (
+        <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a href="#Beranda" onClick={this._handleOpenBreadcumbs}>
+              Beranda
+            </a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a href="#PermintaanTKP" onClick={this._handleOpenBreadcumbs}>
+              Pengajuan TKP
+            </a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a href="#DalamProses" onClick={this._handleOpenBreadcumbs}>
+              Dalam Proses
+            </a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item
+            style={{
+              cursor: "pointer",
+              color: "#D51100 !important",
+              fontWeight: "bold",
+            }}
+          >
+            <a href="#DetailTKP">Detail TKP</a>
+          </Breadcrumb.Item>
+        </Breadcrumb>
+      );
+    } else if (pathname === "/pengajuan-tkp/riwayat") {
+      return (
+        <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a href="#Beranda" onClick={this._handleOpenBreadcumbs}>
+              Beranda
+            </a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a href="#DataPermintaan" onClick={this._handleOpenBreadcumbs}>
+              Riwayat TKP
+            </a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item
+            style={{
+              cursor: "pointer",
+              color: "#D51100 !important",
+              fontWeight: "bold",
+            }}
+          >
+            <a href="#DetailTKP">Detail TKP</a>
+          </Breadcrumb.Item>
+        </Breadcrumb>
+      );
+    } else {
+      return (
+        <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
+          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <a href="#Beranda" onClick={this._handleOpenBreadcumbs}>
+              Beranda
+            </a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item
+            style={{
+              cursor: "pointer",
+              color: "#DA1E20 !important",
+              fontWeight: "bold",
+            }}
+          >
+            <a href="#Beranda">Detail TKP</a>
+          </Breadcrumb.Item>
+        </Breadcrumb>
+      );
+    }
   };
 
   _handleCloseModal = () => {
@@ -466,17 +576,23 @@ class DetailTKP extends React.Component {
   };
 
   _renderPanelHeader = (value) => {
-    console.log('panel', value);
+    console.log("panel", value);
     const { classes } = this.props;
-    const coba = moment(value.tanggal_perubahan).format('MMMM YYYY');
+    const coba = moment(value.tanggal_perubahan).format("MMMM YYYY");
     return (
       <div className={classes.headPanel}>
         <div>
-          <h3><b>{value.t_job_title_levelling.nama_job_title_levelling}</b></h3>
-          <p style={{ color: '#E17F93'}}><b>{value.jenis_perubahan}</b></p>
+          <h3>
+            <b>{value.t_job_title_levelling.nama_job_title_levelling}</b>
+          </h3>
+          <p style={{ color: "#E17F93" }}>
+            <b>{value.jenis_perubahan}</b>
+          </p>
         </div>
         <div className={classes.headPanel2}>
-          <h3 style={{ color: "#DA1E20" }}>{coba} - {value.tanggal_habis_kontrak || 'Sekarang'}</h3>
+          <h3 style={{ color: "#DA1E20" }}>
+            {coba} - {value.tanggal_habis_kontrak || "Sekarang"}
+          </h3>
         </div>
       </div>
     );
@@ -485,11 +601,18 @@ class DetailTKP extends React.Component {
   render() {
     const { classes } = this.props;
     const { dataDetail } = this.state;
-    console.log('mana', dataDetail);
+    console.log("mana", dataDetail);
     let { dataRiwayat } = this.state;
-    const startOnboard = moment(get(dataDetail, "tanggal_onboard")).format('MMMM YYYY');
-    const TL = moment(get(dataDetail, "tanggal_lahir")).format('DD MMMM YYYY') !== 'Invalid date' ? moment(get(dataDetail, "tanggal_lahir")).format('DD MMMM YYYY') :
-    '-';
+    const startOnboard = moment(get(dataDetail, "tanggal_onboard")).format(
+      "MMMM YYYY"
+    );
+    const TL =
+      moment(get(dataDetail, "tanggal_lahir")).format("DD MMMM YYYY") !==
+      "Invalid date"
+        ? moment(get(dataDetail, "tanggal_lahir")).format("DD MMMM YYYY")
+        : "-";
+
+        console.log(previousPath);
 
     const listTab1 = [
       {
@@ -617,7 +740,7 @@ class DetailTKP extends React.Component {
       },
       {
         title: "Onboard",
-        desc: startOnboard !== 'Invalid date' ? startOnboard : '-' || "-",
+        desc: startOnboard !== "Invalid date" ? startOnboard : "-" || "-",
       },
       {
         title: "Job Title Ketetapan Wawancara",
@@ -650,7 +773,7 @@ class DetailTKP extends React.Component {
       },
       {
         title: "Mulai Onboard",
-        desc: startOnboard !== 'Invalid date' ? startOnboard : '-' || "-",
+        desc: startOnboard !== "Invalid date" ? startOnboard : "-" || "-",
       },
       {
         title: "Mitra",
@@ -668,7 +791,7 @@ class DetailTKP extends React.Component {
         <HeadBar />
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-
+          {this._renderBreadcrumbs()}
           <h1 style={{ marginLeft: 35, marginTop: 35 }}>
             <strong>Detail TKP</strong>
           </h1>
@@ -950,7 +1073,10 @@ class DetailTKP extends React.Component {
                       },
                       {
                         title: "Onboard",
-                        desc: startOnboard !== 'Invalid date' ? startOnboard : '-' || "-",
+                        desc:
+                          startOnboard !== "Invalid date"
+                            ? startOnboard
+                            : "-" || "-",
                       },
                       {
                         title: "Job Title",
@@ -1003,7 +1129,7 @@ class DetailTKP extends React.Component {
                           <CaretRightOutlined rotate={isActive ? 90 : 0} />
                         )}
                         className="site-collapse-custom-collapse"
-                        expandIconPosition={'right'}
+                        expandIconPosition={"right"}
                         ghost
                       >
                         <Panel

@@ -18,7 +18,7 @@ function Path() {
       <Route path={ROUTES.PENGAJUAN_TKP()} component={pages.MengajukanTKP} />
       <Route path={ROUTES.PENGAJUAN_TKP_FORM()} component={pages.FormPengajuanTKP} />
       <Route path={ROUTES.PENGAJUAN_TKP_DALAM_PROSES()} component={pages.DalamProsesPengajuanTKP} />
-      <Route path={ROUTES.RIWAYAT_TKP()} component={pages.RiwayatTKP} />
+      <Route path={ROUTES.PENGAJUAN_TKP_RIWAYAT()} component={pages.RiwayatTKP} />
       <Route path={ROUTES.DETAIL_TKP()} component={pages.DetailTKP} />
     </Router>
   );
