@@ -29,5 +29,6 @@ export default {
   getZipTKPUnderSPV: baseUrl + "tkp/get-zip/tkp-under-spv/",
   getCSVTKPUnderSPV: baseUrl + "tkp/export-csv/tkp-under-spv/",
   dataspv: baseUrl + 'spv/',
+  checkToken: baseUrl + 'token/verify-token-spv'
 };
 

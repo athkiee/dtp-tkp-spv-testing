@@ -227,7 +227,7 @@ class MengajukanTKP extends React.Component {
                   disableClearable
                   options={data.map((option) => option.nama_spv)}
                   renderInput={(params) => (
-                    sessionStorage.setItem("nama_spv", params.inputProps.value),
+                    sessionStorage.setItem("nama_spv", params.inputProps.value)
                     (
                       <TextField
                         {...params}
@@ -272,7 +272,7 @@ class MengajukanTKP extends React.Component {
                   renderInput={(params) => (
                     matchesNIK === ""
                       ? sessionStorage.setItem("nik_spv", params.inputProps.value)
-                      : sessionStorage.setItem("nik_spv", matchesNIK),
+                      : sessionStorage.setItem("nik_spv", matchesNIK)
                     (
                       <TextField
                         {...params}

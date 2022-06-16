@@ -24,12 +24,6 @@ function LoginSekre(props) {
   const [error, setError] = useState(null);
   let history = useHistory();
   const [values, setValues] = useState({ password:"", showPassword: false });
-  const [checked, setChecked] = useState(Cookies.get('rememberMe'));
-
-  const handleCheckStyle = () => {
-    setChecked(!checked);
-  };
- 
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
@@ -37,10 +31,6 @@ function LoginSekre(props) {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
-  };
-
-  const handlePasswordChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
   };
 
   const handleLogin = () => {
@@ -64,7 +54,6 @@ function LoginSekre(props) {
           response.data.foto_profil,
           response.data.type,
         );
-        console.log('test', response);
 
         if (response.status === 200) {
           setTimeout(() => {

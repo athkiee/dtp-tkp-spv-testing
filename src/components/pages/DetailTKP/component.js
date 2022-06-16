@@ -18,8 +18,6 @@ import moment from "moment";
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const drawerWidth = 240;
-const borderStyle = { borderRight: "4px solid #DA1E20" };
-const rowStyle = { ...borderStyle, width: "100%", padding: 10 };
 
 const styles = (theme) => ({
   root: {
@@ -73,6 +71,7 @@ const styles = (theme) => ({
     fontWeight: 700,
     fontSize: 24,
     justifyContent: "center",
+    cursor: 'pointer'
   },
   buttonSimpan: {
     width: 216,
@@ -445,7 +444,7 @@ class DetailTKP extends React.Component {
           >
             {modalTitle}
           </h2>
-          <img src={preview} />
+          <img src={preview} alt='preview' />
           <button
             className={classes.buttonUnduh}
             onClick={() => window.open(preview)}
