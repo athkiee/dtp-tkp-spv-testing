@@ -1342,6 +1342,7 @@ class FormPengajuanTKP extends React.Component {
                       uploadType="Creative CV"
                       onChange={this._handleFilesFromDrag.bind(this.file, "cv")}
                       onBlur={handleBlur}
+                      hintError={errors.cv}
                       value={this.state.cv}
                       name={"cv"}
                     />
@@ -1358,6 +1359,7 @@ class FormPengajuanTKP extends React.Component {
                         "foto_scanktp"
                       )}
                       onBlur={handleBlur}
+                      hintError={errors.foto_scanktp}
                       value={this.state.foto_scanktp}
                       name={"foto_scanktp"}
                     />
