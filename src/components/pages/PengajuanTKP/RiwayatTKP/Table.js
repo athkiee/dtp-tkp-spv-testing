@@ -52,6 +52,15 @@ export default class TableRiwayat extends React.Component {
       });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { perPage } = this.props;
+    this.setState({
+      pagination: {
+        ...nextProps.pagination,
+        pageSize: perPage,
+      },
+    });
+  }
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -278,12 +287,17 @@ export default class TableRiwayat extends React.Component {
         title: "INT",
         dataIndex: "int",
         key: "int",
+        sorter: (a, b) => a.int.localeCompare(b.int),
+        ...this.getColumnSearchProps("int"),
       },
       {
         title: "Bidang",
         dataIndex: "bidang",
         key: "bidang",
         ...this.getColumnSearchProps("bidang"),
+        sorter: (a, b) => a.bidang.localeCompare(b.bidang),
+        ...this.getColumnSearchProps("bidang"),
+
       },
       {
         title: "Nama TKP",
@@ -297,6 +311,7 @@ export default class TableRiwayat extends React.Component {
         title: "Supervisor/PIC",
         dataIndex: "supervisor",
         key: "supervisor",
+        sorter: (a, b) => a.supervisor.localeCompare(b.supervisor),
         ...this.getColumnSearchProps("supervisor"),
       },
       {
@@ -304,12 +319,14 @@ export default class TableRiwayat extends React.Component {
         dataIndex: "nik_spv",
         key: "nik_spv",
         ...this.getColumnSearchProps("nik_spv"),
+        sorter: (a, b) => a.nik_spv.localeCompare(b.nik_spv),
       },
       {
         title: "Loker",
         dataIndex: "loker",
         key: "loker",
         ...this.getColumnSearchProps("loker"),
+        sorter: (a, b) => a.loker.localeCompare(b.loker),
       },
       {
         title: "Status",
@@ -355,18 +372,21 @@ export default class TableRiwayat extends React.Component {
         dataIndex: "jobTitle",
         key: "jobTitle",
         ...this.getColumnSearchProps("jobTitle"),
+        sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
       },
       {
         title: "Onboard",
         dataIndex: "onboard",
         key: "onboard",
         ...this.getColumnSearchProps("onboard"),
+        sorter: (a, b) => a.onboard.localeCompare(b.onboard),
       },
       {
         title: "Perubahan Status Terakhir",
         dataIndex: "last_status",
         key: "last_status",
         ...this.getColumnSearchProps("last_status"),
+        sorter: (a, b) => a.last_status.localeCompare(b.last_status),
       },
 
       {
@@ -402,9 +422,9 @@ export default class TableRiwayat extends React.Component {
       <Table
         columns={typeAuth === "sekretaris" ? columnSekbid : columns}
         dataSource={sourceData}
-        pagination={true}
+        pagination={{ pageSize: perPage }}
         scroll={{ x: "max-content" }}
-
+        footer={() => ("menampilkan 1-" +perPage+ " dari " +sourceData.length+ " data")}
       />
     );
   }
