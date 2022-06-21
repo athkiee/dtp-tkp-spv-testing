@@ -19,7 +19,7 @@ export default class TableDashboard extends React.Component {
       dataTKP: [],
       pagination: {
         current: 1,
-        pageSize: 10,
+        dataTKP: [],
       },
     };
   }
@@ -224,16 +224,6 @@ export default class TableDashboard extends React.Component {
         title: "N0",
         dataIndex: "index",
         key: "index",
-        render: (text, name, index) => index + 1,
-        sorter: (a, b) => a.index - b.index,
-      },
-      {
-        // width: "8%",
-        title: "Bidang",
-        dataIndex: "bidang",
-        key: "bidang",
-        sorter: (a, b) => a.bidang.localeCompare(b.bidang),
-        ...this.getColumnSearchProps("bidang"),
       },
       {
         // width: "13%",
@@ -334,10 +324,10 @@ export default class TableDashboard extends React.Component {
       <Table
         columns={typeAuth === "sekretaris" ? columnsekbid : columns}
         dataSource={this.state.dataTKP}
-        pagination={pagination}
+        pagination={{ pageSize: perPage }}
         scroll={{ x: "max-content" }}
         size="middle"
-
+        footer={() => 'Menampilkan 1 - ' + perPage + ' dari ' + this.state.dataTKP.length + ' data'}
       />
     );
   }

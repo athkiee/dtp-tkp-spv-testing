@@ -248,25 +248,6 @@ import { withRouter } from "react-router-dom";
                 alignItems="flex-end">
                 <Button
                   variant="contained"
-                  onClick={this.handleLogout}
-                  style={{
-                    backgroundColor: "#DA1E20",
-                    color: "white",
-                    width: "60%",
-                    height: "40px",
-                    borderRadius: "10px",
-                  }}
-                >
-                  Ya
-                </Button>
-
-              </Grid>
-              <Grid item xs={6} container
-                irection="row"
-                justifyContent="center"
-                alignItems="flex-end">
-                <Button
-                  variant="contained"
                   onClick={this.handleCloseModal}
                   style={{
                     backgroundColor: "#DA1E20",
@@ -277,6 +258,26 @@ import { withRouter } from "react-router-dom";
                   }}
                 >
                   Tidak
+                </Button>
+
+              </Grid>
+              <Grid item xs={6} container
+                irection="row"
+                justifyContent="center"
+                alignItems="flex-end">
+             
+                <Button
+                  variant="contained"
+                  onClick={this.handleLogout}
+                  style={{
+                    backgroundColor: "#DA1E20",
+                    color: "white",
+                    width: "60%",
+                    height: "40px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  Ya
                 </Button>
               </Grid>
             </Grid>
