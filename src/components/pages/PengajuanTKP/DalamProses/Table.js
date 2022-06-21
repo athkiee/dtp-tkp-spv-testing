@@ -11,6 +11,7 @@ import axios from "axios";
 import Typography from "@material-ui/core/Typography";
 import CircleIcon from "@mui/icons-material/Circle";
 import { ROUTES, API } from "../../../../configs";
+import moment from "moment";
 
 export default class TableDalamProses extends React.Component {
   constructor(props) {
@@ -38,7 +39,7 @@ export default class TableDalamProses extends React.Component {
         const tkp = response.data.map((tkp) => ({
           index: tkp,
           key: tkp.id_tkp,
-          tanggal_pengajuan: tkp.tanggal_pengajuan,
+          tanggal_pengajuan: moment(tkp.tanggal_pengajuan).format('LL'),
           name: tkp.nama_lengkap,
           jobTitle: tkp.t_job_title_levelling.nama_job_title_levelling,
           roles: tkp.t_job_role.nama_job_role,
@@ -156,6 +157,7 @@ export default class TableDalamProses extends React.Component {
   _handleOpenDetail = (key) => {
     window.location = ROUTES.DETAIL_TKP(key);
     localStorage.setItem("detail_id", key);
+    sessionStorage.setItem("previousPath", window.location.pathname);
   };
 
   render() {
@@ -184,11 +186,11 @@ export default class TableDalamProses extends React.Component {
         ...this.getColumnSearchProps("name"),
       },
       {
-        title: "Job Role",
-        dataIndex: "roles",
-        key: "roles",
-        sorter: (a, b) => a.roles.localeCompare(b.roles),
-        ...this.getColumnSearchProps("roles"),
+        title: "Job Title",
+        dataIndex: "jobTitle",
+        key: "jobTitle",
+        sorter: (a, b) => a.roles.localeCompare(b.jobTitle),
+        ...this.getColumnSearchProps("jobTitle"),
       },
       {
         title: "Status",
@@ -371,7 +373,7 @@ export default class TableDalamProses extends React.Component {
       <Table
         columns={typeAuth === "sekretaris" ? columnsekbid : columns}
         dataSource={this.state.dataTKP}
-        pagination={pagination}
+        pagination={true}
         scroll={{ x: 1300 }}
       />
     );

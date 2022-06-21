@@ -178,7 +178,7 @@ export default function SideMenu() {
             </ListItem>
           </List>
         </Link>
-        <Link to={ROUTES.RIWAYAT_TKP} style={{ color: "black" }}>
+        <Link to={ROUTES.PENGAJUAN_TKP_RIWAYAT} style={{ color: "black" }}>
           <List component="div">
             <ListItem
               button

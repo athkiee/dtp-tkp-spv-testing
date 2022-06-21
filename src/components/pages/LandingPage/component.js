@@ -1,6 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
 import "./styles/Landing.css";
-import { Link } from "react-router-dom";
 import { ROUTES } from "../../../configs";
 import { IMAGES } from "../../../configs";
 import { Button} from "antd";

@@ -10,7 +10,6 @@ import { Formik } from "formik";
 import moment from "moment";
 import { ROUTES, API } from "../../../../../configs";
 import Button from "@material-ui/core/Button";
-import * as Yup from "yup";
 
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
@@ -396,10 +395,6 @@ class FormPengajuanTKP extends React.Component {
       datajobRole,
       dataExperience,
       dataPendidikan,
-      id_mitra,
-      id_paket,
-      id_status_tkp,
-      status_tkp,
     } = this.state;
 
     const body = {
@@ -1347,6 +1342,7 @@ class FormPengajuanTKP extends React.Component {
                       uploadType="Creative CV"
                       onChange={this._handleFilesFromDrag.bind(this.file, "cv")}
                       onBlur={handleBlur}
+                      hintError={errors.cv}
                       value={this.state.cv}
                       name={"cv"}
                     />
@@ -1363,6 +1359,7 @@ class FormPengajuanTKP extends React.Component {
                         "foto_scanktp"
                       )}
                       onBlur={handleBlur}
+                      hintError={errors.foto_scanktp}
                       value={this.state.foto_scanktp}
                       name={"foto_scanktp"}
                     />
