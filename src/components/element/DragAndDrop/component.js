@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
+import clsx from 'clsx';
 
 const baseStyle = {
   display: 'flex',
@@ -24,12 +25,17 @@ const acceptStyle = {
   borderColor: '#17827B'
 };
 
+const rejectStyle = {
+  borderColor: '#DE1B1B'
+};
+
 
 export default function DragAndDrop(props) {
   const {
     onChange,
     acceptFiles,
     uploadType,
+    hintError,
   } = props;
   const [file, setFile] = useState(null);
   const onDrop = useCallback(acceptedFiles => {
@@ -42,6 +48,7 @@ export default function DragAndDrop(props) {
     getInputProps,
     isDragActive,
     isDragAccept,
+    isDragReject
   } = useDropzone({
     onDrop,
     accept: acceptFiles,
@@ -51,13 +58,17 @@ export default function DragAndDrop(props) {
     ...baseStyle,
     ...(isDragActive ? activeStyle : {}),
     ...(isDragAccept ? acceptStyle : {}),
+    ...(isDragReject ? rejectStyle : {})
   }), [
     isDragActive,
-    isDragAccept
+    isDragAccept,
+    isDragReject
   ]);
 
   return (
-    <div {...getRootProps({ style })}>
+    <div {...getRootProps({ style: {
+      ...style,
+      ...(hintError && rejectStyle)} })}>
       <input {...getInputProps()} />
       <div><b>{file ? file.name : `+ Tambahkan file ${uploadType} anda disini`}</b></div>
     </div>
