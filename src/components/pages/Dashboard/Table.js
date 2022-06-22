@@ -232,6 +232,8 @@ export default class TableDashboard extends React.Component {
       },
     ];
 
+    
+
     const columnsekbid = [
       {
         
@@ -239,6 +241,7 @@ export default class TableDashboard extends React.Component {
         title: "N0",
         dataIndex: "index",
         key: "index",
+        render: (text, name, index) => index + 1,
       },
       {
         // width: "13%",
