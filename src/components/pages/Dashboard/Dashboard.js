@@ -134,6 +134,8 @@ class Dashboard extends React.Component {
       dialogZip: false,
       dialogSuccess: false,
       dialogLoading: false,
+      hiddenColumns: [],
+
     };
   }
 
@@ -151,10 +153,21 @@ class Dashboard extends React.Component {
     const nama = localStorage.getItem("nama");
     console.log(token);
 
+ 
+
     const buttonPin = (
       <Menu>
         <Menu.Item key="0">
-          <Checkbox>Nama TKP</Checkbox>
+          <Checkbox 
+            onChange={(e) => {
+              this.setState({
+                dialogConfirmation: true,
+              });
+            }
+            }
+
+
+          >Nama TKP</Checkbox>
         </Menu.Item>
         <Menu.Item key="1">
           <Checkbox>Job Title</Checkbox>
