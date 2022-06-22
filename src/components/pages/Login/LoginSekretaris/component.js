@@ -78,14 +78,14 @@ function LoginSekre(props) {
     const checked = e.target.checked;
     if (checked) {
       Cookies.set("rememberMe", "true", {
-        expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain: dtp-tkp-supervisor-dev.herokuapp.com/});
-      Cookies.set("username", username.value, { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain: dtp - tkp - supervisor - dev.herokuapp.com / });
-      Cookies.set("password", password.value, { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain: dtp - tkp - supervisor - dev.herokuapp.com / });
+        expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain:"http://dtp-tkp-supervisor-dev.herokuapp.com/"});
+      Cookies.set("username", username.value, { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain: "http://dtp-tkp-supervisor-dev.herokuapp.com/" });
+      Cookies.set("password", password.value, { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain: "http://dtp-tkp-supervisor-dev.herokuapp.com/" });
     }
      else {
-      Cookies.set("rememberMe", "false", { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain: dtp - tkp - supervisor - dev.herokuapp.com / });
-      Cookies.remove("username", { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain: dtp - tkp - supervisor - dev.herokuapp.com / });
-      Cookies.remove("password", { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain: dtp - tkp - supervisor - dev.herokuapp.com / });
+      Cookies.set("rememberMe", "false", { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain: "http://dtp-tkp-supervisor-dev.herokuapp.com/" });
+      Cookies.remove("username", { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain: "http://dtp-tkp-supervisor-dev.herokuapp.com/" });
+      Cookies.remove("password", { expires: 30, path: '/login/sekretaris', samesite: 'strict', secure: true, domain: "http://dtp-tkp-supervisor-dev.herokuapp.com/" });
     }
   }
 
