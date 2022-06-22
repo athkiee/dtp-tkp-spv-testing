@@ -82,14 +82,14 @@ function LoginSupervisor(props) {
   const handleRememberMe = (e) => {
     const checked = e.target.checked;
     if (checked) {
-      Cookies.set("rememberme", "true", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
-      Cookies.set("nik", nik.value, { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
-      Cookies.set("passwordspv", password.value, { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
+      Cookies.set("rememberme", "true", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
+      Cookies.set("nik", nik.value, { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
+      Cookies.set("passwordspv", password.value, { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
     }
     else {
-      Cookies.set("rememberme", "false", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
-      Cookies.remove("nik", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
-      Cookies.remove("passwordspv", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true });
+      Cookies.set("rememberme", "false", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
+      Cookies.remove("nik", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
+      Cookies.remove("passwordspv", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
     }
   }
 
