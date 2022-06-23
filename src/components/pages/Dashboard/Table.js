@@ -173,7 +173,6 @@ export default class TableDashboard extends React.Component {
   };
 
   render() {
-    const { pagination } = this.state;
     const { perPage } = this.props;
     const columns = [
       {

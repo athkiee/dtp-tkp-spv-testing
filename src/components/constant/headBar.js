@@ -259,6 +259,8 @@ class HeadBar extends React.Component {
                     color: "#DA1E20",
                     fontFamily: "Montserrat",
                   }}
+
+                
                 >
                   Keluar
                 </Typography>
@@ -284,15 +286,15 @@ class HeadBar extends React.Component {
                 alignItems="flex-end"
               >
                 <Button
-                  variant="contained"
                   onClick={this.handleCloseModal}
                   style={{
-                    backgroundColor: "#DA1E20",
-                    color: "white",
+                    borderColor:"black",
+                    color: "black",
                     width: "60%",
                     height: "40px",
                     borderRadius: "10px",
                   }}
+                  variant="outlined"
                 >
                   Tidak
                 </Button>

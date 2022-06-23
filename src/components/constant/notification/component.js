@@ -15,7 +15,6 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import WebAssetOffOutlinedIcon from '@mui/icons-material/WebAssetOffOutlined';
 import axios from "axios";
 import { API } from "../../../configs";
-import { ThirtyFpsSharp } from '@mui/icons-material';
 
 
 export default class NotificationPopover extends React.Component {
@@ -199,7 +198,6 @@ export default class NotificationPopover extends React.Component {
                                         width: '50px',
                                         height: '50px',
                                                 backgroundColor: notif.kategori === 2 ? '#DBE8F4' : notif.kategori === 3 ? '#CCEDC4' : notif.kategori === 4 ? '#EBD0D1' : notif.kategori === 5 ? '#FFBD70' : notif.kategori === 6 ? '#B5D8F7' : notif.kategori === 7 ? '#FF979A' : '#FF979A',
-                                        
                                                 color: notif.kategori === 2 ? '#66ACEA' : notif.kategori === 3 ? '#409C2A' : notif.kategori === 4 ? '#EE2E24' : notif.kategori === 5 ? '#603D13' : notif.kategori === 6 ? '#3498DB' : notif.kategori === 7 ? '#BC1D15' : '#BC1D15',
                                         
 
