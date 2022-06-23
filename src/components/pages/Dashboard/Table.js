@@ -338,7 +338,7 @@ export default class TableDashboard extends React.Component {
         columns={typeAuth === "sekretaris" ? columnsekbid : columns}
         dataSource={this.state.dataTKP}
         pagination={{ pageSize: perPage }}
-        scroll={{ x: "max-content" }}
+        scroll={{x: "max-content" }}
         size="middle"
         footer={() => 'Menampilkan 1 - ' + perPage + ' dari ' + this.state.dataTKP.length + ' data'}
       />

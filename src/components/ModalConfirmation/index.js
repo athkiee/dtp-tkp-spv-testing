@@ -108,11 +108,11 @@ export default function ModalConfirmation({
             alignItems="flex-end"
           >
             <Button
-              variant="contained"
+              variant="outlined"
               onClick={() => handleClose(false)}
               style={{
-                backgroundColor: "#DA1E20",
-                color: "white",
+                borderColor: "black",
+                color: "black",
                 width: "60%",
                 height: "40px",
                 borderRadius: "10px",
