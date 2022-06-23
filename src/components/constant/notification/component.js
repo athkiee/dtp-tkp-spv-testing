@@ -67,7 +67,6 @@ export default class NotificationPopover extends React.Component {
                     data: data,
                     
                 });
-                console.log("testingnotif", response);
             });
         console.log(localStorage);
 
@@ -87,7 +86,6 @@ export default class NotificationPopover extends React.Component {
                 this.setState({
                     dataNotif: data,
                 });
-                console.log("testnotifsudahdibaca", response);
             }
             );
     }

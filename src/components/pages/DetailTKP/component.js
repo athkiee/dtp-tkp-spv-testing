@@ -180,7 +180,7 @@ const styles = (theme) => ({
   },
   noteModal: {
     marginTop: "20px",
-    fontSize: "10px",
+    fontSize: "14px",
     lineHeight: "12px",
     fontFamily: "Roboto",
     color: "#a0a0a0",
@@ -191,6 +191,13 @@ const styles = (theme) => ({
   headPanel2: {
     marginLeft: 50,
     padding: 10,
+  },
+  negativeCase: {
+    color: "#EE2E24",
+    marginTop: "20px",
+    fontSize: "14px",
+    lineHeight: "12px",
+    fontFamily: "Roboto",
   },
 });
 
@@ -207,6 +214,7 @@ class DetailTKP extends React.Component {
       preview: "",
       editData: false,
       dataRiwayat: [],
+      error_skck: false,
     };
   }
 
@@ -309,31 +317,38 @@ class DetailTKP extends React.Component {
   };
 
   _handleSubmit = () => {
+    const { file_skck } = this.state;
     let id_tkp = localStorage.getItem("detail_id");
     let token = localStorage.getItem("token");
-    var payload = new FormData();
-    payload.append("id_tkp", id_tkp);
-    payload.append("file_skck", this.state.file_skck);
-    axios
-      .put(
-        "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/documents/upload-skck",
-        payload,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then(
-        (res) => {
-          this._renderModalInfo();
-        },
-        (err) => {
-          console.log("Error : ", err);
-        }
-      );
+    if (file_skck.size > 2000000) {
+      this.setState({
+        error_skck: true,
+      });
+    } else {
+      var payload = new FormData();
+      payload.append("id_tkp", id_tkp);
+      payload.append("file_skck", file_skck);
+      axios
+        .put(
+          "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/documents/upload-skck",
+          payload,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then(
+          (res) => {
+            this._renderModalInfo();
+          },
+          (err) => {
+            console.log("Error : ", err);
+          }
+        );
+    }
   };
 
   _renderModalUpload = () => {
-    const { modalInputSkck, modalTitle, handleBlur } = this.state;
+    const { modalInputSkck, modalTitle, handleBlur, error_skck } = this.state;
     const { classes } = this.props;
     return (
       <div>
@@ -360,11 +375,12 @@ class DetailTKP extends React.Component {
               uploadType="SKCK"
               onChange={this._handleFilesFromDrag.bind(this, "file_skck")}
               onBlur={handleBlur}
+              hintError={error_skck}
               value={this.state.file_skck}
               name={"file_skck"}
             />
           </div>
-          <p className={classes.noteModal}>
+          <p className={error_skck? classes.negativeCase:classes.noteModal}>
             Format file berupa PDF dengan maksimal ukuran 2 MB
           </p>
           <button
@@ -612,7 +628,7 @@ class DetailTKP extends React.Component {
         ? moment(get(dataDetail, "tanggal_lahir")).format("DD MMMM YYYY")
         : "-";
 
-        console.log(previousPath);
+    console.log(previousPath);
 
     const listTab1 = [
       {

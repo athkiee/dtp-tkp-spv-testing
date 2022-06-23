@@ -55,7 +55,6 @@ export default class TableDalamProses extends React.Component {
         this.setState({
           dataTKP: tkp,
         });
-        console.log("asdasd", response);
       });
   }
 
