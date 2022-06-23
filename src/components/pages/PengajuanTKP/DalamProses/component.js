@@ -313,9 +313,9 @@ class DalamProsesPengajuanTKP extends React.Component {
 
                 {/* modal dialog confirmation csv */}
                 <ModalConfirmation
-                  title={"Yakin ingin Ekspor Data Hasil Evaluasi (.csv)?"}
+                  title={"Anda ingin Ekspor Riwayat (.csv)?"}
                   description={
-                    "Banyaknya data akan berpengaruh pada proses ekspor."
+                    "Proses ekspor data memerlukan waktu beberapa saat"
                   }
                   open={this.state.dialogConfirmation}
                   handleClose={() =>
@@ -326,9 +326,9 @@ class DalamProsesPengajuanTKP extends React.Component {
 
                 {/* modal dialog confirmation zip */}
                 <ModalConfirmation
-                  title={"Yakin ingin Ekspor Data Hasil Evaluasi (.zip)?"}
+                  title={"Anda ingin Ekspor Riwayat (.zip)?"}
                   description={
-                    "Banyaknya data akan berpengaruh pada proses ekspor."
+                    "Proses ekspor data memerlukan waktu beberapa saat"
                   }
                   open={this.state.dialogZip}
                   handleClose={() => this.setState({ dialogZip: false })}

@@ -48,8 +48,8 @@ export default function ModalSuccess({ open, handleClose }) {
               style={{
                 width: "50px",
                 height: "50px",
-                backgroundColor: "rgba(213, 17, 0, 0.1)",
-                color: "#DA1E20",
+                backgroundColor: "rgba(46, 204, 113, 0.2)",
+                color: "#2ECC71",
               }}
             >
               <CheckCircleOutlineIcon></CheckCircleOutlineIcon>
@@ -68,7 +68,7 @@ export default function ModalSuccess({ open, handleClose }) {
               style={{
                 fontWeight: "bold",
                 fontSize: "20px",
-                color: "#DA1E20",
+                color: "#2ECC71",
                 fontFamily: "Montserrat",
               }}
             >
@@ -87,11 +87,12 @@ export default function ModalSuccess({ open, handleClose }) {
               variant="contained"
               onClick={handleClose}
               style={{
-                backgroundColor: "#DA1E20",
+                backgroundColor: "#2ECC71",
                 color: "white",
                 width: "20%",
                 height: "40px",
-                borderRadius: "10px",
+                borderRadius: "14px",
+                fontFamily: "Roboto",
               }}
             >
               Ok

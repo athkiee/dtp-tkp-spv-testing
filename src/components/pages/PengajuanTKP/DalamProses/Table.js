@@ -166,7 +166,6 @@ export default class TableDalamProses extends React.Component {
     const columns = [
       {
         title: "No",
-        width: "10%",
         key: "index",
         render: (text, name, index) => index + 1,
       },
@@ -265,14 +264,14 @@ export default class TableDalamProses extends React.Component {
 
     const columnsekbid = [
       {
-        width: "1%",
+       
         title: "No",
         dataIndex: "index",
         key: "index",
         render: (text, name, index) => index + 1,
       },
       {
-        width: "2%",
+        
         title: "Bidang",
         dataIndex: "bidang",
         key: "bidang",
@@ -280,7 +279,7 @@ export default class TableDalamProses extends React.Component {
         ...this.getColumnSearchProps("bidang"),
       },
       {
-        width: "10%",
+      
         title: "Nama TKP",
         dataIndex: "name",
         key: "name",
@@ -288,7 +287,7 @@ export default class TableDalamProses extends React.Component {
         ...this.getColumnSearchProps("name"),
       },
       {
-        width: "13%",
+        
         title: "Supervisor/PIC",
         dataIndex: "supervisor",
         key: "supervisor",
@@ -296,7 +295,7 @@ export default class TableDalamProses extends React.Component {
         ...this.getColumnSearchProps("supervisor"),
       },
       {
-        width: "9%",
+        
         title: "Nik SPV",
         dataIndex: "nik_spv",
         key: "nik_spv",
@@ -318,7 +317,7 @@ export default class TableDalamProses extends React.Component {
         ...this.getColumnSearchProps("jobTitle"),
       },
       {
-        width: "18%",
+        
         title: "Kelompok Pekerjaan",
         dataIndex: "kelompokPekerjaan",
         key: "kelompokPekerjaan",
@@ -373,8 +372,10 @@ export default class TableDalamProses extends React.Component {
       <Table
         columns={typeAuth === "sekretaris" ? columnsekbid : columns}
         dataSource={this.state.dataTKP}
-        pagination={true}
-        scroll={{ x: 1300 }}
+        pagination={{ pageSize: perPage }}
+        scroll={{ x:"max-content" }}
+        footer={() => ("menampilkan 1-" + perPage + " dari " + this.state.dataTKP.length + " data")}
+      
       />
     );
   }
