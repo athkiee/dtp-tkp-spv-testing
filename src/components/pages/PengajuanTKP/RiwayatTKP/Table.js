@@ -284,22 +284,6 @@ export default class TableRiwayat extends React.Component {
         render: (text, name, index) => index + 1,
       },
       {
-        title: "INT",
-        dataIndex: "int",
-        key: "int",
-        sorter: (a, b) => a.int.localeCompare(b.int),
-        ...this.getColumnSearchProps("int"),
-      },
-      {
-        title: "Bidang",
-        dataIndex: "bidang",
-        key: "bidang",
-        ...this.getColumnSearchProps("bidang"),
-        sorter: (a, b) => a.bidang.localeCompare(b.bidang),
-        ...this.getColumnSearchProps("bidang"),
-
-      },
-      {
         title: "Nama TKP",
         dataIndex: "name",
         key: "name",
