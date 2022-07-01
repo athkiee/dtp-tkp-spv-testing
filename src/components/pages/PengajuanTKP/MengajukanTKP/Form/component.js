@@ -83,7 +83,7 @@ const styles = (theme) => ({
   },
   noteModal: {
     marginTop: "8px",
-    fontSize: "10px",
+    fontSize: "14px",
     lineHeight: "12px",
     fontFamily: "Roboto",
     color: "#000000",
@@ -633,7 +633,7 @@ class FormPengajuanTKP extends React.Component {
                 ) {
                   errors.akun_trello = "Akun Trello/Jira tidak valid";
                 }
-
+                console.log('asd', errors.cv);
                 return errors;
               }}
               onSubmit={async (values, { setSubmitting }) => {
@@ -1342,11 +1342,11 @@ class FormPengajuanTKP extends React.Component {
                       uploadType="Creative CV"
                       onChange={this._handleFilesFromDrag.bind(this.file, "cv")}
                       onBlur={handleBlur}
-                      hintError={errors.cv}
+                      hintError={touched.cv && errors.cv}
                       value={this.state.cv}
                       name={"cv"}
                     />
-                    <p className={errors.cv? classes.negativeCase:classes.noteModal}>
+                    <p className={touched.cv && errors.cv? classes.negativeCase:classes.noteModal}>
                       Format file berupa PDF dengan maksimal ukuran 2 MB
                     </p>
                   </div>
@@ -1359,11 +1359,11 @@ class FormPengajuanTKP extends React.Component {
                         "foto_scanktp"
                       )}
                       onBlur={handleBlur}
-                      hintError={errors.foto_scanktp}
+                      hintError={touched.foto_scanktp && errors.foto_scanktp}
                       value={this.state.foto_scanktp}
                       name={"foto_scanktp"}
                     />
-                    <p className={errors.foto_scanktp ? classes.negativeCase:classes.noteModal}>
+                    <p className={touched.foto_scanktp && errors.foto_scanktp ? classes.negativeCase:classes.noteModal}>
                       Format foto berupa JPG atau JPEG dengan maksimal ukuran
                       2MB
                     </p>
