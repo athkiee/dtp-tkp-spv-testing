@@ -31,6 +31,15 @@ const routes = {
   },
   RIWAYAT_TKP() {
     return `/riwayat-tkp/`;
+  },
+  PENILAIAN_TKP() {
+    return `/penilaian-tkp`;
+  },
+  TKP_TIDAK_PERPANJANG() {
+    return `/tkp-tidak-diperpanjang`;
+  },
+  TKP_PERPANJANG() {
+    return `/tkp-diperpanjang`;
   }
 };
 

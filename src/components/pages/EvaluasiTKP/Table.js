@@ -2,10 +2,9 @@ import React from "react";
 import axios from "axios";
 import "antd/dist/antd.css";
 import { Table, Input, Button, Space } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
+import { SearchOutlined, FileAddOutlined } from "@ant-design/icons";
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
-import { API } from '../../../configs';
+import { API, ROUTES } from '../../../configs';
 
 export default class TableDashboard extends React.Component {
   state = {
@@ -186,7 +185,7 @@ export default class TableDashboard extends React.Component {
         fixed: "right",
         render: () => (
           <div>
-            <CloudUploadOutlinedIcon style={{marginRight:20}}></CloudUploadOutlinedIcon>
+            <FileAddOutlined  onClick={() => (window.location = ROUTES.PENILAIAN_TKP())} style={{marginRight:20, fontSize: '25px', color: '#DA1E20', cursor: "pointer" }}/>
             <SendOutlinedIcon></SendOutlinedIcon>
           </div>
         ),

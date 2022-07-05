@@ -1,15 +1,16 @@
-import React from "react";
-import clsx from "clsx";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import FileSaver from "file-saver";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import TableDashboard from "./Table";
-import { DownloadOutlined } from "@ant-design/icons";
-import { Button, Breadcrumb } from "antd";
-import FileSaver from "file-saver";
+import { DownloadOutlined, DownOutlined, SendOutlined, PushpinOutlined } from "@ant-design/icons";
+import { Button, Breadcrumb, Dropdown, Popover, Checkbox, Menu, } from "antd";
 import HeadBar from "../../constant/headBar";
-import { ROUTES } from "../../../configs";
+import { ROUTES, API } from "../../../configs";
 
 const drawerWidth = 240;
+const nikSpv = sessionStorage.getItem("nik");
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,13 +30,20 @@ const useStyles = makeStyles((theme) => ({
     color: "#DA1E20",
     borderColor: "#DA1E20",
     marginLeft: 15,
-    marginTop: 15,
     borderRadius: 10,
-    backgroundColor: "white",
+    background: "white",
     "&:hover": {
-      backgroundColor: "#DA1E20",
+      background: "#DA1E20",
       borderColor: "#DA1E20",
     },
+    "&:active":{
+      background: "#DA1E20",
+      borderColor: "#DA1E20",
+    },
+    "&:focus":{
+      background: "#DA1E20",
+      borderColor: "#DA1E20",
+    }
   },
   containerTataCara: {
     width: 550,
@@ -123,22 +131,88 @@ const _handleBreadcumbs = () => {
   window.location = ROUTES.DASHBOARD();
 };
 
+const jumlahData = (
+  <Menu>
+    <Menu.Item key="0">
+      5
+    </Menu.Item>
+    <Menu.Item key="1">
+      10
+    </Menu.Item>
+    <Menu.Item key="2">
+      15
+    </Menu.Item>
+    <Menu.Item key="3">
+      20
+    </Menu.Item>
+  </Menu>
+);
+
+const exportData = (
+  <Menu>
+    <Menu.Item
+      key="0"
+      onClick={() => window.open(API.exportCsvUnderSpv + nikSpv + "/active")}
+    >
+      Ekspor Data (.Csv)
+    </Menu.Item>
+    <Menu.Item
+      key="1"
+      onClick={() => window.open(API.exportFileUnderSpv + nikSpv + "/active")}
+    >
+      Ekspor Data (.Zip)
+    </Menu.Item>
+  </Menu>
+);
+
+const buttonPin = (
+  <Menu>
+    <Menu.Item key="0">
+      <Checkbox>Nama TKP</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="1">
+      <Checkbox>Job Title</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="2">
+      <Checkbox>Job Role</Checkbox>
+    </Menu.Item>
+    <Menu.Item key="3">
+      <Checkbox>Mitra</Checkbox>
+    </Menu.Item>
+  </Menu>
+);
+
 export default function EvaluasiTKP() {
   const classes = useStyles();
-  const download = () => {
+  const urlFormulir = API.getFormulir;
+  const [evaluasiLink, getEvaluasi] = useState('');
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    downloadEvaluasi();
+  }, []);
+
+  const downloadEvaluasi = () => {
+    axios.get(urlFormulir, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((response) => {
+      const urlEvaluasi = response.data;
+      getEvaluasi(urlEvaluasi);
+    });
+  };
+
+  const downloadSKI = () => {
     FileSaver.saveAs(
-      "https://drive.google.com/u/0/uc?id=1kpX-YeopvB90bjc8VuhdTqawMkeJNDax&export=download",
-      "test.pdf"
+      evaluasiLink.form_evaluasi_ski
     );
   };
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
+
+  const downloadISH = () => {
+    FileSaver.saveAs(
+      evaluasiLink.form_evaluasi_ish
+    );
   };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -174,7 +248,7 @@ export default function EvaluasiTKP() {
           <Button
             type="primary"
             icon={<DownloadOutlined />}
-            onClick={download}
+            onClick={downloadISH}
             className={classes.downloadForm}
           >
             Unduh Form Evaluasi ISH
@@ -183,13 +257,52 @@ export default function EvaluasiTKP() {
           <Button
             type="primary"
             icon={<DownloadOutlined />}
-            onClick={download}
+            onClick={downloadSKI}
             className={classes.downloadForm}
           >
             Unduh Form Evaluasi SKI
           </Button>
         </Container>
         <Container maxWidth="lg" className={classes.container}>
+        <div style={{ float: "left",  marginLeft: 15 }}> 
+            <h3> Jumlah Data</h3>
+          </div>
+          <div style={{ float: "right", marginBottom: 20 }}>
+            <Dropdown overlay={jumlahData} trigger={["click"]}>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Button style={{ marginRight: 730 }}>
+                  10
+                  <DownOutlined style={{ marginLeft: 40 }} />
+                </Button>
+              </a>
+            </Dropdown>
+            <Button className={classes.kirimSemua}>
+              Kirim Semua
+              <SendOutlined rotate={315} style={{ marginLeft: 40 }} />
+            </Button>
+            <Dropdown overlay={exportData} trigger={["click"]}>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Button style={{ marginRight: 20 }}>
+                  Ekspor Data
+                  <DownloadOutlined style={{ marginLeft: 40 }} />
+                </Button>
+              </a>
+            </Dropdown>
+            <Popover placement="bottom" content={buttonPin} trigger="click">
+              <PushpinOutlined
+                style={{
+                  fontSize: 24,
+                  color: "#DA1E20",
+                }}
+              />
+            </Popover>
+          </div>
           <TableDashboard />
         </Container>
       </main>

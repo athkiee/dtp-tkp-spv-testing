@@ -57,6 +57,7 @@
     "react-scripts": "4.0.3",
     "react-select": "^4.3.1",
     "recharts": "^2.1.2",
+    "unop-react-dropdown": "^0.2.3",
     "web-vitals": "^1.1.2",
     "yup": "^0.32.11"
   },

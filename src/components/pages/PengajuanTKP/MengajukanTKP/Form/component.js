@@ -52,6 +52,7 @@ const styles = (theme) => ({
     marginLeft: 35,
     backgroundColor: "white",
     borderRadius: 10,
+    padding: 20
   },
   menuButton: {
     marginRight: 36,
