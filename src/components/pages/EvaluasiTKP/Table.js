@@ -3,8 +3,8 @@ import axios from "axios";
 import "antd/dist/antd.css";
 import { Table, Input, Button, Space } from "antd";
 import { SearchOutlined, FileAddOutlined } from "@ant-design/icons";
-import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
-import { API, ROUTES } from '../../../configs';
+import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
+import { API, ROUTES } from "../../../configs";
 
 export default class TableDashboard extends React.Component {
   state = {
@@ -13,9 +13,12 @@ export default class TableDashboard extends React.Component {
   };
 
   componentDidMount() {
-    const nik_spv = localStorage.getItem('nik');
+    const nik_spv = localStorage.getItem("nik");
+    const token = localStorage.getItem("token");
     axios
-      .get(API.tkpUnderSpv + nik_spv + '&id_kategori_status_tkp=2', API.token)
+      .get(API.tkpUnderSpv + nik_spv + "/aktif", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
         const tkp = response.data.map((tkp) => ({
           key: tkp.id_tkp,
@@ -174,7 +177,7 @@ export default class TableDashboard extends React.Component {
         key: "status",
       },
       {
-        title: "Mitra", 
+        title: "Mitra",
         dataIndex: "mitra",
         key: "mitra",
       },
@@ -185,7 +188,15 @@ export default class TableDashboard extends React.Component {
         fixed: "right",
         render: () => (
           <div>
-            <FileAddOutlined  onClick={() => (window.location = ROUTES.PENILAIAN_TKP())} style={{marginRight:20, fontSize: '25px', color: '#DA1E20', cursor: "pointer" }}/>
+            <FileAddOutlined
+              onClick={() => (window.location = ROUTES.PENILAIAN_TKP())}
+              style={{
+                marginRight: 20,
+                fontSize: "25px",
+                color: "#DA1E20",
+                cursor: "pointer",
+              }}
+            />
             <SendOutlinedIcon></SendOutlinedIcon>
           </div>
         ),
@@ -193,7 +204,11 @@ export default class TableDashboard extends React.Component {
     ];
 
     return (
-      <Table columns={columns} rowSelection={rowSelection} dataSource={dataTKP} />
+      <Table
+        columns={columns}
+        rowSelection={rowSelection}
+        dataSource={dataTKP}
+      />
     );
   }
 }

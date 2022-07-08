@@ -408,7 +408,7 @@ export default class TableRiwayat extends React.Component {
         dataSource={sourceData}
         pagination={{ pageSize: perPage }}
         scroll={{ x: "max-content" }}
-        footer={() => ("menampilkan 1-" +perPage+ " dari " +sourceData.length+ " data")}
+        footer={() => ("Menampilkan 1-" +perPage+ " dari " +sourceData.length+ " data")}
       />
     );
   }

@@ -373,7 +373,7 @@ export default class TableDalamProses extends React.Component {
         dataSource={this.state.dataTKP}
         pagination={{ pageSize: perPage }}
         scroll={{ x:"max-content" }}
-        footer={() => ("menampilkan 1-" + perPage + " dari " + this.state.dataTKP.length + " data")}
+        footer={() => ("Menampilkan 1-" + perPage + " dari " + this.state.dataTKP.length + " data")}
       
       />
     );

@@ -214,7 +214,7 @@ class DetailTKP extends React.Component {
       preview: "",
       editData: false,
       dataRiwayat: [],
-      error_skck: false,
+      error_skck: '',
     };
   }
 
@@ -313,7 +313,7 @@ class DetailTKP extends React.Component {
   };
 
   _handleFilesFromDrag = (name, file) => {
-    this.setState({ [name]: file });
+    this.setState({ [name]: file, error_skck: undefined });
   };
 
   _handleSubmit = () => {
@@ -322,7 +322,7 @@ class DetailTKP extends React.Component {
     let token = localStorage.getItem("token");
     if (file_skck.size > 2000000) {
       this.setState({
-        error_skck: true,
+        error_skck: 'error',
       });
     } else {
       var payload = new FormData();
