@@ -20,10 +20,11 @@ export default class TableDashboard extends React.Component {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
+        console.log(response.data);
         const tkp = response.data.map((tkp) => ({
           key: tkp.id_tkp,
           name: tkp.nama_lengkap,
-          jobTitle: tkp.t_job_title.nama_job_title,
+          jobTitle: tkp.t_job_title_levelling.nama_job_title_levelling,
           roles: tkp.t_job_role.nama_job_role,
           mitra: tkp.t_mitra.nama_mitra,
         }));
@@ -164,6 +165,8 @@ export default class TableDashboard extends React.Component {
         dataIndex: "name",
         key: "name",
         width: "20%",
+        ...this.getColumnSearchProps("name"),
+        sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
       },
       {

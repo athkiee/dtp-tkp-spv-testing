@@ -157,7 +157,6 @@ export default class TableDashboard extends React.Component {
 
   _getDataTkp = async (key) => {
     const token = localStorage.getItem("token");
-    console.log('haha', key);
     const dataTkp = await axios
       .get(`http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` + key, {
         headers: { Authorization: `Bearer ${token}` },

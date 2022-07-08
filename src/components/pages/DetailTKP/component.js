@@ -381,7 +381,7 @@ class DetailTKP extends React.Component {
             />
           </div>
           <p className={error_skck? classes.negativeCase:classes.noteModal}>
-            Format file berupa PDF dengan maksimal ukuran 2 MB
+            {error_skck ? 'Ukuran file melebihi 2MB': 'Format file berupa PDF dengan maksimal ukuran 2MB'}
           </p>
           <button
             className={classes.buttonSimpan}
