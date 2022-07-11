@@ -4,9 +4,12 @@ import { ROUTES } from "../../../configs";
 import { IMAGES } from "../../../configs";
 import { Button} from "antd";
 import Grid from "@material-ui/core/Grid";
-
 class LandingPage extends React.Component {
+
   render() {
+
+
+
     return (
       <div className="container-landing">
         <div className="form-content-left">
@@ -35,7 +38,8 @@ class LandingPage extends React.Component {
                 </Grid>
                 <Grid item sm>
 
-                  <Button style={{ color: "#D51100", fontWeight: "bold", borderRadius: 5, width: "70%", }} danger onClick={() => (window.location = ROUTES.LOGIN_SEKRETARIS())}>
+                  <Button style={{ color: "#D51100", fontWeight: "bold", borderRadius: 5, width: "70%", }} danger onClick={() => (window.location = ROUTES.LOGIN_SEKRETARIS()
+                    )}>
                     Sekretaris
                   </Button>
                 </Grid>
