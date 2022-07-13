@@ -9,11 +9,12 @@ import axios from "axios";
 import { get } from "lodash";
 import PDFViewer from "pdf-viewer-reactjs";
 import { Collapse } from "antd";
-import { CaretRightOutlined } from "@ant-design/icons";
+import { CaretRightOutlined, UploadOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import { Avatar, Breadcrumb } from "antd";
 import { API, ROUTES } from "../../../configs";
 import moment from "moment";
+import ModalSuccess from "../../ModalSuccess";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -26,6 +27,8 @@ const styles = (theme) => ({
     display: "flex",
     ".ant-modal-content": {
       width: 760,
+      height: 296,
+      borderRadius: 10,
     },
   },
   toolbar: {
@@ -76,17 +79,16 @@ const styles = (theme) => ({
     cursor: "pointer",
   },
   buttonSimpan: {
-    width: 216,
-    height: 56,
+    width: 140,
+    height: 43,
     marginTop: 10,
-    borderRadius: 15,
+    borderRadius: 5,
     background: "#D51100",
     outline: "none",
     border: "none",
     color: "#fff",
     fontWeight: 700,
-    fontSize: 24,
-    justifyContent: "right",
+    fontSize: 14,
     cursor: "pointer",
   },
   buttonOke: {
@@ -107,6 +109,20 @@ const styles = (theme) => ({
     "& .desc": {
       paddingLeft: 16,
       marginBottom: 15,
+    },
+    "& .descLihat": {
+      paddingLeft: 16,
+      marginBottom: 15,
+      color: "#DA1E20",
+    },
+    "& .unggahskck": {
+      marginLeft: 16,
+      background: "#FFFFFF",
+      border: "1px solid #E22529",
+      borderRadius: "5px",
+      color: "#D51100",
+      padding: "8px",
+      cursor: "pointer",
     },
   },
   appBarShift: {
@@ -211,10 +227,12 @@ class DetailTKP extends React.Component {
       modalPreview: null,
       modalInputSkck: null,
       modalPhoto: null,
+      modalSuccess: false,
       preview: "",
       editData: false,
       dataRiwayat: [],
-      error_skck: '',
+      error_skck: "",
+      file_skck: "",
     };
   }
 
@@ -320,9 +338,14 @@ class DetailTKP extends React.Component {
     const { file_skck } = this.state;
     let id_tkp = localStorage.getItem("detail_id");
     let token = localStorage.getItem("token");
+    if (file_skck === "") {
+      this.setState({
+        error_skck: "errorEmpty",
+      });
+    }
     if (file_skck.size > 2000000) {
       this.setState({
-        error_skck: 'error',
+        error_skck: "errorSize",
       });
     } else {
       var payload = new FormData();
@@ -336,14 +359,12 @@ class DetailTKP extends React.Component {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
-        .then(
-          (res) => {
-            this._renderModalInfo();
-          },
-          (err) => {
-            console.log("Error : ", err);
-          }
-        );
+        .then((res) => {
+          this.setState({
+            modalInputSkck: false,
+            modalSuccess: true
+          });
+        });
     }
   };
 
@@ -380,8 +401,10 @@ class DetailTKP extends React.Component {
               name={"file_skck"}
             />
           </div>
-          <p className={error_skck? classes.negativeCase:classes.noteModal}>
-            {error_skck ? 'Ukuran file melebihi 2MB': 'Format file berupa PDF dengan maksimal ukuran 2MB'}
+          <p className={error_skck ? classes.negativeCase : classes.noteModal}>
+            {error_skck === "errorSize"
+              ? "Ukuran file melebihi 2MB"
+              : "Format file berupa PDF dengan maksimal ukuran 2MB"}
           </p>
           <button
             className={classes.buttonSimpan}
@@ -392,16 +415,6 @@ class DetailTKP extends React.Component {
         </Modal>
       </div>
     );
-  };
-
-  _renderModalInfo = () => {
-    Modal.success({
-      content: "Unggah SKCK Berhasil",
-      onOk() {
-        window.location.reload();
-      },
-    });
-    this._handleCloseModal();
   };
 
   _renderDokumenPenunjang = () => {
@@ -592,7 +605,6 @@ class DetailTKP extends React.Component {
   };
 
   _renderPanelHeader = (value) => {
-    console.log("panel", value);
     const { classes } = this.props;
     const coba = moment(value.tanggal_perubahan).format("MMMM YYYY");
     return (
@@ -617,7 +629,6 @@ class DetailTKP extends React.Component {
   render() {
     const { classes } = this.props;
     const { dataDetail } = this.state;
-    console.log("mana", dataDetail);
     let { dataRiwayat } = this.state;
     const startOnboard = moment(get(dataDetail, "tanggal_onboard")).format(
       "MMMM YYYY"
@@ -627,8 +638,6 @@ class DetailTKP extends React.Component {
       "Invalid date"
         ? moment(get(dataDetail, "tanggal_lahir")).format("DD MMMM YYYY")
         : "-";
-
-    console.log(previousPath);
 
     const listTab1 = [
       {
@@ -887,12 +896,13 @@ class DetailTKP extends React.Component {
                           color: "#DA1E20",
                           fontWeight: "bold",
                           marginTop: 15,
+                          width: 200,
                         }}
                       >
                         {namaTkp}
                       </h2>
-                      <p style={{ maxWidth: 150, minWidth: 150, width: 150 }}>
-                        {dataDetail && dataDetail.t_bidang.kode_bidang} /{" "}
+                      <p style={{ maxWidth: 200, minWidth: 200, width: 200 }}>
+                        {dataDetail && dataDetail.t_bidang.kode_bidang} / {" "}
                         {dataDetail &&
                           dataDetail.t_job_title_levelling
                             .nama_job_title_levelling}
@@ -1024,20 +1034,37 @@ class DetailTKP extends React.Component {
                         <p>:</p>
                       </Grid>
                       <Grid item xs={6}>
-                        <a
-                          className="desc"
-                          onClick={
-                            item.title === "Foto/Scan KTP"
-                              ? this._handleDokumenFoto.bind(this, item)
-                              : this._handleDokumenPenunjang.bind(this, item)
-                          }
-                        >
-                          Lihat
-                        </a>
+                        {item.title === "SKCK" && item.desc === "" ? (
+                          <button
+                            className="unggahskck"
+                            onClick={this._handleDokumenPenunjang.bind(
+                              this,
+                              item
+                            )}
+                          >
+                            <UploadOutlined /> Unggah SKCK
+                          </button>
+                        ) : (
+                          <a
+                            className="descLihat"
+                            onClick={
+                              item.title === "Foto/Scan KTP"
+                                ? this._handleDokumenFoto.bind(this, item)
+                                : this._handleDokumenPenunjang.bind(this, item)
+                            }
+                          >
+                            Lihat
+                          </a>
+                        )}
                       </Grid>
                     </Grid>
                   ))}
                 </div>
+                <ModalSuccess
+                  open={this.state.modalSuccess}
+                  label="Unggah Dokumen SKCK Berhasil"
+                  handleClose={() => window.location.reload()}
+                />
                 {this._renderModalUpload()}
                 {this._renderDokumenFoto()}
                 {this._renderDokumenPenunjang()}

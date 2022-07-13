@@ -152,7 +152,6 @@ class DalamProsesPengajuanTKP extends React.Component {
     const nikSpv = localStorage.getItem("nik");
     const token = localStorage.getItem("token");
     const nama = localStorage.getItem("nama");
-    console.log(token);
 
     const buttonPin = (
       <Menu>
