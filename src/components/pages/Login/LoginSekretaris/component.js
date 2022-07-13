@@ -14,13 +14,40 @@ import FromControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
+
 
 
 
 function LoginSekre(props) {
-  const [loading, setLoading] = useState(false);
-  const username = useFormInput(Cookies.get("username"));
-  const password = useFormInput(Cookies.get('password'));
+  
+ const [loading, setLoading] = useState(false);
+  
+  //  handle decode cookie
+  const getCookieUsername = () => {
+    if (Cookies.get("rememberMe") === "true") {
+      const getusername = Cookies.get("KXHS");
+      const bytesUser = CryptoJS.AES.decrypt(getusername, "&3498nds89347bf93fkjsf34b");
+      const user = bytesUser.toString(CryptoJS.enc.Utf8);
+      return user;
+    } else
+      return Cookies.get("KXHS");
+  }
+
+  const getCookiePassword = () => {
+    if (Cookies.get("rememberMe") === "true") {
+      const getpassword = Cookies.get("SHHC");
+      const bytesPass = CryptoJS.AES.decrypt(getpassword, "83nf893bfjaksgbs=sgn3+dfhsdb");
+      const pass = bytesPass.toString(CryptoJS.enc.Utf8);
+      return pass;
+    }
+    else {
+      return Cookies.get("SHHC");
+    }
+  }
+
+  const username = useFormInput(getCookieUsername);
+  const password = useFormInput(getCookiePassword);
   const [error, setError] = useState(null);
   let history = useHistory();
   const [values, setValues] = useState({ password:"", showPassword: false });
@@ -32,6 +59,8 @@ function LoginSekre(props) {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+
 
   const handleLogin = () => {
     setError(null);
@@ -73,25 +102,29 @@ function LoginSekre(props) {
   };
 
 
+ 
+
+
+   
+
 
 // set remember me to cookie
   const handleRememberMe = (e) => {
     const checked = e.target.checked;
     if (checked) {
-      Cookies.set("rememberMe", "true", {
-        expires: 30, path: '/login/sekretaris', samesite: 'strict', HttpOnly: true
-});
-      Cookies.set("username",username.value, { expires: 30, path: '/login/sekretaris', samesite: 'strict',HttpOnly: true});
-      Cookies.set("password", password.value, { expires: 30, path: '/login/sekretaris', samesite: 'strict',HttpOnly: true });
+      Cookies.set("rememberMe", "true", { expires: 30, path: '/login/sekretaris'});
+      Cookies.set("KXHS", CryptoJS.AES.encrypt(username.value, '&3498nds89347bf93fkjsf34b').toString(), { expires: 30, path: '/login/sekretaris'
+      });
+      Cookies.set("SHHC", CryptoJS.AES.encrypt(password.value, '83nf893bfjaksgbs=sgn3+dfhsdb').toString(), { expires: 30, path: '/login/sekretaris'});
+      
     }
      else {
-      Cookies.set("rememberMe", "false", { expires: 30, path: '/login/sekretaris', samesite: 'strict', HttpOnly: true   });
-      Cookies.remove("username", { expires: 30, path: '/login/sekretaris', samesite: 'strict', HttpOnly: true });
-      Cookies.remove("password", { expires: 30, path: '/login/sekretaris', samesite: 'strict', HttpOnly: true });
+      Cookies.set("rememberMe", "false", { expires: 30, path: '/login/sekretaris', samesite: 'strict',   });
+      // Cookies.set("KXHS", { expires: 30, path: '/login/sekretaris', samesite: 'strict' });
+      Cookies.remove("KXHS", { expires: 30, path: '/login/sekretaris', samesite: 'strict' });
+      Cookies.remove("SHHC", { expires: 30, path: '/login/sekretaris', samesite: 'strict' });
     }
   }
-
- 
 
   return (
     <div className="form-container">
