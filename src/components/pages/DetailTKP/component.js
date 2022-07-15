@@ -369,13 +369,15 @@ class DetailTKP extends React.Component {
   };
 
   _renderModalUpload = () => {
-    const { modalInputSkck, modalTitle, handleBlur, error_skck } = this.state;
+    const { modalInputSkck, modalTitle, handleBlur, error_skck, file_skck } = this.state;
     const { classes } = this.props;
+    console.log('test', this.state.file_skck);
     return (
       <div>
         <Modal
           visible={modalInputSkck}
           onCancel={this._handleCloseModal}
+          onClose={this._handleCloseModal}
           footer={null}
           className={classes.modalPreview}
         >
@@ -397,8 +399,7 @@ class DetailTKP extends React.Component {
               onChange={this._handleFilesFromDrag.bind(this, "file_skck")}
               onBlur={handleBlur}
               hintError={error_skck}
-              value={this.state.file_skck}
-              name={"file_skck"}
+              value={file_skck}
             />
           </div>
           <p className={error_skck ? classes.negativeCase : classes.noteModal}>
@@ -601,6 +602,8 @@ class DetailTKP extends React.Component {
       modalPhoto: false,
       modalInputSkck: false,
       preview: "",
+      file_skck: "",
+      error_skck: ""
     });
   };
 

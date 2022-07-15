@@ -33,8 +33,10 @@ const styles = (theme) => ({
     ...theme.mixins.toolbar,
   },
   submitForm: {
-    width: "150px",
-    height: "40px",
+    width: "100%",
+    height: "60px",
+    fontSize: 20,
+    fontWeight: 700,
     color: "white",
     borderColor: "#DA1E20",
     borderRadius: 10,
@@ -42,7 +44,7 @@ const styles = (theme) => ({
     "&:hover": {
       color: "#DA1E20",
       backgroundColor: "white",
-      borderColor: "#DA1E20",
+      border: "1px solid #DA1E20",
     },
   },
   containerTataCara: {
@@ -67,9 +69,12 @@ const styles = (theme) => ({
     color: "#EE2E24",
   },
   inputForm: {
+    '&.ant-select:not(.ant-select-customize-input) .ant-select-selector': {
+      borderRadius: 5,
+      height: 40
+    },
     display: "block",
-    paddingLeft: 10,
-    borderRadius: 2,
+    borderRadius: 5,
     height: 40,
     width: "100%",
   },
@@ -591,14 +596,14 @@ class FormPengajuanTKP extends React.Component {
                   errors.cv = "CV tidak boleh kosong";
                   
                 } else if(values.cv.size > 2000000){
-                  errors.cv = "CV tidak boleh lebih dari 2MB";
+                  errors.cv = "Ukuran file melebihi 2MB";
                 } else if(values.cv.type !== 'application/pdf'){
                   errors.cv = "CV harus berupa file PDF";
                 }
                 if (!values.foto_scanktp) {
                   errors.foto_scanktp = "Scan KTP tidak boleh kosong";
                 } else if (values.foto_scanktp.size > 2000000) {
-                  errors.foto_scanktp = "Scan KTP tidak boleh lebih dari 2MBs";
+                  errors.foto_scanktp = "Ukuran file melebihi 2MB";
                 } else if (values.foto_scanktp.type !== 'image/jpeg' && values.foto_scanktp.type !== 'image/png' && values.foto_scanktp.type !== 'image/jpg') {
                   errors.foto_scanktp = "Scan KTP harus berupa file gambar";
                 }
@@ -1348,7 +1353,7 @@ class FormPengajuanTKP extends React.Component {
                       name={"cv"}
                     />
                     <p className={touched.cv && errors.cv? classes.negativeCase:classes.noteModal}>
-                      Format file berupa PDF dengan maksimal ukuran 2 MB
+                      {errors.cv || 'Format file berupa PDF dengan maksimal ukuran 2 MB'}
                     </p>
                   </div>
                   <div style={{ margin: 20 }}>
@@ -1365,8 +1370,7 @@ class FormPengajuanTKP extends React.Component {
                       name={"foto_scanktp"}
                     />
                     <p className={touched.foto_scanktp && errors.foto_scanktp ? classes.negativeCase:classes.noteModal}>
-                      Format foto berupa JPG atau JPEG dengan maksimal ukuran
-                      2MB
+                      {errors.foto_scanktp || 'Format foto berupa JPG atau JPEG dengan maksimal ukuran'}
                     </p>
                   </div>
                   <div style={{ margin: 20 }}>
@@ -1394,14 +1398,14 @@ class FormPengajuanTKP extends React.Component {
                   </div>
 
                   <div style={{ margin: 20 }}>
-                    <Grid container justify="flex-end">
+                    <Grid container justify="center">
                       <Button
                         className={classes.submitForm}
                         type="submit"
                         disabled={isSubmitting}
                       >
                         {" "}
-                        SUBMIT
+                        Kirim
                       </Button>
                     </Grid>
                   </div>

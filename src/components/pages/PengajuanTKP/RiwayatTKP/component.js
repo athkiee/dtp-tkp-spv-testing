@@ -283,9 +283,6 @@ class RiwayatTKP extends React.Component {
         key: 'Kontrak Tidak Diperpanjang',
         value: 'Kontrak Tidak Diperpanjang',
       },
-      { key :'INT', value: 'INT'},
-      { key :'Bidang', value: 'Bidang'},
-      
     ];
 
     const optionJumlahData = filterShowdata.map((d) => (

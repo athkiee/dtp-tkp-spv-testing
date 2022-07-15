@@ -152,20 +152,23 @@ export default class TableRiwayat extends React.Component {
     sessionStorage.setItem("previousPath", window.location.pathname);
   };
 
-  _getDataTkp = async (key) => {
+  _getDataTkp = async (value) => {
     const token = localStorage.getItem("token");
-    console.log('haha', key);
     const dataTkp = await axios
-      .get(`http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` + key, {
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: "blob",
-      })
+      .get(
+        `http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` +
+          value.key,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        }
+      )
       .then((response) => response)
       .catch((error) => console.error(error));
 
     const { status, data } = dataTkp;
     if (status === 200) {
-      fileDownload(data, `${key}.zip`);
+      fileDownload(data, `${value.name}.zip`);
     }
   };
 
@@ -175,10 +178,10 @@ export default class TableRiwayat extends React.Component {
     const { dataRiwayat } = this.state;
     const sourceData =
       filterStat !== ""
-        ? dataRiwayat.filter((obj) => obj.status === filterStat).splice( 0, perPage )
+        ? dataRiwayat
+            .filter((obj) => obj.status === filterStat)
+            .splice(0, perPage)
         : dataRiwayat;
-  
-      
 
     const columns = [
       {
@@ -224,7 +227,7 @@ export default class TableRiwayat extends React.Component {
                   color: "rgba(129, 199, 114, 1)",
                 }}
               >
-                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
               </Typography>
             );
           } else if (text === "Ditolak") {
@@ -234,16 +237,48 @@ export default class TableRiwayat extends React.Component {
                   color: "rgba(238, 46, 36, 1)",
                 }}
               >
-                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
               </Typography>
             );
-          } else {
+          } else if (text === "Kontrak Tidak Diperpanjang") {
+            return (
+              <Typography
+                style={{
+                  color: "#36ADFD",
+                  width: 220
+                }}
+              >
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
+              </Typography>
+            );
+          } else if (text === "Perubahan Job Title" || text === "Menunggu Konfirmasi") {
+            return (
+              <Typography
+                style={{
+                  color: "#F1B44C",
+                }}
+              >
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
+              </Typography>
+            );
+          } else if (text === "Wawancara") {
+            return (
+              <Typography
+                style={{
+                  color: "#FF787B",
+                }}
+              >
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
+              </Typography>
+            );
+          }
+          else {
             return (
               <Typography
                 variant="span"
                 style={{ color: "rgba(173, 173, 173, 1)" }}
               >
-                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
               </Typography>
             );
           }
@@ -252,13 +287,13 @@ export default class TableRiwayat extends React.Component {
       {
         width: 125,
         title: "Aksi",
-        dataIndex: "key",
+        dataIndex: ['name', 'key'],
         fixed: "right",
-        render: (key) => (
+        render: (text, id) => (
           <div>
             <Tooltip placement="bottom" title={"Lihat Detail"}>
               <span
-                onClick={this._handleOpenDetail.bind(this, key)}
+                onClick={this._handleOpenDetail.bind(this, id.key)}
                 style={{ marginRight: 15, cursor: "pointer" }}
               >
                 <EyeTwoTone />
@@ -267,7 +302,7 @@ export default class TableRiwayat extends React.Component {
             <Tooltip placement="bottom" title={"Unduh Data"}>
               <span>
                 <DownloadOutlined
-                  onClick={this._getDataTkp.bind(this, key)}
+                  onClick={this._getDataTkp.bind(this, id)}
                   style={{ color: "#00FF00" }}
                 />
               </span>
@@ -325,7 +360,7 @@ export default class TableRiwayat extends React.Component {
                   color: "rgba(129, 199, 114, 1)",
                 }}
               >
-                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
               </Typography>
             );
           } else if (text === "Ditolak") {
@@ -335,16 +370,48 @@ export default class TableRiwayat extends React.Component {
                   color: "rgba(238, 46, 36, 1)",
                 }}
               >
-                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
               </Typography>
             );
-          } else {
+          } else if (text === "Kontrak Tidak Diperpanjang") {
+            return (
+              <Typography
+                style={{
+                  color: "#36ADFD",
+                  width: 220
+                }}
+              >
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
+              </Typography>
+            );
+          } else if (text === "Perubahan Job Title" || text === "Menunggu Konfirmasi") {
+            return (
+              <Typography
+                style={{
+                  color: "#F1B44C",
+                }}
+              >
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
+              </Typography>
+            );
+          } else if (text === "Wawancara") {
+            return (
+              <Typography
+                style={{
+                  color: "#FF787B",
+                }}
+              >
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
+              </Typography>
+            );
+          }
+          else {
             return (
               <Typography
                 variant="span"
                 style={{ color: "rgba(173, 173, 173, 1)" }}
               >
-                <CircleIcon style={{ fontSize: "10px" }} /> {text}
+                <CircleIcon style={{ fontSize: "14px" }} /> {text}
               </Typography>
             );
           }
@@ -408,7 +475,9 @@ export default class TableRiwayat extends React.Component {
         dataSource={sourceData}
         pagination={{ pageSize: perPage }}
         scroll={{ x: "max-content" }}
-        footer={() => ("Menampilkan 1-" +perPage+ " dari " +sourceData.length+ " data")}
+        footer={() =>
+          "Menampilkan 1-" + perPage + " dari " + sourceData.length + " data"
+        }
       />
     );
   }

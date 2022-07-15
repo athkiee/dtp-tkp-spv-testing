@@ -43,8 +43,6 @@ export default function DragAndDrop(props) {
     onChange(acceptedFiles[0]);
   }, []);
 
-  console.log('ahaha', hintError);
-
   const {
     getRootProps,
     getInputProps,
@@ -66,6 +64,7 @@ export default function DragAndDrop(props) {
     isDragAccept,
     isDragReject
   ]);
+  console.log('yeyeye', file);
 
   return (
     <div {...getRootProps({ style: {
