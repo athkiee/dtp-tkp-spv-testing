@@ -3,12 +3,8 @@ import React, { Component } from "react";
 
 export default class Tablerow extends Component {
     changeHandler = (value, id) => {
-    console.log("ValueTab: ", value);
-    console.log("Idtab: ", id);
     if (value) {
       this.props.onSelect(id);
-    } else {
-      // handle de-select
     }
   };
 

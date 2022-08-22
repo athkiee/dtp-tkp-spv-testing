@@ -35,12 +35,6 @@ const routes = {
   PENILAIAN_TKP() {
     return `/penilaian-tkp`;
   },
-  TKP_TIDAK_PERPANJANG() {
-    return `/tkp-tidak-diperpanjang`;
-  },
-  TKP_PERPANJANG() {
-    return `/tkp-diperpanjang`;
-  }
 };
 
 export default routes;

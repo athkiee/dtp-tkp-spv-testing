@@ -21,8 +21,6 @@ function Path() {
       <Route path={ROUTES.PENGAJUAN_TKP_RIWAYAT()} component={pages.RiwayatTKP} />
       <Route path={ROUTES.DETAIL_TKP()} component={pages.DetailTKP} />
       <Route path={ROUTES.PENILAIAN_TKP()} component={pages.PenilaianTKP} />
-      <Route path={ROUTES.TKP_TIDAK_PERPANJANG()} component={pages.TidakPerpanjang} />
-      <Route path={ROUTES.TKP_PERPANJANG()} component={pages.TKPPerpanjang} />
     </Router>
   );
 }

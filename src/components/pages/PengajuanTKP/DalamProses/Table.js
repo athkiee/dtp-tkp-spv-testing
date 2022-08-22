@@ -176,6 +176,90 @@ export default class TableDalamProses extends React.Component {
     }
   };
 
+  _renderStatus = (text) => {
+    if (text === "Diterima") {
+      return (
+        <Typography
+          style={{
+            color: "rgba(129, 199, 114, 1)",
+            fontSize: "14px"
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    } else if (text === "Ditolak") {
+      return (
+        <Typography
+          style={{
+            color: "rgba(238, 46, 36, 1)",
+            fontSize: "14px"
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    } else if (text === "Kontrak Tidak Diperpanjang") {
+      return (
+        <Typography
+          style={{
+            color: "#36ADFD",
+            fontSize: "14px",
+            width: 220
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    } else if (text === "Menunggu Konfirmasi") {
+      return (
+        <Typography
+          style={{
+            color: "#F1B44C",
+            fontSize: "14px"
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    } else if (text === "Perubahan Job Title") {
+      return (
+        <Typography
+          style={{
+            color: "#FF8E26",
+            fontSize: "14px"
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    }
+    else if (text === "Wawancara") {
+      return (
+        <Typography
+          style={{
+            color: "#FF787B",
+            fontSize: "14px"
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    }
+    else {
+      return (
+        <Typography
+          variant="span"
+          style={{ color: "rgba(173, 173, 173, 1)",
+          fontSize: "14px" }}
+          
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    }
+  }
+
   render() {
     const { pagination } = this.state;
     const { perPage } = this.props;
@@ -213,70 +297,7 @@ export default class TableDalamProses extends React.Component {
         key: "status",
         sorter: (a, b) => a.status.localeCompare(b.status),
         ...this.getColumnSearchProps("status"),
-        render: (text) => {
-          if (text === "Diterima") {
-            return (
-              <Typography
-                style={{
-                  color: "rgba(129, 199, 114, 1)",
-                }}
-              >
-                <CircleIcon style={{ fontSize: "14px" }} /> {text}
-              </Typography>
-            );
-          } else if (text === "Ditolak") {
-            return (
-              <Typography
-                style={{
-                  color: "rgba(238, 46, 36, 1)",
-                }}
-              >
-                <CircleIcon style={{ fontSize: "14px" }} /> {text}
-              </Typography>
-            );
-          } else if (text === "Kontrak Tidak Diperpanjang") {
-            return (
-              <Typography
-                style={{
-                  color: "#36ADFD",
-                  width: 220
-                }}
-              >
-                <CircleIcon style={{ fontSize: "14px" }} /> {text}
-              </Typography>
-            );
-          } else if (text === "Perubahan Job Title" || text === "Menunggu Konfirmasi") {
-            return (
-              <Typography
-                style={{
-                  color: "#F1B44C",
-                }}
-              >
-                <CircleIcon style={{ fontSize: "14px" }} /> {text}
-              </Typography>
-            );
-          } else if (text === "Wawancara") {
-            return (
-              <Typography
-                style={{
-                  color: "#FF787B",
-                }}
-              >
-                <CircleIcon style={{ fontSize: "14px" }} /> {text}
-              </Typography>
-            );
-          }
-          else {
-            return (
-              <Typography
-                variant="span"
-                style={{ color: "rgba(173, 173, 173, 1)" }}
-              >
-                <CircleIcon style={{ fontSize: "14px" }} /> {text}
-              </Typography>
-            );
-          }
-        },
+        render: (text) => this._renderStatus(text)
       },
       {
         width: 125,

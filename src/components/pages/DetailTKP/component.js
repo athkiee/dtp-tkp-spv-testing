@@ -18,7 +18,6 @@ import ModalSuccess from "../../ModalSuccess";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
-const drawerWidth = 240;
 
 const previousPath = sessionStorage.getItem("previousPath");
 
@@ -31,16 +30,6 @@ const styles = (theme) => ({
       borderRadius: 10,
     },
   },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
-  },
   downloadForm: {
     color: "#DA1E20",
     borderColor: "#DA1E20",
@@ -51,14 +40,6 @@ const styles = (theme) => ({
       backgroundColor: "#DA1E20",
       borderColor: "#DA1E20",
     },
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: "#E5E5E5",
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
   },
   modal: {
     display: "flex",
@@ -125,44 +106,6 @@ const styles = (theme) => ({
       cursor: "pointer",
     },
   },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: "none",
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     height: "100vh",
@@ -178,15 +121,6 @@ const styles = (theme) => ({
     margin: "0px 35px 40px 35px",
     backgroundColor: "white",
     borderRadius: 10,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-  fixedHeight: {
-    height: 240,
   },
   modalPreview: {
     width: "760px !important",

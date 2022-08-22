@@ -2,14 +2,26 @@ import React from "react";
 import axios from "axios";
 import "antd/dist/antd.css";
 import { Table, Input, Button, Space } from "antd";
-import { SearchOutlined, FileAddOutlined } from "@ant-design/icons";
-import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
+import {
+  SearchOutlined,
+  FileAddOutlined,
+  SendOutlined,
+} from "@ant-design/icons";
 import { API, ROUTES } from "../../../configs";
+import Typography from "@material-ui/core/Typography";
+import CircleIcon from "@mui/icons-material/Circle";
+import ModalSuccess from "../../ModalSuccess";
+import ModalConfirmation from "../../ModalConfirmation";
+
+const token = localStorage.getItem("token");
 
 export default class TableDashboard extends React.Component {
   state = {
     searchText: "",
     searchedColumn: "",
+    modalSuccess: false,
+    dialogConfirmation: false,
+    evaluasi_id: ''
   };
 
   componentDidMount() {
@@ -25,6 +37,8 @@ export default class TableDashboard extends React.Component {
           key: tkp.id_tkp,
           name: tkp.nama_lengkap,
           jobTitle: tkp.t_job_title_levelling.nama_job_title_levelling,
+          status: tkp.status_buka_evaluasi,
+          evaluasi: tkp.t_evaluasi_tkps.status_evaluasi,
           roles: tkp.t_job_role.nama_job_role,
           mitra: tkp.t_mitra.nama_mitra,
         }));
@@ -33,6 +47,25 @@ export default class TableDashboard extends React.Component {
         });
       });
   }
+
+  _handleOpenDetail = (key) => {
+    window.location = ROUTES.PENILAIAN_TKP(key);
+    localStorage.setItem("detail_id", key);
+  };
+
+  _handleSendEvaluasi = () => {
+    const { evaluasi_id } = this.state;
+    const list_tkp = [{ id_tkp: evaluasi_id }];
+    axios
+      .post(API.detailTkp + "evaluasi-tkp/kirim", {list_tkp}, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(() => {
+        this.setState({
+          modalSuccess: true,
+        });
+      });
+  };
 
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -119,44 +152,67 @@ export default class TableDashboard extends React.Component {
     this.setState({ searchText: "" });
   };
 
+  _renderModalConfirm = (key) => {
+    this.setState({
+      dialogConfirmation: true,
+      evaluasi_id: key
+    })
+  }
+
+  _renderStatus = (id) => {
+    const status = id.status;
+    const formEval = id.evaluasi;
+    if (status === 2) {
+      return (
+        <Typography
+          style={{
+            color: "#EB681F",
+            fontSize: "14px",
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> Draft
+        </Typography>
+      );
+    } else if (status === 1) {
+      return (
+        <Typography
+          style={{
+            color: "#DA1E20",
+            fontSize: "14px",
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> Belum Dinilai
+        </Typography>
+      );
+    } else if (status === 0 && formEval === 4) {
+      return (
+        <Typography
+          style={{
+            color: "#1F9515",
+            fontSize: "14px",
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> Sudah Dinilai
+        </Typography>
+      );
+    } else {
+      return (
+        <Typography
+          variant="span"
+          style={{ color: "rgba(173, 173, 173, 1)", fontSize: "14px" }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> Belum Dibuka
+        </Typography>
+      );
+    }
+  };
+
   render() {
     const { selectedRowKeys, dataTKP } = this.state;
+    console.log("asda", dataTKP);
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
-      selections: [
-        Table.SELECTION_ALL,
-        Table.SELECTION_INVERT,
-        Table.SELECTION_NONE,
-        {
-          key: "odd",
-          text: "Select Odd Row",
-          onSelect: (changableRowKeys) => {
-            let newSelectedRowKeys = [];
-            newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-              if (index % 2 !== 0) {
-                return false;
-              }
-              return true;
-            });
-            this.setState({ selectedRowKeys: newSelectedRowKeys });
-          },
-        },
-        {
-          key: "even",
-          text: "Select Even Row",
-          onSelect: (changableRowKeys) => {
-            let newSelectedRowKeys = [];
-            newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-              if (index % 2 !== 0) {
-                return true;
-              }
-              return false;
-            });
-            this.setState({ selectedRowKeys: newSelectedRowKeys });
-          },
-        },
-      ],
     };
 
     const columns = [
@@ -165,7 +221,6 @@ export default class TableDashboard extends React.Component {
         dataIndex: "name",
         key: "name",
         width: "20%",
-        ...this.getColumnSearchProps("name"),
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
       },
@@ -173,45 +228,94 @@ export default class TableDashboard extends React.Component {
         title: "Job Title",
         dataIndex: "jobTitle",
         key: "jobTitle",
+        sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
+        ...this.getColumnSearchProps("jobTitle"),
       },
       {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
+        title: "Status Penilaian",
+        dataIndex: ["name", "key"],
+        sorter: (a, b) => a.name.localeCompare(b.name),
+        ...this.getColumnSearchProps("status"),
+        render: (text, id) => this._renderStatus(id),
       },
       {
         title: "Mitra",
         dataIndex: "mitra",
         key: "mitra",
+        sorter: (a, b) => a.mitra.localeCompare(b.mitra),
+        ...this.getColumnSearchProps("mitra"),
       },
       {
         width: 125,
         title: "Aksi",
-        dataIndex: "aksi",
+        dataIndex: ["name", "key"],
         fixed: "right",
-        render: () => (
+        render: (text, id) => (
           <div>
-            <FileAddOutlined
-              onClick={() => (window.location = ROUTES.PENILAIAN_TKP())}
-              style={{
-                marginRight: 20,
-                fontSize: "25px",
-                color: "#DA1E20",
-                cursor: "pointer",
-              }}
-            />
-            <SendOutlinedIcon></SendOutlinedIcon>
+            {id.status !== 0 ? (
+              <FileAddOutlined
+                onClick={this._handleOpenDetail.bind(this, id.key)}
+                style={{
+                  marginRight: 20,
+                  fontSize: "25px",
+                  color: "#DA1E20",
+                  cursor: "pointer",
+                }}
+              />
+            ) : (
+              <FileAddOutlined
+                disabled
+                style={{
+                  marginRight: 20,
+                  fontSize: "25px",
+                  color: "rgba(173, 173, 173, 1)",
+                }}
+              />
+            )}
+            {id.status === 2 ? (
+              <SendOutlined
+                onClick={this._renderModalConfirm.bind(this, id.key)}
+                style={{
+                  transform: "rotate(-45deg)",
+                  fontSize: "25px",
+                  color: "#BF22C2",
+                  cursor: "pointer",
+                }}
+              />
+            ) : (
+              <SendOutlined
+                style={{
+                  transform: "rotate(-45deg)",
+                  color: "rgba(173, 173, 173, 1)",
+                  fontSize: 25,
+                }}
+              />
+            )}
           </div>
         ),
       },
     ];
 
     return (
-      <Table
-        columns={columns}
-        rowSelection={rowSelection}
-        dataSource={dataTKP}
-      />
+      <div>
+        <Table
+          columns={columns}
+          rowSelection={rowSelection}
+          dataSource={dataTKP}
+        />
+        <ModalConfirmation
+          title={"Kirim Penilaian Evaluasi TKP"}
+          description={"Anda yakin ingin mengirimkan Penilaian Evaluasi TKP?"}
+          open={this.state.dialogConfirmation}
+          handleClose={() => this.setState({ dialogConfirmation: false })}
+          getData={this._handleSendEvaluasi}
+        />
+        <ModalSuccess
+          open={this.state.modalSuccess}
+          label="Pengiriman Evaluasi TKP Berhasil!"
+          handleClose={() => window.location.reload()}
+        />
+      </div>
     );
   }
 }

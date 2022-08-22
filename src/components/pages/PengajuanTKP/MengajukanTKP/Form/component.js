@@ -16,21 +16,9 @@ const dateFormatList = ["DD/MM/YYYY"];
 const { TextArea } = Input;
 const token = localStorage.getItem("token");
 
-const drawerWidth = 240;
-
 const styles = (theme) => ({
   root: {
     display: "flex",
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
   },
   submitForm: {
     width: "100%",
@@ -78,15 +66,6 @@ const styles = (theme) => ({
     height: 40,
     width: "100%",
   },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
   noteModal: {
     marginTop: "8px",
     fontSize: "14px",
@@ -94,18 +73,6 @@ const styles = (theme) => ({
     fontFamily: "Roboto",
     color: "#000000",
   },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     height: "100vh",
@@ -115,15 +82,6 @@ const styles = (theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-  fixedHeight: {
-    height: 240,
   },
 });
 
@@ -1353,7 +1311,7 @@ class FormPengajuanTKP extends React.Component {
                       name={"cv"}
                     />
                     <p className={touched.cv && errors.cv? classes.negativeCase:classes.noteModal}>
-                      {errors.cv || 'Format file berupa PDF dengan maksimal ukuran 2 MB'}
+                      {touched.cv && errors.cv ? errors.cv : 'Format file berupa PDF dengan maksimal ukuran 2 MB'}
                     </p>
                   </div>
                   <div style={{ margin: 20 }}>
@@ -1370,7 +1328,7 @@ class FormPengajuanTKP extends React.Component {
                       name={"foto_scanktp"}
                     />
                     <p className={touched.foto_scanktp && errors.foto_scanktp ? classes.negativeCase:classes.noteModal}>
-                      {errors.foto_scanktp || 'Format foto berupa JPG atau JPEG dengan maksimal ukuran'}
+                      {touched.foto_scanktp && errors.foto_scanktp ? errors.foto_scanktp : 'Format foto berupa JPG atau JPEG dengan maksimal ukuran'}
                     </p>
                   </div>
                   <div style={{ margin: 20 }}>

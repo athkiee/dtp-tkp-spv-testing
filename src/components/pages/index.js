@@ -6,9 +6,6 @@ import DetailTKP from "./DetailTKP";
 import RiwayatTKP from "./PengajuanTKP/RiwayatTKP/";
 import EvaluasiTKP from "./EvaluasiTKP";
 import PenilaianTKP from "./EvaluasiTKP/Penilaian";
-import TidakPerpanjang from "./EvaluasiTKP/TidakPerpanjang";
-import TKPPerpanjang from "./EvaluasiTKP/Perpanjang";
-
 
 const pages = {
     LandingPage,
@@ -19,8 +16,6 @@ const pages = {
     RiwayatTKP,
     EvaluasiTKP,
     PenilaianTKP,
-    TidakPerpanjang,
-    TKPPerpanjang
 }
 
 export default pages;
