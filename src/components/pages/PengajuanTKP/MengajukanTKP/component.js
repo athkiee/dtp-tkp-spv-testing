@@ -92,10 +92,10 @@ class MengajukanTKP extends React.Component {
 
     const namaSpv = localStorage.getItem("nama");
     const nikSpv = localStorage.getItem("nik");
-    
+
 
     return (
-     
+
       <div className={classes.root}>
         <HeadBar />
         <main className={classes.content}>
@@ -139,11 +139,11 @@ class MengajukanTKP extends React.Component {
               Silahkan mengisi Data Supervisor di bawah ini untuk membuka
               formulir TKP
             </p>
-              
+
             <label className="form-label">Nama Supervisor</label>
             <div style={{ marginBottom: 20 }}>
               {
-                typeAuth === "supervisor" ?(
+                typeAuth === "supervisor" ? (
                   <TextField
                     label={
                       namaSpv
@@ -161,32 +161,31 @@ class MengajukanTKP extends React.Component {
                   disableClearable
                   options={data.map((option) => option.nama_spv)}
                   renderInput={(params) => (
-                    sessionStorage.setItem("nama_spv", params.inputProps.value)
-                    (
-                      <TextField
-                        {...params}
-                        label="--"
-                        InputProps={{
-                          ...params.InputProps,
-                          type: "search",
-                        }}
-                        onSelect={(e) => {
-                          this.setState({
-                            nama_supervisor: e.target.value,
-                            nik_supervisor: matchesNIK,
-                          });
-                        }}
-                      />
-                    )
-                  )}
+                    <TextField
+                      {...params}
+                      label="--"
+                      InputProps={{
+                        ...params.InputProps,
+                        type: "search",
+                      }}
+                      onSelect={(e) => {
+                        this.setState({
+                          nama_supervisor: e.target.value,
+                          nik_supervisor: matchesNIK,
+                        });
+                        sessionStorage.setItem("nama_spv", params.inputProps.value)
+                      }}
+                    />
+                  )
+                  }
                 />)
               }
-             
+
             </div>
             <label className="form-label">NIK Supervisor</label>
             <div style={{ marginBottom: 20 }}>
               {
-                typeAuth === "supervisor" ?(
+                typeAuth === "supervisor" ? (
                   <TextField
                     label={
                       nikSpv
@@ -203,10 +202,8 @@ class MengajukanTKP extends React.Component {
                   disableClearable
                   value={nik_supervisor}
                   options={matchesNIK ? [matchesNIK] : []}
-                  renderInput={(params) => (
-                    matchesNIK === ""
-                      ? sessionStorage.setItem("nik_spv", params.inputProps.value)
-                      : sessionStorage.setItem("nik_spv", matchesNIK)
+                  renderInput={(params) => 
+
                     (
                       <TextField
                         {...params}
@@ -231,31 +228,32 @@ class MengajukanTKP extends React.Component {
                             : this.setState({
                               nik_supervisor: matchesNIK,
                             });
+                          matchesNIK === "" ? sessionStorage.setItem("nik_spv", params.inputProps.value) : sessionStorage.setItem("nik_spv", matchesNIK)
                         }}
                       />
-                    )
+                    
                   )}
                 />)
 
               }
-              
-            
+
+
             </div>
-          
+
 
             <Button
               type="submit"
               onClick={() => (window.location = ROUTES.PENGAJUAN_TKP_FORM())}
               className={classes.submitForm}
-                                disabled={
+              disabled={
                 typeAuth === "supervisor"
                   ? false
                   : nama_supervisor === "" || nik_supervisor !== matchesNIK || nama_supervisor !== matchesNama
 
-         
+
               }
             >
-              <strong>SUBMIT</strong>
+              <strong>Langkah Selanjutnya</strong>
             </Button>
           </Container>
           <Container maxWidth="lg" className={classes.container}></Container>
