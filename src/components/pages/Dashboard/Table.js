@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import fileDownload from "js-file-download";
 import axios from "axios";
 import { ROUTES, API } from "../../../configs";
+import moment from "moment";
 
 export default class TableDashboard extends React.Component {
   constructor(props) {
@@ -305,8 +306,14 @@ export default class TableDashboard extends React.Component {
         title: "Onboard",
         dataIndex: "tanggalOnboard",
         key: "tanggalOnboard",
-        sorter: (a, b) => a.tanggalOnboard.localeCompare(b.tanggalOnboard),
-        ...this.getColumnSearchProps("tanggalOnboard"),
+        sorter: (a, b) => {
+          const aa = new Date(a.tanggalOnboard);
+          const bb = new Date(b.tanggalOnboard);
+          return aa - bb;
+        },
+        render : (text) => {
+          return text ? moment(text).format("DD MMMM YYYY") : "-";
+        }
       },
       {
         // width: "5%",

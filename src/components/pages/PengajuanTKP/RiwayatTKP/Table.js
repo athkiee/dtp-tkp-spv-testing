@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import CircleIcon from "@mui/icons-material/Circle";
 import PropTypes from "prop-types";
 import fileDownload from "js-file-download";
+import moment from "moment";
 
 export default class TableRiwayat extends React.Component {
   constructor(props) {
@@ -20,7 +21,7 @@ export default class TableRiwayat extends React.Component {
       searchText: "",
       searchedColumn: "",
       dataRiwayat: [],
-    };
+      pageSize: 10 };
   }
 
   async componentDidMount() {
@@ -49,6 +50,7 @@ export default class TableRiwayat extends React.Component {
         this.setState({
           dataRiwayat: riwayat,
         });
+        console.log(this.state.dataRiwayat);
       });
   }
 
@@ -281,7 +283,10 @@ export default class TableRiwayat extends React.Component {
       {
         title: "No",
         key: "index",
-        render: (text, name, index) => index + 1,
+        render: ( text, name, index ) => {
+          return index + 1;
+        },
+        
       },
       {
         title: "Nama TKP",
@@ -322,7 +327,7 @@ export default class TableRiwayat extends React.Component {
             return (
               <Typography
                 style={{
-                  color: "rgba(129, 199, 114, 1)",
+                  color: "rgba(129, 199, 114, 1)", fontSize: "14px"
                 }}
               >
                 <CircleIcon style={{ fontSize: "10px" }} /> {text}
@@ -332,7 +337,7 @@ export default class TableRiwayat extends React.Component {
             return (
               <Typography
                 style={{
-                  color: "rgba(238, 46, 36, 1)",
+                  color: "rgba(238, 46, 36, 1)", fontSize: "14px"
                 }}
               >
                 <CircleIcon style={{ fontSize: "10px" }} /> {text}
@@ -342,7 +347,7 @@ export default class TableRiwayat extends React.Component {
             return (
               <Typography
                 variant="span"
-                style={{ color: "rgba(173, 173, 173, 1)" }}
+                style={{ color: "rgba(173, 173, 173, 1)",fontSize: "14px" }}
               >
                 <CircleIcon style={{ fontSize: "10px" }} /> {text}
               </Typography>
@@ -362,8 +367,14 @@ export default class TableRiwayat extends React.Component {
         title: "Onboard",
         dataIndex: "onboard",
         key: "onboard",
-        ...this.getColumnSearchProps("onboard"),
-        sorter: (a, b) => a.onboard.localeCompare(b.onboard),
+        sorter: (a, b) => {
+          const aa = new Date(a.onboard);
+          const bb = new Date(b.onboard);
+          return aa - bb;
+        },
+        render: (text) => {
+          return text ? moment(text).format("DD MMMM YYYY") : "-";
+        }
       },
       {
         title: "Perubahan Status Terakhir",
