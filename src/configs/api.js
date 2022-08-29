@@ -30,6 +30,7 @@ export default {
   getCSVTKPUnderSPV: baseUrl + "tkp/export-csv/tkp-under-spv/",
   dataspv: baseUrl + 'spv/',
   checkToken: baseUrl + 'token/verify-token-spv',
+  readallnotif: baseUrl + 'notifikasi_spv/',
   getFormulir: baseUrl + 'formulir/'
 };
 
