@@ -5,7 +5,7 @@ import DalamProsesPengajuanTKP from "./PengajuanTKP/DalamProses/";
 import DetailTKP from "./DetailTKP";
 import RiwayatTKP from "./PengajuanTKP/RiwayatTKP/";
 import EvaluasiTKP from "./EvaluasiTKP";
-
+import PenilaianTKP from "./EvaluasiTKP/Penilaian";
 
 const pages = {
     LandingPage,
@@ -14,7 +14,8 @@ const pages = {
     DalamProsesPengajuanTKP,
     DetailTKP,
     RiwayatTKP,
-    EvaluasiTKP
+    EvaluasiTKP,
+    PenilaianTKP,
 }
 
 export default pages;

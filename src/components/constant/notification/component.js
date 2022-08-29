@@ -67,7 +67,6 @@ export default class NotificationPopover extends React.Component {
                     data: data,
 
                 });
-                console.log("testingnotif", response);
             });
         console.log(localStorage);
 

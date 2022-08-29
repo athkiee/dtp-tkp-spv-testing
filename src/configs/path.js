@@ -20,6 +20,7 @@ function Path() {
       <Route path={ROUTES.PENGAJUAN_TKP_DALAM_PROSES()} component={pages.DalamProsesPengajuanTKP} />
       <Route path={ROUTES.PENGAJUAN_TKP_RIWAYAT()} component={pages.RiwayatTKP} />
       <Route path={ROUTES.DETAIL_TKP()} component={pages.DetailTKP} />
+      <Route path={ROUTES.PENILAIAN_TKP()} component={pages.PenilaianTKP} />
     </Router>
   );
 }
