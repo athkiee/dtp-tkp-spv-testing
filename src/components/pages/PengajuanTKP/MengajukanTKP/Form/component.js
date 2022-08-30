@@ -709,33 +709,29 @@ class FormPengajuanTKP extends React.Component {
                     },
                   })
                   .then((response) => {
+                    console.log(response,"test");
                     if (response.status === 200) {
-                      axios
-                        .post(API.registerFileTkp, "lol", {
-                          headers: {
-                            "Content-Type":
-                              "multipart/form-data; boundary=--------------------------somestring123abcdefg",
-                            Authorization: `Bearer ${token}`,
-                          },
-                        })
-                        .then((res) => {
-                          if (res.status == 200) {
-                            Modal.success({
-                              content: "Pengajuan TKP Anda telah berhasil",
-                              onOk() {},
-                            });
-                            this.sendNotif();
-                            console.log("OK!", values);
-                            sessionStorage.removeItem("nama_spv");
-                            sessionStorage.removeItem("nik_spv");
-                          } else {
-                            const error = res.data.error;
-                            Modal.error({
-                              content: error,
-                              onOk() {},
-                            });
-                          }
-                        });
+                      Modal.success({
+                        content: "Pengajuan TKP Anda telah berhasil",
+                        onOk() { },
+                      });
+                      this.sendNotif();
+                      console.log("OK!", values);
+                      sessionStorage.removeItem("nama_spv");
+                      sessionStorage.removeItem("nik_spv");
+                    } else if (response.status === 409) {
+                      Modal.success({
+                        content: "email terdaftar",
+                        onOk() { },
+                      });
+                    }
+                  })
+                  .catch((error) => {
+                    if (error.response.status === 409) {
+                      Modal.success({
+                        content: "email terdaftar",
+                        onOk() { },
+                      });
                     }
                   });
                 setSubmitting(false);

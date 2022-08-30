@@ -102,9 +102,10 @@ export default class NotificationPopover extends React.Component {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => {
-                console.log("testreadall", response);
                 this.handleClose();
-                window.location.reload();
+                this.setState({
+                    data: [],
+                });
             });
     }
     handleread = (key) => {

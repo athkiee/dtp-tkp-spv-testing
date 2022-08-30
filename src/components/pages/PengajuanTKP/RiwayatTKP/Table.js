@@ -21,7 +21,8 @@ export default class TableRiwayat extends React.Component {
       searchText: "",
       searchedColumn: "",
       dataRiwayat: [],
-      pageSize: 10 };
+      pageSize: 10,
+    };
   }
 
   async componentDidMount() {
@@ -156,12 +157,16 @@ export default class TableRiwayat extends React.Component {
 
   _getDataTkp = async (key) => {
     const token = localStorage.getItem("token");
-    console.log('haha', key);
+    console.log("haha", key);
     const dataTkp = await axios
-      .get(`http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` + key, {
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: "blob",
-      })
+      .get(
+        `http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` +
+          key,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        }
+      )
       .then((response) => response)
       .catch((error) => console.error(error));
 
@@ -177,10 +182,10 @@ export default class TableRiwayat extends React.Component {
     const { dataRiwayat } = this.state;
     const sourceData =
       filterStat !== ""
-        ? dataRiwayat.filter((obj) => obj.status === filterStat).splice( 0, perPage )
+        ? dataRiwayat
+            .filter((obj) => obj.status === filterStat)
+            .splice(0, perPage)
         : dataRiwayat;
-  
-      
 
     const columns = [
       {
@@ -279,14 +284,19 @@ export default class TableRiwayat extends React.Component {
       },
     ];
 
+    const showFormattedDate = (date) => {
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(date).toLocaleDateString("id-ID", options);
+    };
     const columnSekbid = [
       {
         title: "No",
         key: "index",
-        render: ( text, name, index ) => {
-          return index + 1;
-        },
-        
+        render: (text, current, index) => index + 1,
       },
       {
         title: "Nama TKP",
@@ -295,6 +305,9 @@ export default class TableRiwayat extends React.Component {
         className: "clientName" ? "show" : "hide",
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
+        render: (text) => {
+          return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
+        },
       },
       {
         title: "Supervisor/PIC",
@@ -302,13 +315,18 @@ export default class TableRiwayat extends React.Component {
         key: "supervisor",
         sorter: (a, b) => a.supervisor.localeCompare(b.supervisor),
         ...this.getColumnSearchProps("supervisor"),
+        render: (text) => {
+          return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
+        },
       },
       {
         title: "NIK SPV",
         dataIndex: "nik_spv",
         key: "nik_spv",
         ...this.getColumnSearchProps("nik_spv"),
-        sorter: (a, b) => a.nik_spv.localeCompare(b.nik_spv),
+        render: (text) => {
+          return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
+        },
       },
       {
         title: "Loker",
@@ -316,6 +334,9 @@ export default class TableRiwayat extends React.Component {
         key: "loker",
         ...this.getColumnSearchProps("loker"),
         sorter: (a, b) => a.loker.localeCompare(b.loker),
+        render: (text) => {
+          return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
+        },
       },
       {
         title: "Status",
@@ -327,7 +348,8 @@ export default class TableRiwayat extends React.Component {
             return (
               <Typography
                 style={{
-                  color: "rgba(129, 199, 114, 1)", fontSize: "14px"
+                  color: "rgba(129, 199, 114, 1)",
+                  fontSize: "14px",
                 }}
               >
                 <CircleIcon style={{ fontSize: "10px" }} /> {text}
@@ -337,7 +359,8 @@ export default class TableRiwayat extends React.Component {
             return (
               <Typography
                 style={{
-                  color: "rgba(238, 46, 36, 1)", fontSize: "14px"
+                  color: "rgba(238, 46, 36, 1)",
+                  fontSize: "14px",
                 }}
               >
                 <CircleIcon style={{ fontSize: "10px" }} /> {text}
@@ -346,8 +369,7 @@ export default class TableRiwayat extends React.Component {
           } else {
             return (
               <Typography
-                variant="span"
-                style={{ color: "rgba(173, 173, 173, 1)",fontSize: "14px" }}
+                style={{ color: "rgba(173, 173, 173, 1)", fontSize: "14px" }}
               >
                 <CircleIcon style={{ fontSize: "10px" }} /> {text}
               </Typography>
@@ -362,6 +384,9 @@ export default class TableRiwayat extends React.Component {
         key: "jobTitle",
         ...this.getColumnSearchProps("jobTitle"),
         sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
+        render: (text) => {
+          return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
+        },
       },
       {
         title: "Onboard",
@@ -373,8 +398,14 @@ export default class TableRiwayat extends React.Component {
           return aa - bb;
         },
         render: (text) => {
-          return text ? moment(text).format("DD MMMM YYYY") : "-";
-        }
+          return text ? (
+            <Typography style={{ fontSize: "14px" }}>
+              {showFormattedDate(text)}
+            </Typography>
+          ) : (
+            "-"
+          );
+        },
       },
       {
         title: "Perubahan Status Terakhir",
@@ -419,7 +450,9 @@ export default class TableRiwayat extends React.Component {
         dataSource={sourceData}
         pagination={{ pageSize: perPage }}
         scroll={{ x: "max-content" }}
-        footer={() => ("menampilkan 1-" +perPage+ " dari " +sourceData.length+ " data")}
+        footer={() =>
+          "menampilkan 1-" + perPage + " dari " + sourceData.length + " data"
+        }
       />
     );
   }

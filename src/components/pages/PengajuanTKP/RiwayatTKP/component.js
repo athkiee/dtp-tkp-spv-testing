@@ -26,6 +26,7 @@ const { Option } = Select;
 const styles = (theme) => ({
   root: {
     display: "flex",
+    fontFamily: "Roboto",
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
