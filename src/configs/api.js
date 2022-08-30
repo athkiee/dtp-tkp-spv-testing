@@ -31,5 +31,6 @@ export default {
   dataspv: baseUrl + 'spv/',
   checkToken: baseUrl + 'token/verify-token-spv',
   readallnotif: baseUrl + 'notifikasi_spv/',
+  getFormulir: baseUrl + 'formulir/'
 };
 

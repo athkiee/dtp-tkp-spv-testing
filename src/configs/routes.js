@@ -31,7 +31,10 @@ const routes = {
   },
   RIWAYAT_TKP() {
     return `/riwayat-tkp/`;
-  }
+  },
+  PENILAIAN_TKP() {
+    return `/penilaian-tkp`;
+  },
 };
 
 export default routes;

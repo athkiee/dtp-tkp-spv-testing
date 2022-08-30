@@ -64,11 +64,13 @@ export default function DragAndDrop(props) {
     isDragAccept,
     isDragReject
   ]);
+  console.log('yeyeye', file);
 
   return (
     <div {...getRootProps({ style: {
       ...style,
-      ...(hintError && rejectStyle)} })}>
+      ...(hintError && rejectStyle),
+      ...(hintError === undefined && activeStyle)} })}>
       <input {...getInputProps()} />
       <div><b>{file ? file.name : `+ Tambahkan file ${uploadType} anda disini`}</b></div>
     </div>

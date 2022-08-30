@@ -20,22 +20,11 @@ import ModalConfirmation from "../../../ModalConfirmation";
 import ModalSuccess from "../../../ModalSuccess";
 import ModalLoading from "../../../ModalLoading";
 
-const drawerWidth = 240;
 const { Option } = Select;
 
 const styles = (theme) => ({
   root: {
     display: "flex",
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
   },
   filterJumlahdata: {
     display: "block",
@@ -51,48 +40,10 @@ const styles = (theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: "none",
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
   navLogo: {
     width: 294,
     height: 152,
   },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
   content: {
     width: "100%",
     flexGrow: 1,
@@ -110,18 +61,6 @@ const styles = (theme) => ({
     backgroundColor: "white",
     borderRadius: 10,
     maxWidth: "95.3%",
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-  fixedHeight: {
-    height: 240,
-  },
-  nested: {
-    paddingLeft: theme.spacing(4),
   },
 });
 class DalamProsesPengajuanTKP extends React.Component {
@@ -152,7 +91,6 @@ class DalamProsesPengajuanTKP extends React.Component {
     const nikSpv = localStorage.getItem("nik");
     const token = localStorage.getItem("token");
     const nama = localStorage.getItem("nama");
-    console.log(token);
 
     const buttonPin = (
       <Menu>

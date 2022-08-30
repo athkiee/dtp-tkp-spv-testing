@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import CircleIcon from "@mui/icons-material/Circle";
 import { ROUTES, API } from "../../../../configs";
 import moment from "moment";
+import fileDownload from "js-file-download";
 
 export default class TableDalamProses extends React.Component {
   constructor(props) {
@@ -55,7 +56,6 @@ export default class TableDalamProses extends React.Component {
         this.setState({
           dataTKP: tkp,
         });
-        console.log("asdasd", response);
       });
   }
 
@@ -160,6 +160,106 @@ export default class TableDalamProses extends React.Component {
     sessionStorage.setItem("previousPath", window.location.pathname);
   };
 
+  _getDataTkp = async (value) => {
+    const token = localStorage.getItem("token");
+    const dataTkp = await axios
+      .get(`http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` + value.key, {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: "blob",
+      })
+      .then((response) => response)
+      .catch((error) => console.error(error));
+
+    const { status, data } = dataTkp;
+    if (status === 200) {
+      fileDownload(data, `${value.name}.zip`);
+    }
+  };
+
+  _renderStatus = (text) => {
+    if (text === "Diterima") {
+      return (
+        <Typography
+          style={{
+            color: "rgba(129, 199, 114, 1)",
+            fontSize: "14px"
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    } else if (text === "Ditolak") {
+      return (
+        <Typography
+          style={{
+            color: "rgba(238, 46, 36, 1)",
+            fontSize: "14px"
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    } else if (text === "Kontrak Tidak Diperpanjang") {
+      return (
+        <Typography
+          style={{
+            color: "#36ADFD",
+            fontSize: "14px",
+            width: 220
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    } else if (text === "Menunggu Konfirmasi") {
+      return (
+        <Typography
+          style={{
+            color: "#F1B44C",
+            fontSize: "14px"
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    } else if (text === "Perubahan Job Title") {
+      return (
+        <Typography
+          style={{
+            color: "#FF8E26",
+            fontSize: "14px"
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    }
+    else if (text === "Wawancara") {
+      return (
+        <Typography
+          style={{
+            color: "#FF787B",
+            fontSize: "14px"
+          }}
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    }
+    else {
+      return (
+        <Typography
+          variant="span"
+          style={{ color: "rgba(173, 173, 173, 1)",
+          fontSize: "14px" }}
+          
+        >
+          <CircleIcon style={{ fontSize: "14px" }} /> {text}
+        </Typography>
+      );
+    }
+  }
+
   render() {
     const { pagination } = this.state;
     const { perPage } = this.props;
@@ -197,49 +297,18 @@ export default class TableDalamProses extends React.Component {
         key: "status",
         sorter: (a, b) => a.status.localeCompare(b.status),
         ...this.getColumnSearchProps("status"),
-        render: (text) => {
-          if (text === "Diterima") {
-            return (
-              <Typography
-                style={{
-                  color: "rgba(129, 199, 114, 1)",
-                }}
-              >
-                <CircleIcon style={{ fontSize: "10px" }} /> {text}
-              </Typography>
-            );
-          } else if (text === "Ditolak") {
-            return (
-              <Typography
-                style={{
-                  color: "rgba(238, 46, 36, 1)",
-                }}
-              >
-                <CircleIcon style={{ fontSize: "10px" }} /> {text}
-              </Typography>
-            );
-          } else {
-            return (
-              <Typography
-                variant="span"
-                style={{ color: "rgba(173, 173, 173, 1)" }}
-              >
-                <CircleIcon style={{ fontSize: "10px" }} /> {text}
-              </Typography>
-            );
-          }
-        },
+        render: (text) => this._renderStatus(text)
       },
       {
         width: 125,
         title: "Aksi",
-        dataIndex: "key",
+        dataIndex: ['name', 'key'],
         fixed: "right",
-        render: (key) => (
+        render: (text, id) => (
           <div>
             <Tooltip placement="bottom" title={"Lihat Detail"}>
               <span
-                onClick={this._handleOpenDetail.bind(this, key)}
+                onClick={this._handleOpenDetail.bind(this, id.key)}
                 style={{ marginRight: 15, cursor: "pointer" }}
               >
                 <EyeTwoTone />
@@ -248,11 +317,7 @@ export default class TableDalamProses extends React.Component {
             <Tooltip placement="bottom" title={"Unduh Data"}>
               <span>
                 <DownloadOutlined
-                  onClick={() =>
-                    window.open(
-                      "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/216"
-                    )
-                  }
+                  onClick={this._getDataTkp.bind(this, id)}
                   style={{ color: "#00FF00" }}
                 />
               </span>
@@ -374,7 +439,7 @@ export default class TableDalamProses extends React.Component {
         dataSource={this.state.dataTKP}
         pagination={{ pageSize: perPage }}
         scroll={{ x:"max-content" }}
-        footer={() => ("menampilkan 1-" + perPage + " dari " + this.state.dataTKP.length + " data")}
+        footer={() => ("Menampilkan 1-" + perPage + " dari " + this.state.dataTKP.length + " data")}
       
       />
     );

@@ -9,7 +9,7 @@ import {
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import React from "react";
 
-export default function ModalSuccess({ open, handleClose }) {
+export default function ModalSuccess({ open, handleClose, label }) {
   return (
     <Modal
       open={open}
@@ -72,7 +72,7 @@ export default function ModalSuccess({ open, handleClose }) {
                 fontFamily: "Montserrat",
               }}
             >
-              Ekspor Data Berhasil
+              {label || 'Ekspor Data Berhasil'}
             </Typography>
           </Grid>
           <Grid
@@ -95,7 +95,7 @@ export default function ModalSuccess({ open, handleClose }) {
                 fontFamily: "Roboto",
               }}
             >
-              Ok
+              Oke
             </Button>
           </Grid>
         </Grid>

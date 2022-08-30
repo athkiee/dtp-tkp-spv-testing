@@ -9,15 +9,15 @@ import axios from "axios";
 import { get } from "lodash";
 import PDFViewer from "pdf-viewer-reactjs";
 import { Collapse } from "antd";
-import { CaretRightOutlined } from "@ant-design/icons";
+import { CaretRightOutlined, UploadOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import { Avatar, Breadcrumb } from "antd";
 import { API, ROUTES } from "../../../configs";
 import moment from "moment";
+import ModalSuccess from "../../ModalSuccess";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
-const drawerWidth = 240;
 
 const previousPath = sessionStorage.getItem("previousPath");
 
@@ -26,17 +26,9 @@ const styles = (theme) => ({
     display: "flex",
     ".ant-modal-content": {
       width: 760,
+      height: 296,
+      borderRadius: 10,
     },
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
   },
   downloadForm: {
     color: "#DA1E20",
@@ -48,14 +40,6 @@ const styles = (theme) => ({
       backgroundColor: "#DA1E20",
       borderColor: "#DA1E20",
     },
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: "#E5E5E5",
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
   },
   modal: {
     display: "flex",
@@ -76,17 +60,16 @@ const styles = (theme) => ({
     cursor: "pointer",
   },
   buttonSimpan: {
-    width: 216,
-    height: 56,
+    width: 140,
+    height: 43,
     marginTop: 10,
-    borderRadius: 15,
+    borderRadius: 5,
     background: "#D51100",
     outline: "none",
     border: "none",
     color: "#fff",
     fontWeight: 700,
-    fontSize: 24,
-    justifyContent: "right",
+    fontSize: 14,
     cursor: "pointer",
   },
   buttonOke: {
@@ -108,45 +91,21 @@ const styles = (theme) => ({
       paddingLeft: 16,
       marginBottom: 15,
     },
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: "none",
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9),
+    "& .descLihat": {
+      paddingLeft: 16,
+      marginBottom: 15,
+      color: "#DA1E20",
+    },
+    "& .unggahskck": {
+      marginLeft: 16,
+      background: "#FFFFFF",
+      border: "1px solid #E22529",
+      borderRadius: "5px",
+      color: "#D51100",
+      padding: "8px",
+      cursor: "pointer",
     },
   },
-  appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     height: "100vh",
@@ -163,15 +122,6 @@ const styles = (theme) => ({
     backgroundColor: "white",
     borderRadius: 10,
   },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-  fixedHeight: {
-    height: 240,
-  },
   modalPreview: {
     width: "760px !important",
   },
@@ -180,7 +130,7 @@ const styles = (theme) => ({
   },
   noteModal: {
     marginTop: "20px",
-    fontSize: "10px",
+    fontSize: "14px",
     lineHeight: "12px",
     fontFamily: "Roboto",
     color: "#a0a0a0",
@@ -191,6 +141,13 @@ const styles = (theme) => ({
   headPanel2: {
     marginLeft: 50,
     padding: 10,
+  },
+  negativeCase: {
+    color: "#EE2E24",
+    marginTop: "20px",
+    fontSize: "14px",
+    lineHeight: "12px",
+    fontFamily: "Roboto",
   },
 });
 
@@ -204,9 +161,12 @@ class DetailTKP extends React.Component {
       modalPreview: null,
       modalInputSkck: null,
       modalPhoto: null,
+      modalSuccess: false,
       preview: "",
       editData: false,
       dataRiwayat: [],
+      error_skck: "",
+      file_skck: "",
     };
   }
 
@@ -305,41 +265,53 @@ class DetailTKP extends React.Component {
   };
 
   _handleFilesFromDrag = (name, file) => {
-    this.setState({ [name]: file });
+    this.setState({ [name]: file, error_skck: undefined });
   };
 
   _handleSubmit = () => {
+    const { file_skck } = this.state;
     let id_tkp = localStorage.getItem("detail_id");
     let token = localStorage.getItem("token");
-    var payload = new FormData();
-    payload.append("id_tkp", id_tkp);
-    payload.append("file_skck", this.state.file_skck);
-    axios
-      .put(
-        "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/documents/upload-skck",
-        payload,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then(
-        (res) => {
-          this._renderModalInfo();
-        },
-        (err) => {
-          console.log("Error : ", err);
-        }
-      );
+    if (file_skck === "") {
+      this.setState({
+        error_skck: "errorEmpty",
+      });
+    }
+    if (file_skck.size > 2000000) {
+      this.setState({
+        error_skck: "errorSize",
+      });
+    } else {
+      var payload = new FormData();
+      payload.append("id_tkp", id_tkp);
+      payload.append("file_skck", file_skck);
+      axios
+        .put(
+          "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/documents/upload-skck",
+          payload,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          this.setState({
+            modalInputSkck: false,
+            modalSuccess: true
+          });
+        });
+    }
   };
 
   _renderModalUpload = () => {
-    const { modalInputSkck, modalTitle, handleBlur } = this.state;
+    const { modalInputSkck, modalTitle, handleBlur, error_skck, file_skck } = this.state;
     const { classes } = this.props;
+    console.log('test', this.state.file_skck);
     return (
       <div>
         <Modal
           visible={modalInputSkck}
           onCancel={this._handleCloseModal}
+          onClose={this._handleCloseModal}
           footer={null}
           className={classes.modalPreview}
         >
@@ -360,12 +332,14 @@ class DetailTKP extends React.Component {
               uploadType="SKCK"
               onChange={this._handleFilesFromDrag.bind(this, "file_skck")}
               onBlur={handleBlur}
-              value={this.state.file_skck}
-              name={"file_skck"}
+              hintError={error_skck}
+              value={file_skck}
             />
           </div>
-          <p className={classes.noteModal}>
-            Format file berupa PDF dengan maksimal ukuran 2 MB
+          <p className={error_skck ? classes.negativeCase : classes.noteModal}>
+            {error_skck === "errorSize"
+              ? "Ukuran file melebihi 2MB"
+              : "Format file berupa PDF dengan maksimal ukuran 2MB"}
           </p>
           <button
             className={classes.buttonSimpan}
@@ -376,16 +350,6 @@ class DetailTKP extends React.Component {
         </Modal>
       </div>
     );
-  };
-
-  _renderModalInfo = () => {
-    Modal.success({
-      content: "Unggah SKCK Berhasil",
-      onOk() {
-        window.location.reload();
-      },
-    });
-    this._handleCloseModal();
   };
 
   _renderDokumenPenunjang = () => {
@@ -572,11 +536,12 @@ class DetailTKP extends React.Component {
       modalPhoto: false,
       modalInputSkck: false,
       preview: "",
+      file_skck: "",
+      error_skck: ""
     });
   };
 
   _renderPanelHeader = (value) => {
-    console.log("panel", value);
     const { classes } = this.props;
     const coba = moment(value.tanggal_perubahan).format("MMMM YYYY");
     return (
@@ -601,7 +566,6 @@ class DetailTKP extends React.Component {
   render() {
     const { classes } = this.props;
     const { dataDetail } = this.state;
-    console.log("mana", dataDetail);
     let { dataRiwayat } = this.state;
     const startOnboard = moment(get(dataDetail, "tanggal_onboard")).format(
       "MMMM YYYY"
@@ -611,8 +575,6 @@ class DetailTKP extends React.Component {
       "Invalid date"
         ? moment(get(dataDetail, "tanggal_lahir")).format("DD MMMM YYYY")
         : "-";
-
-        console.log(previousPath);
 
     const listTab1 = [
       {
@@ -871,12 +833,13 @@ class DetailTKP extends React.Component {
                           color: "#DA1E20",
                           fontWeight: "bold",
                           marginTop: 15,
+                          width: 200,
                         }}
                       >
                         {namaTkp}
                       </h2>
-                      <p style={{ maxWidth: 150, minWidth: 150, width: 150 }}>
-                        {dataDetail && dataDetail.t_bidang.kode_bidang} /{" "}
+                      <p style={{ maxWidth: 200, minWidth: 200, width: 200 }}>
+                        {dataDetail && dataDetail.t_bidang.kode_bidang} / {" "}
                         {dataDetail &&
                           dataDetail.t_job_title_levelling
                             .nama_job_title_levelling}
@@ -1008,20 +971,37 @@ class DetailTKP extends React.Component {
                         <p>:</p>
                       </Grid>
                       <Grid item xs={6}>
-                        <a
-                          className="desc"
-                          onClick={
-                            item.title === "Foto/Scan KTP"
-                              ? this._handleDokumenFoto.bind(this, item)
-                              : this._handleDokumenPenunjang.bind(this, item)
-                          }
-                        >
-                          Lihat
-                        </a>
+                        {item.title === "SKCK" && item.desc === "" ? (
+                          <button
+                            className="unggahskck"
+                            onClick={this._handleDokumenPenunjang.bind(
+                              this,
+                              item
+                            )}
+                          >
+                            <UploadOutlined /> Unggah SKCK
+                          </button>
+                        ) : (
+                          <a
+                            className="descLihat"
+                            onClick={
+                              item.title === "Foto/Scan KTP"
+                                ? this._handleDokumenFoto.bind(this, item)
+                                : this._handleDokumenPenunjang.bind(this, item)
+                            }
+                          >
+                            Lihat
+                          </a>
+                        )}
                       </Grid>
                     </Grid>
                   ))}
                 </div>
+                <ModalSuccess
+                  open={this.state.modalSuccess}
+                  label="Unggah Dokumen SKCK Berhasil"
+                  handleClose={() => window.location.reload()}
+                />
                 {this._renderModalUpload()}
                 {this._renderDokumenFoto()}
                 {this._renderDokumenPenunjang()}
