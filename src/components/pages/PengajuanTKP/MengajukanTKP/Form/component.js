@@ -10,6 +10,10 @@ import { Formik } from "formik";
 import moment from "moment";
 import { ROUTES, API } from "../../../../../configs";
 import Button from "@material-ui/core/Button";
+import ModalSuccess from "../../../../ModalSuccess";
+import ModalConfirmation from "../../../../ModalConfirmation";
+import ModalFailed from "../../../../element/ModalFailed";
+import * as Yup from "yup";
 
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
@@ -42,7 +46,7 @@ const styles = (theme) => ({
     marginLeft: 35,
     backgroundColor: "white",
     borderRadius: 10,
-    padding: 20
+    padding: 20,
   },
   menuButton: {
     marginRight: 36,
@@ -57,9 +61,9 @@ const styles = (theme) => ({
     color: "#EE2E24",
   },
   inputForm: {
-    '&.ant-select:not(.ant-select-customize-input) .ant-select-selector': {
+    "&.ant-select:not(.ant-select-customize-input) .ant-select-selector": {
       borderRadius: 5,
-      height: 40
+      height: 40,
     },
     display: "block",
     borderRadius: 5,
@@ -133,13 +137,16 @@ class FormPengajuanTKP extends React.Component {
       id_paket: "1",
       id_status_tkp: "1",
       status_tkp: "Menunggu Konfirmasi",
+      failedModal: false,
+      successModal: false,
+      failedDataAvail: false,
+      confirmModal: false,
+      errorData: "",
+      errorEmail: false,
+      errorNIK: false,
+      errorNoHP: false,
     };
   }
-
- 
-
-
-  
 
   componentDidMount() {
     axios
@@ -296,6 +303,71 @@ class FormPengajuanTKP extends React.Component {
     });
   };
 
+  _modalConfirmationActive = () => {
+    this.setState({ confirmModal: true });
+  };
+
+  _modalSuccesActive = (formData) => {
+    Object.keys(formData).length !== 0
+      ? this.setState({ confirmModal: true })
+      : this.setState({ confirmModal: false });
+  };
+  _renderModalConfirmation = (errors, handleSubmit) => {
+    return (
+      <ModalConfirmation
+        open={this.state.confirmModal && errors}
+        title="Konfirmasi Pengajuan TKP"
+        handleClose={() => this.setState({ confirmModal: false })}
+        getData={() =>
+          handleSubmit && this.state.confirmModal && handleSubmit()
+        }
+      />
+    );
+  };
+
+  _renderModalGagal = (errorData) => {
+    <ModalFailed
+      open={errorData.length !== 0}
+      title="Konfirmasi Pengajuan TKP"
+      handleClose={() => this.setState({ confirmModal: false })}
+    />
+  }
+  _handleSubmit = (formData) => {
+    const { errorEmail, errorNIK, errorNoHP } = this.state;
+
+    axios
+      .post(API.registerTkp, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          Modal.success({
+            content: "Pengajuan TKP Anda telah berhasil",
+            onOk() {},
+          });
+          this.sendNotif();
+          sessionStorage.removeItem("nama_spv");
+          sessionStorage.removeItem("nik_spv");
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 409) {
+          const dataError = error.response.data.message;
+
+          if (dataError === "NIK TKP sudah terdaftar") {
+            this.setState({ errorNIK: true });
+          }
+          if (dataError === "Email sudah terdaftar") {
+            this.setState({ errorEmail: true });
+          }
+          if (dataError === "No. Handphone sudah terdaftar") {
+            this.setState({ errorNoHP: true });
+          }
+        }
+        console.log(errorEmail, errorNIK, errorNoHP, "error");
+      });
+  };
+
   sendNotif = () => {
     const nik_spv = localStorage.getItem("nik");
     const data = {
@@ -319,6 +391,7 @@ class FormPengajuanTKP extends React.Component {
 
   render() {
     const typeAuth = localStorage.getItem("typeAuth");
+
     const { classes } = this.props;
     const {
       nik_spv,
@@ -359,6 +432,14 @@ class FormPengajuanTKP extends React.Component {
       datajobRole,
       dataExperience,
       dataPendidikan,
+      failedModal,
+      successModal,
+      failedDataAvail,
+      errorEmail,
+      errorNIK,
+      errorNoHP,
+      confirmModal,
+      errorData,
     } = this.state;
 
     const body = {
@@ -552,26 +633,29 @@ class FormPengajuanTKP extends React.Component {
                 }
                 if (!values.cv) {
                   errors.cv = "CV tidak boleh kosong";
-                  
-                } else if(values.cv.size > 2000000){
+                } else if (values.cv.size > 2000000) {
                   errors.cv = "Ukuran file melebihi 2MB";
-                } else if(values.cv.type !== 'application/pdf'){
+                } else if (values.cv.type !== "application/pdf") {
                   errors.cv = "CV harus berupa file PDF";
                 }
                 if (!values.foto_scanktp) {
                   errors.foto_scanktp = "Scan KTP tidak boleh kosong";
                 } else if (values.foto_scanktp.size > 2000000) {
                   errors.foto_scanktp = "Ukuran file melebihi 2MB";
-                } else if (values.foto_scanktp.type !== 'image/jpeg' && values.foto_scanktp.type !== 'image/png' && values.foto_scanktp.type !== 'image/jpg') {
+                } else if (
+                  values.foto_scanktp.type !== "image/jpeg" &&
+                  values.foto_scanktp.type !== "image/png" &&
+                  values.foto_scanktp.type !== "image/jpg"
+                ) {
                   errors.foto_scanktp = "Scan KTP harus berupa file gambar";
                 }
-                if(values.file_skck.size > 2000000){
+                if (values.file_skck.size > 2000000) {
                   errors.file_skck = "Scan SKCK tidak boleh lebih dari 2MB";
-                  if (values.file_skck.type !== 'aplication/pdf') {
+                  if (values.file_skck.type !== "aplication/pdf") {
                     errors.file_skck = "Scan SKCK harus berupa file PDF";
                   }
                 }
-                
+
                 if (!values.email) {
                   errors.email = "Email Aktif tidak boleh kosong";
                 } else if (
@@ -597,7 +681,7 @@ class FormPengajuanTKP extends React.Component {
                 ) {
                   errors.akun_trello = "Akun Trello/Jira tidak valid";
                 }
-                console.log('asd', errors.cv);
+
                 return errors;
               }}
               onSubmit={async (values, { setSubmitting }) => {
@@ -659,46 +743,11 @@ class FormPengajuanTKP extends React.Component {
                 formData.append("foto_scanktp", this.state.foto_scanktp);
                 formData.append("file_skck", this.state.file_skck);
 
-                // Display the key/value pairs
+                //Display the key/value pairs
                 for (var pair of formData.entries()) {
                   console.log(pair[0] + ", " + pair[1]);
                 }
-
-                await axios
-                  .post(API.registerTkp, formData, {
-                    headers: {
-                      "Content-Type":
-                        "multipart/form-data; boundary=--------------------------somestring123abcdefg",
-                      Authorization: `Bearer ${token}`,
-                    },
-                  })
-                  .then((response) => {
-                    console.log(response,"test");
-                    if (response.status === 200) {
-                      Modal.success({
-                        content: "Pengajuan TKP Anda telah berhasil",
-                        onOk() { },
-                      });
-                      this.sendNotif();
-                      console.log("OK!", values);
-                      sessionStorage.removeItem("nama_spv");
-                      sessionStorage.removeItem("nik_spv");
-                    } else if (response.status === 409) {
-                      Modal.success({
-                        content: "email terdaftar",
-                        onOk() { },
-                      });
-                    }
-                  })
-                  .catch((error) => {
-                    if (error.response.status === 409) {
-                      Modal.success({
-                        content: "email terdaftar",
-                        onOk() { },
-                      });
-                    }
-                  });
-                setSubmitting(false);
+                this._handleSubmit(formData);
               }}
             >
               {({
@@ -799,7 +848,9 @@ class FormPengajuanTKP extends React.Component {
                           value={values.no_ktp}
                         />
                         <p className={classes.negativeCase}>
-                          {errors.no_ktp && touched.no_ktp && errors.no_ktp}
+                          {errorNIK === true
+                            ? "NIK sudah terdaftar"
+                            : errors.no_ktp && touched.no_ktp && errors.no_ktp}
                         </p>
                       </div>
                     </Grid>
@@ -947,7 +998,10 @@ class FormPengajuanTKP extends React.Component {
                       value={values.email}
                     />
                     <p className={classes.negativeCase}>
-                      {errors.email && touched.email && errors.email}
+                      {errorEmail === true
+                        ? "Email sudah terdaftar"
+                        : errors.email && touched.email && errors.email}
+                      {console.log(errorData)}
                     </p>
                   </div>
                   <div style={{ margin: 20 }}>
@@ -965,7 +1019,9 @@ class FormPengajuanTKP extends React.Component {
                       value={values.no_hp}
                     />
                     <p className={classes.negativeCase}>
-                      {errors.no_hp && touched.no_hp && errors.no_hp}
+                      {errorNoHP === true
+                        ? "No Handphone sudah terdaftar"
+                        : errors.no_hp && touched.no_hp && errors.no_hp}
                     </p>
                   </div>
                   <Grid container>
@@ -1298,7 +1354,7 @@ class FormPengajuanTKP extends React.Component {
                   </h2>
                   <div style={{ margin: 20 }}>
                     <label className="form-label">CV{important}</label>
-                    <DragAndDrop              
+                    <DragAndDrop
                       uploadType="Creative CV"
                       onChange={this._handleFilesFromDrag.bind(this.file, "cv")}
                       onBlur={handleBlur}
@@ -1306,8 +1362,16 @@ class FormPengajuanTKP extends React.Component {
                       value={this.state.cv}
                       name={"cv"}
                     />
-                    <p className={touched.cv && errors.cv? classes.negativeCase:classes.noteModal}>
-                      {touched.cv && errors.cv ? errors.cv : 'Format file berupa PDF dengan maksimal ukuran 2 MB'}
+                    <p
+                      className={
+                        touched.cv && errors.cv
+                          ? classes.negativeCase
+                          : classes.noteModal
+                      }
+                    >
+                      {touched.cv && errors.cv
+                        ? errors.cv
+                        : "Format file berupa PDF dengan maksimal ukuran 2 MB"}
                     </p>
                   </div>
                   <div style={{ margin: 20 }}>
@@ -1323,8 +1387,16 @@ class FormPengajuanTKP extends React.Component {
                       value={this.state.foto_scanktp}
                       name={"foto_scanktp"}
                     />
-                    <p className={touched.foto_scanktp && errors.foto_scanktp ? classes.negativeCase:classes.noteModal}>
-                      {touched.foto_scanktp && errors.foto_scanktp ? errors.foto_scanktp : 'Format foto berupa JPG atau JPEG dengan maksimal ukuran'}
+                    <p
+                      className={
+                        touched.foto_scanktp && errors.foto_scanktp
+                          ? classes.negativeCase
+                          : classes.noteModal
+                      }
+                    >
+                      {touched.foto_scanktp && errors.foto_scanktp
+                        ? errors.foto_scanktp
+                        : "Format foto berupa JPG atau JPEG dengan maksimal ukuran"}
                     </p>
                   </div>
                   <div style={{ margin: 20 }}>
@@ -1340,9 +1412,14 @@ class FormPengajuanTKP extends React.Component {
                       name={"file_skck"}
                     />
 
-                    <p className={errors.file_skck?classes.negativeCase:classes.noteModal}>
+                    <p
+                      className={
+                        errors.file_skck
+                          ? classes.negativeCase
+                          : classes.noteModal
+                      }
+                    >
                       Format file berupa PDF dengan maksimal ukuran 2 MB
-
                     </p>
                     <p>
                       {errors.file_skck &&
@@ -1355,10 +1432,10 @@ class FormPengajuanTKP extends React.Component {
                     <Grid container justify="center">
                       <Button
                         className={classes.submitForm}
-                        type="submit"
                         disabled={isSubmitting}
+                        type="submit"
+                        onClick={handleSubmit}
                       >
-                        {" "}
                         Kirim
                       </Button>
                     </Grid>
