@@ -64,7 +64,6 @@ export default function DragAndDrop(props) {
     isDragAccept,
     isDragReject
   ]);
-  console.log('yeyeye', file);
 
   return (
     <div {...getRootProps({ style: {

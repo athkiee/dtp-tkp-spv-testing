@@ -25,6 +25,7 @@ const { Option } = Select;
 const styles = (theme) => ({
   root: {
     display: "flex",
+    fontFamily: "Roboto",
   },
   filterJumlahdata: {
     display: "block",

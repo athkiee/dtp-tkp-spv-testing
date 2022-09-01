@@ -12,7 +12,6 @@ import Typography from "@material-ui/core/Typography";
 import CircleIcon from "@mui/icons-material/Circle";
 import PropTypes from "prop-types";
 import fileDownload from "js-file-download";
-import moment from "moment";
 
 export default class TableRiwayat extends React.Component {
   constructor(props) {
@@ -21,7 +20,8 @@ export default class TableRiwayat extends React.Component {
       searchText: "",
       searchedColumn: "",
       dataRiwayat: [],
-      pageSize: 10 };
+      pageSize: 10,
+    };
   }
 
   async componentDidMount() {
@@ -335,14 +335,19 @@ export default class TableRiwayat extends React.Component {
       },
     ];
 
+    const showFormattedDate = (date) => {
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(date).toLocaleDateString("id-ID", options);
+    };
     const columnSekbid = [
       {
         title: "No",
         key: "index",
-        render: ( text, name, index ) => {
-          return index + 1;
-        },
-        
+        render: (text, current, index) => index + 1,
       },
       {
         title: "Nama TKP",
@@ -351,6 +356,9 @@ export default class TableRiwayat extends React.Component {
         className: "clientName" ? "show" : "hide",
         sorter: (a, b) => a.name.localeCompare(b.name),
         ...this.getColumnSearchProps("name"),
+        render: (text) => {
+          return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
+        },
       },
       {
         title: "Supervisor/PIC",
@@ -358,13 +366,18 @@ export default class TableRiwayat extends React.Component {
         key: "supervisor",
         sorter: (a, b) => a.supervisor.localeCompare(b.supervisor),
         ...this.getColumnSearchProps("supervisor"),
+        render: (text) => {
+          return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
+        },
       },
       {
         title: "NIK SPV",
         dataIndex: "nik_spv",
         key: "nik_spv",
         ...this.getColumnSearchProps("nik_spv"),
-        sorter: (a, b) => a.nik_spv.localeCompare(b.nik_spv),
+        render: (text) => {
+          return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
+        },
       },
       {
         title: "Loker",
@@ -372,6 +385,9 @@ export default class TableRiwayat extends React.Component {
         key: "loker",
         ...this.getColumnSearchProps("loker"),
         sorter: (a, b) => a.loker.localeCompare(b.loker),
+        render: (text) => {
+          return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
+        },
       },
       {
         title: "Status",
@@ -388,6 +404,9 @@ export default class TableRiwayat extends React.Component {
         key: "jobTitle",
         ...this.getColumnSearchProps("jobTitle"),
         sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
+        render: (text) => {
+          return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
+        },
       },
       {
         title: "Onboard",
@@ -399,8 +418,14 @@ export default class TableRiwayat extends React.Component {
           return aa - bb;
         },
         render: (text) => {
-          return text ? moment(text).format("DD MMMM YYYY") : "-";
-        }
+          return text ? (
+            <Typography style={{ fontSize: "14px" }}>
+              {showFormattedDate(text)}
+            </Typography>
+          ) : (
+            "-"
+          );
+        },
       },
       {
         title: "Perubahan Status Terakhir",
@@ -446,7 +471,7 @@ export default class TableRiwayat extends React.Component {
         pagination={{ pageSize: perPage }}
         scroll={{ x: "max-content" }}
         footer={() =>
-          "Menampilkan 1-" + perPage + " dari " + sourceData.length + " data"
+          "menampilkan 1-" + perPage + " dari " + sourceData.length + " data"
         }
       />
     );
