@@ -13,7 +13,6 @@ import Button from "@material-ui/core/Button";
 import ModalSuccess from "../../../../ModalSuccess";
 import ModalConfirmation from "../../../../ModalConfirmation";
 import ModalFailed from "../../../../element/ModalFailed";
-import * as Yup from "yup";
 
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
@@ -24,6 +23,7 @@ const styles = (theme) => ({
   root: {
     display: "flex",
   },
+  appBarSpacer: theme.mixins.toolbar,
   submitForm: {
     width: "100%",
     height: "60px",
@@ -272,9 +272,22 @@ class FormPengajuanTKP extends React.Component {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
+    let { errorEmail, errorNIK, errorNoHP } = this.state
+    if (name === 'no_ktp') {
+      errorNIK = false;
+    }
+    else if (name === 'email') {
+      errorEmail = false;
+    }
+    else if (name === 'no_hp') {
+      errorNoHP = false;
+    }
 
     this.setState({
       [name]: value,
+      errorNIK,
+      errorEmail,
+      errorNoHP
     });
   };
 
@@ -622,7 +635,7 @@ class FormPengajuanTKP extends React.Component {
                     "Job Title Level Usulan tidak boleh kosong";
                 }
                 if (!values.id_job_role) {
-                  errors.id_kategori_job_title = "Job Role tidak boleh kosong";
+                  errors.id_job_role = "Job Role tidak boleh kosong";
                 }
                 if (!values.deskripsi_pekerjaan) {
                   errors.deskripsi_pekerjaan =
@@ -670,7 +683,7 @@ class FormPengajuanTKP extends React.Component {
                     values.akun_tmoney
                   )
                 ) {
-                  errors.akun_tmoney = "Akun T-Money tidak valid";
+                  errors.akun_tmoney = "Akun T-Money tidak sesuai format";
                 }
                 if (!values.akun_trello) {
                   errors.akun_trello = "Akun Trello/Jira tidak boleh kosong";
@@ -679,7 +692,7 @@ class FormPengajuanTKP extends React.Component {
                     values.akun_trello
                   )
                 ) {
-                  errors.akun_trello = "Akun Trello/Jira tidak valid";
+                  errors.akun_trello = "Akun Trello/Jira tidak sesuai format";
                 }
 
                 return errors;

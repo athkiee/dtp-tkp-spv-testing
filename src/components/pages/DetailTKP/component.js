@@ -45,6 +45,7 @@ const styles = (theme) => ({
     display: "flex",
     justifyContent: "center",
   },
+  appBarSpacer: theme.mixins.toolbar,
   buttonUnduh: {
     width: 216,
     height: 56,
@@ -296,16 +297,17 @@ class DetailTKP extends React.Component {
         .then((res) => {
           this.setState({
             modalInputSkck: false,
-            modalSuccess: true
+            modalSuccess: true,
           });
         });
     }
   };
 
   _renderModalUpload = () => {
-    const { modalInputSkck, modalTitle, handleBlur, error_skck, file_skck } = this.state;
+    const { modalInputSkck, modalTitle, handleBlur, error_skck, file_skck } =
+      this.state;
     const { classes } = this.props;
-    console.log('test', this.state.file_skck);
+    console.log("test", this.state.file_skck);
     return (
       <div>
         <Modal
@@ -537,7 +539,7 @@ class DetailTKP extends React.Component {
       modalInputSkck: false,
       preview: "",
       file_skck: "",
-      error_skck: ""
+      error_skck: "",
     });
   };
 
@@ -754,7 +756,7 @@ class DetailTKP extends React.Component {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           {this._renderBreadcrumbs()}
-          <h1 style={{ marginLeft: 35, marginTop: 35 }}>
+          <h1 style={{ marginLeft: 35, marginTop: 26 }}>
             <strong>Detail TKP</strong>
           </h1>
           <p style={{ marginLeft: 35 }}>Kelola data TKP pada halaman ini.</p>
@@ -839,7 +841,7 @@ class DetailTKP extends React.Component {
                         {namaTkp}
                       </h2>
                       <p style={{ maxWidth: 200, minWidth: 200, width: 200 }}>
-                        {dataDetail && dataDetail.t_bidang.kode_bidang} / {" "}
+                        {dataDetail && dataDetail.t_bidang.kode_bidang} /{" "}
                         {dataDetail &&
                           dataDetail.t_job_title_levelling
                             .nama_job_title_levelling}
@@ -1027,7 +1029,16 @@ class DetailTKP extends React.Component {
                         <p>:</p>
                       </Grid>
                       <Grid item xs={6}>
-                        <p className="desc">{item.desc}</p>
+                        {item.title === "Berita Acara" ? (
+                          <a
+                            className="descLihat"
+                            onClick={this._handleDokumenPenunjang.bind(this, item)}
+                          >
+                            Lihat
+                          </a>
+                        ) : (
+                          <p className="desc">{item.desc}</p>
+                        )}
                       </Grid>
                     </Grid>
                   ))}
