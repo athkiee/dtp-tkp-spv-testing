@@ -14,13 +14,35 @@ import FromControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Cookies from "js-cookie";
-
+import CryptoJS from "crypto-js";
 
 
 function LoginSupervisor(props) {
   const [loading, setLoading] = useState(false);
-  const nik = useFormInput(Cookies.get('nik'));
-  const password = useFormInput(Cookies.get('passwordspv'));
+  //  handle decode cookie
+  const getCookieNik = () => {
+    if (Cookies.get("rememberme") === "true") {
+      const getNik = Cookies.get("KHSY");
+      const bytesNik = CryptoJS.AES.decrypt(getNik, "&3498nds89347bf93fkjsf34b");
+      const nik = bytesNik.toString(CryptoJS.enc.Utf8);
+      return nik;
+    } else
+      return Cookies.get("KHSY");
+  }
+
+  const getCookiePassword = () => {
+    if (Cookies.get("rememberme") === "true") {
+      const getpassword = Cookies.get("GYUS");
+      const bytesPass = CryptoJS.AES.decrypt(getpassword, "83nf893bfjaksgbs=sgn3+dfhsdb");
+      const pass = bytesPass.toString(CryptoJS.enc.Utf8);
+      return pass;
+    }
+    else {
+      return Cookies.get("GYUS");
+    }
+  }
+  const nik = useFormInput(getCookieNik);
+  const password = useFormInput(getCookiePassword);
   const [error, setError] = useState(null);
   let history = useHistory();
   const [values, setValues] = useState({ password:"", showPassword: false });
@@ -82,15 +104,18 @@ function LoginSupervisor(props) {
   const handleRememberMe = (e) => {
     const checked = e.target.checked;
     if (checked) {
-      Cookies.set("rememberme", "true", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
-      Cookies.set("nik", nik.value, { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
-      Cookies.set("passwordspv", password.value, { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
+      Cookies.set("rememberme", "true", { expires: 30, path: '/login/spv' });
+      Cookies.set("KHSY", CryptoJS.AES.encrypt(nik.value, '&3498nds89347bf93fkjsf34b').toString(), {
+        expires: 30, path: '/login/spv'
+      });
+      Cookies.set("GYUS", CryptoJS.AES.encrypt(password.value, '83nf893bfjaksgbs=sgn3+dfhsdb').toString(), { expires: 30, path: '/login/spv' });
+
     }
     else {
-      Cookies.set("rememberme", "false", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
-      Cookies.remove("nik", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
-      Cookies.remove("passwordspv", { expires: 30, path: '/login/spv', samesite: 'strict', secure: true, domain: "dtp-tkp-supervisor-dev.herokuapp.com" });
-    }
+      Cookies.set("rememberme", "false", { expires: 30, path: '/login/spv', samesite: 'strict', });
+      Cookies.remove("KHSY", { expires: 30, path: '/login/spv', samesite: 'strict' });
+      Cookies.remove("GYUS", { expires: 30, path: '/login/spv', samesite: 'strict' });
+    };
   }
 
  

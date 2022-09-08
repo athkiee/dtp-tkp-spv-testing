@@ -19,6 +19,7 @@ import fileDownload from "js-file-download";
 import ModalConfirmation from "../../../ModalConfirmation";
 import ModalSuccess from "../../../ModalSuccess";
 import ModalLoading from "../../../ModalLoading";
+import Link from "@material-ui/core/Link";
 
 const { Option } = Select;
 
@@ -236,10 +237,10 @@ class RiwayatTKP extends React.Component {
           <div className={classes.appBarSpacer} />
           <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
           <Breadcrumb.Item style={{ cursor: "pointer" }}>
-            <a onClick={this._handleBreadcumbs}>Beranda</a>
+              <Link onClick={this._handleBreadcumbs}>Beranda</Link>
           </Breadcrumb.Item>
           <Breadcrumb.Item style={{ cursor: "pointer" }}>
-            <a>Pengajuan TKP</a>
+              <Link>Pengajuan TKP</Link>
           </Breadcrumb.Item>
           <Breadcrumb.Item
             style={{
@@ -248,7 +249,7 @@ class RiwayatTKP extends React.Component {
               fontWeight: "bold",
             }}
           >
-            <a>Riwayat</a>
+              <Link>Riwayat</Link>
           </Breadcrumb.Item>
         </Breadcrumb>
           <h1 style={{ marginLeft: 35, marginTop: 10, fontSize: 20 }}>

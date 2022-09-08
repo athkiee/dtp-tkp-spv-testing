@@ -120,7 +120,6 @@ function LoginSekre(props) {
     }
      else {
       Cookies.set("rememberMe", "false", { expires: 30, path: '/login/sekretaris', samesite: 'strict',   });
-      // Cookies.set("KXHS", { expires: 30, path: '/login/sekretaris', samesite: 'strict' });
       Cookies.remove("KXHS", { expires: 30, path: '/login/sekretaris', samesite: 'strict' });
       Cookies.remove("SHHC", { expires: 30, path: '/login/sekretaris', samesite: 'strict' });
     }
