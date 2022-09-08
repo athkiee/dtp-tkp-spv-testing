@@ -45,6 +45,7 @@ const styles = (theme) => ({
     width: 294,
     height: 152,
   },
+  appBarSpacer: theme.mixins.toolbar,
   content: {
     width: "100%",
     flexGrow: 1,

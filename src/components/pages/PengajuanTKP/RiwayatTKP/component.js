@@ -47,6 +47,7 @@ const styles = (theme) => ({
     overflow: "auto",
     backgroundColor: "#E5E5E5",
   },
+  appBarSpacer: theme.mixins.toolbar,
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),

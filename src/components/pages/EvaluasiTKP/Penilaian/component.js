@@ -36,6 +36,7 @@ const styles = (theme) => ({
   root: {
     display: "flex",
   },
+  appBarSpacer: theme.mixins.toolbar,
   submitForm: {
     color: "white",
     borderColor: "#DA1E20",
@@ -171,7 +172,8 @@ class PenilaianTKP extends React.Component {
       jobTT: "",
       jobRole: "",
       id_job_title: "",
-      modalSuccess: false
+      modalSuccess: false,
+      bidang: "",
     };
   }
 
@@ -188,7 +190,11 @@ class PenilaianTKP extends React.Component {
           checked: detailTKP.status_perpanjangan_kontrak || "",
           reason_kontrak: detailTKP.alasan_perpanjangan_kontrak || "",
           checkedPromotion: detailTKP.status_rekomendasi_naik_job_level || "",
-          id_job_title: detailTKP.id_job_title_levelling_usulan || ""
+          id_job_title: detailTKP.id_job_title_usulan || "",
+          reason_levelling: detailTKP.alasan_rekomendasi_naik_job_level || "",
+          bidang: detailTKP.id_bidang_usulan || "",
+          jobTT: detailTKP.id_job_title_levelling_usulan || "",
+          jobRole: detailTKP.id_job_role_usulan || "",
         });
       });
     axios.get(API.allJobTitle).then((response) => {
@@ -273,10 +279,22 @@ class PenilaianTKP extends React.Component {
     } = this.state;
     const formData = new FormData();
     formData.append("tanggal_evaluasi", moment());
+    formData.append("nik_spv", nikSpv);
     formData.append("total_nilai_evaluasi_kerja", this.state.nilai_evaluasi);
     formData.append("status_perpanjangan_kontrak", this.state.extendStatus);
     formData.append("alasan_perpanjangan_kontrak", this.state.reason_kontrak);
-    formData.append("id_job_title_levelling_usulan", this.state.id_job_title);
+    formData.append("id_job_title_usulan", this.state.id_job_title);
+    formData.append(
+      "status_rekomendasi_naik_job_level",
+      this.state.checkedPromotion
+    );
+    formData.append(
+      "alasan_rekomendasi_naik_job_level",
+      this.state.reason_levelling
+    );
+    formData.append("id_bidang_usulan", this.state.bidang);
+    formData.append("id_job_title_levelling_usulan", this.state.jobTT);
+    formData.append("id_job_role_usulan", this.state.jobRole);
     formData.append(
       "file_hasil_penilaian_kinerja_tkp",
       this.state.file_evaluasi
@@ -293,8 +311,8 @@ class PenilaianTKP extends React.Component {
         })
         .then(() => {
           this.setState({
-            modalSuccess: true
-          })
+            modalSuccess: true,
+          });
         });
     }
     this.setState({
@@ -331,8 +349,8 @@ class PenilaianTKP extends React.Component {
         })
         .then(() => {
           this.setState({
-            modalSuccess: true
-          })
+            modalSuccess: true,
+          });
         });
     }
     this.setState({
@@ -465,9 +483,8 @@ class PenilaianTKP extends React.Component {
       error_evaluasi,
       reason_kontrak,
       error_reason_kontrak,
-      dataTKP
+      dataTKP,
     } = this.state;
-    console.log('asdas', dataTKP.status_rekomendasi_naik_job_level);
 
     if (extendStatus === 0) {
       return (
@@ -590,8 +607,10 @@ class PenilaianTKP extends React.Component {
       datajobRole,
       reason_levelling,
       id_job_title,
+      bidang,
+      jobTT,
+      jobRole,
     } = this.state;
-    console.log("asdad", id_job_title);
     const optionJobTitle = datajobTitle.map((d) => (
       <Option key={d.key} roles={d.keyRoles}>
         {d.name}
@@ -622,6 +641,7 @@ class PenilaianTKP extends React.Component {
             placeholder=" Pilih Bidang/Tribe"
             name={"bidang"}
             onChange={this._handleSelect.bind(this, "bidang")}
+            value={bidang}
           >
             {optionBidang}
           </Select>
@@ -645,6 +665,7 @@ class PenilaianTKP extends React.Component {
             className={classes.selectForm}
             placeholder=" Pilih Job Title Level Usulan"
             onChange={this._handleSelect.bind(this, "jobTT")}
+            value={jobTT}
           >
             {optionJTlevel}
           </Select>
@@ -656,6 +677,7 @@ class PenilaianTKP extends React.Component {
             className={classes.selectForm}
             placeholder=" Pilih Job Role"
             onChange={this._handleSelect.bind(this, "jobRole")}
+            value={jobRole}
           >
             {optionJobRole}
           </Select>
@@ -730,7 +752,11 @@ class PenilaianTKP extends React.Component {
           </div>
         </div>
         <div>
-          <Button type="primary" className={classes.submitForm}>
+          <Button
+            onClick={this._handleSubmitForm1}
+            type="primary"
+            className={classes.submitForm}
+          >
             <strong>Submit</strong>
           </Button>
         </div>
@@ -739,7 +765,7 @@ class PenilaianTKP extends React.Component {
   };
 
   render() {
-    const { milestone, checkedPromotion, dataTKP } = this.state;
+    const { milestone, checkedPromotion, dataTKP, extendStatus } = this.state;
     const { classes } = this.props;
     const namaTKP = get(dataTKP.data_tkp, "nama_lengkap");
     const bidangTKP = get(dataTKP.data_tkp, "nama_bidang");
@@ -864,9 +890,9 @@ class PenilaianTKP extends React.Component {
               : milestone === "step2"
               ? this._renderMilestone2()
               : ""}
-            {checkedPromotion === 1
+            {checkedPromotion === 1 && extendStatus === 1
               ? this._renderMilestone2Promotion()
-              : checkedPromotion === 0
+              : checkedPromotion === 0 && extendStatus === 1
               ? this._renderMilestone2NonPromotion()
               : ""}
           </Container>
@@ -874,7 +900,9 @@ class PenilaianTKP extends React.Component {
             <ModalSuccess
               open={this.state.modalSuccess}
               label="Data Evaluasi Berhasil disimpan!"
-              handleClose={() => window.location = ROUTES.KELOLA_EVALUASI_TKP()}
+              handleClose={() =>
+                (window.location = ROUTES.KELOLA_EVALUASI_TKP())
+              }
             />
           </Container>
         </main>

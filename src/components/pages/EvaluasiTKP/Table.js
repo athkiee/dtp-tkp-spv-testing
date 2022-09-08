@@ -162,7 +162,7 @@ export default class TableDashboard extends React.Component {
   _renderStatus = (id) => {
     const status = id.status;
     const formEval = id.evaluasi;
-    if (status === 2) {
+    if (status === 1 && formEval === 3 || status === 2 && formEval === 3) {
       return (
         <Typography
           style={{
@@ -173,7 +173,7 @@ export default class TableDashboard extends React.Component {
           <CircleIcon style={{ fontSize: "14px" }} /> Draft
         </Typography>
       );
-    } else if (status === 1) {
+    } else if (status === 1 && formEval === 1 || status === 1 && formEval === 2) {
       return (
         <Typography
           style={{
@@ -272,7 +272,7 @@ export default class TableDashboard extends React.Component {
                 }}
               />
             )}
-            {id.status === 2 ? (
+            {id.status === 2 && id.evaluasi === 3 || id.status === 1 && id.evaluasi === 3 ? (
               <SendOutlined
                 onClick={this._renderModalConfirm.bind(this, id.key)}
                 style={{
