@@ -6,14 +6,13 @@ import { Grid } from "@material-ui/core";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import { Select, Input, DatePicker, Modal, Breadcrumb } from "antd";
+import Link from "@material-ui/core/Link";
 import { Formik } from "formik";
 import moment from "moment";
 import { ROUTES, API } from "../../../../../configs";
 import Button from "@material-ui/core/Button";
-import ModalSuccess from "../../../../ModalSuccess";
 import ModalConfirmation from "../../../../ModalConfirmation";
 import ModalFailed from "../../../../element/ModalFailed";
-
 const { Option } = Select;
 const dateFormatList = ["DD/MM/YYYY"];
 const { TextArea } = Input;
@@ -337,7 +336,7 @@ class FormPengajuanTKP extends React.Component {
       />
     );
   };
-
+ 
   _renderModalGagal = (errorData) => {
     <ModalFailed
       open={errorData.length !== 0}
@@ -347,7 +346,11 @@ class FormPengajuanTKP extends React.Component {
   }
   _handleSubmit = (formData) => {
     const { errorEmail, errorNIK, errorNoHP } = this.state;
-
+    this.setState({
+      errorNIK: false,
+      errorEmail: false,
+      errorPhone: false,
+    })
     axios
       .post(API.registerTkp, formData, {
         headers: { Authorization: `Bearer ${token}` },
@@ -368,13 +371,13 @@ class FormPengajuanTKP extends React.Component {
           const dataError = error.response.data.message;
 
           if (dataError === "NIK TKP sudah terdaftar") {
-            this.setState({ errorNIK: true });
+            this.setState({ errorEmail: true, errorNIK: true  , errorNoHP: false });
           }
           if (dataError === "Email sudah terdaftar") {
-            this.setState({ errorEmail: true });
+            this.setState({ errorEmail: true, errorNIK:false, errorNoHP:false });
           }
           if (dataError === "No. Handphone sudah terdaftar") {
-            this.setState({ errorNoHP: true });
+            this.setState({ errorEmail: true, errorNIK: false, errorNoHP: true });
           }
         }
         console.log(errorEmail, errorNIK, errorNoHP, "error");
@@ -445,13 +448,9 @@ class FormPengajuanTKP extends React.Component {
       datajobRole,
       dataExperience,
       dataPendidikan,
-      failedModal,
-      successModal,
-      failedDataAvail,
       errorEmail,
       errorNIK,
       errorNoHP,
-      confirmModal,
       errorData,
     } = this.state;
 
@@ -534,10 +533,10 @@ class FormPengajuanTKP extends React.Component {
           <div className={classes.appBarSpacer} />
           <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
             <Breadcrumb.Item style={{ cursor: "pointer" }}>
-              <a onClick={this._handleBreadcumbs}>Beranda</a>
+              <Link onClick={this._handleBreadcumbs}>Beranda</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item style={{ cursor: "pointer" }}>
-              <a>Pengajuan TKP</a>
+              <Link>Pengajuan TKP</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item
               style={{
@@ -546,7 +545,7 @@ class FormPengajuanTKP extends React.Component {
                 fontWeight: "bold",
               }}
             >
-              <a>Ajukan TKP</a>
+              <Link>Ajukan TKP</Link>
             </Breadcrumb.Item>
           </Breadcrumb>
           <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
@@ -861,9 +860,7 @@ class FormPengajuanTKP extends React.Component {
                           value={values.no_ktp}
                         />
                         <p className={classes.negativeCase}>
-                          {errorNIK === true
-                            ? "NIK sudah terdaftar"
-                            : errors.no_ktp && touched.no_ktp && errors.no_ktp}
+                          {errorNIK === true? "NIK sudah terdaftar": errors.no_ktp && touched.no_ktp && errors.no_ktp}
                         </p>
                       </div>
                     </Grid>
@@ -1011,9 +1008,7 @@ class FormPengajuanTKP extends React.Component {
                       value={values.email}
                     />
                     <p className={classes.negativeCase}>
-                      {errorEmail === true
-                        ? "Email sudah terdaftar"
-                        : errors.email && touched.email && errors.email}
+                      { errorEmail === true? "Email sudah terdaftar" : errors.email && touched.email && errors.email}
                       {console.log(errorData)}
                     </p>
                   </div>
@@ -1032,9 +1027,7 @@ class FormPengajuanTKP extends React.Component {
                       value={values.no_hp}
                     />
                     <p className={classes.negativeCase}>
-                      {errorNoHP === true
-                        ? "No Handphone sudah terdaftar"
-                        : errors.no_hp && touched.no_hp && errors.no_hp}
+                      {errorNoHP === true ? "No Handphone sudah terdaftar" : errors.no_hp && touched.no_hp && errors.no_hp}
                     </p>
                   </div>
                   <Grid container>
@@ -1447,7 +1440,11 @@ class FormPengajuanTKP extends React.Component {
                         className={classes.submitForm}
                         disabled={isSubmitting}
                         type="submit"
-                        onClick={handleSubmit}
+                        onClick={() => this.setState({
+                          errorNIK: false,
+                          errorEmail: false,
+                          errorPhone: false,
+                        })}
                       >
                         Kirim
                       </Button>

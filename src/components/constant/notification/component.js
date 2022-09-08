@@ -15,7 +15,6 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import WebAssetOffOutlinedIcon from '@mui/icons-material/WebAssetOffOutlined';
 import axios from "axios";
 import { API } from "../../../configs";
-import moment from "moment";
 
 export default class NotificationPopover extends React.Component {
 
@@ -131,6 +130,21 @@ export default class NotificationPopover extends React.Component {
         const { anchorEl, open, } = this.state;
         const { data } = this.state;
         const { dataNotif } = this.state;
+        const showFormattedDate = (date) => {
+            const options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            };
+            return new Date(date).toLocaleDateString("id-ID", options);
+        };
+        const timeFormated = (date) => {
+            const options = {
+                hour: "numeric",
+                minute: "numeric",
+            };
+            return new Date(date).toLocaleTimeString("id-ID", options);
+        };
         return (
             <div>
                 <IconButton
@@ -225,7 +239,7 @@ export default class NotificationPopover extends React.Component {
                                                 <Typography variant="subtitle1" style={{
                                                     fontSize: "10px", color: "#C4C4C4"
                                                 }}>
-                                                    {moment(notif.tanggal).format('DD MMMM YYYY')},{moment(notif.tanggal).format('LT').slice(0, -3)} WIB
+                                                    {showFormattedDate(notif.tanggal)}, {timeFormated(notif.tanggal)} WIB
                                                 </Typography>
                                             </div>
                                         </div>
@@ -280,7 +294,7 @@ export default class NotificationPopover extends React.Component {
                                                 <Typography variant="subtitle1" style={{
                                                     fontSize: "10px", color: "#C4C4C4"
                                                 }}>
-                                                    {moment(notif.tanggal).format('DD MMMM YYYY')},{moment(notif.tanggal).format('LT').slice(0, -3)} WIB
+                                                    {showFormattedDate(notif.tanggal)}, {timeFormated(notif.tanggal)} WIB
                                                 </Typography>
                                             </div>
                                         </div>

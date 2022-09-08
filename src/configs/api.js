@@ -7,6 +7,7 @@ const token = {
   headers: { Authorization: `Bearer ${tokenSpv}` },
 };
 
+//eslint-disable-next-line
 export default {
   token,
   loginSpv: baseUrl + "spv/login",

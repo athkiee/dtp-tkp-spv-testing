@@ -15,6 +15,7 @@ import { Avatar, Breadcrumb } from "antd";
 import { API, ROUTES } from "../../../configs";
 import moment from "moment";
 import ModalSuccess from "../../ModalSuccess";
+import Link from "@material-ui/core/Link";
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
@@ -984,7 +985,7 @@ class DetailTKP extends React.Component {
                             <UploadOutlined /> Unggah SKCK
                           </button>
                         ) : (
-                          <a
+                            <Link
                             className="descLihat"
                             onClick={
                               item.title === "Foto/Scan KTP"
@@ -993,7 +994,7 @@ class DetailTKP extends React.Component {
                             }
                           >
                             Lihat
-                          </a>
+                            </Link>
                         )}
                       </Grid>
                     </Grid>

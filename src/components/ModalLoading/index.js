@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Modal, Grid, Avatar, Typography } from "@material-ui/core";
 import CachedIcon from "@mui/icons-material/Cached";
-import CloseIcon from '@mui/icons-material/Close';
 
 export default function ModalLoading({ open, handleClose }) {
   return (

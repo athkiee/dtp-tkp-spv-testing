@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
-import clsx from 'clsx';
 
 const baseStyle = {
   display: 'flex',
@@ -38,9 +37,11 @@ export default function DragAndDrop(props) {
     hintError,
   } = props;
   const [file, setFile] = useState(null);
+  
   const onDrop = useCallback(acceptedFiles => {
     setFile(acceptedFiles[0]);
     onChange(acceptedFiles[0]);
+    // eslint-disable-next-line 
   }, []);
 
   const {
