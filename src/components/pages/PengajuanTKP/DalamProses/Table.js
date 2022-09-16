@@ -249,7 +249,6 @@ export default class TableDalamProses extends React.Component {
   }
 
   render() {
-    const { pagination } = this.state;
     const { perPage } = this.props;
     const columns = [
       {

@@ -270,10 +270,10 @@ class Dashboard extends React.Component {
             <Breadcrumb.Item>Beranda</Breadcrumb.Item>
           </Breadcrumb>
           <h1 style={{ marginLeft: 35, marginTop: 10, fontSize: 20 }}>
-            <strong>Basis Data TKP</strong>
+            <strong>Database TKP Aktif</strong>
           </h1>
           <p style={{ marginLeft: 35, marginBottom: 10 }}>
-            Kelola data TKP pada halaman ini.
+            Data dibawah ini adalah data TKP yang masih aktif
           </p>
           <Container className={classes.container}>
             <div

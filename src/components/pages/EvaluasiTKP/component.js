@@ -7,17 +7,13 @@ import TableDashboard from "./Table";
 import { Select } from "antd";
 import {
   DownloadOutlined,
-  DownOutlined,
   SendOutlined,
   PushpinOutlined,
 } from "@ant-design/icons";
 import { Button, Breadcrumb, Dropdown, Popover, Checkbox, Menu } from "antd";
 import HeadBar from "../../constant/headBar";
 import { ROUTES, API } from "../../../configs";
-import fileDownload from "js-file-download";
-import ModalConfirmation from "../../ModalConfirmation";
-import ModalSuccess from "../../ModalSuccess";
-import ModalLoading from "../../ModalLoading";
+import Link from "@material-ui/core/Link";
 
 const nikSpv = sessionStorage.getItem("nik");
 const { Option } = Select;
@@ -82,6 +78,7 @@ const _handleBreadcumbs = () => {
   window.location = ROUTES.DASHBOARD();
 };
 
+// eslint-disable-next-line
 const jumlahData = (
   <Menu>
     <Menu.Item key="0">5</Menu.Item>
@@ -133,7 +130,7 @@ export default function EvaluasiTKP() {
 
   useEffect(() => {
     downloadEvaluasi();
-  }, []);
+  },);
 
   const downloadEvaluasi = () => {
     axios
@@ -228,7 +225,7 @@ export default function EvaluasiTKP() {
         <div className={classes.appBarSpacer} />
         <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
           <Breadcrumb.Item style={{ cursor: "pointer" }}>
-            <a onClick={_handleBreadcumbs}>Beranda</a>
+            <Link onClick={_handleBreadcumbs}>Beranda</Link>
           </Breadcrumb.Item>
           <Breadcrumb.Item
             style={{
@@ -237,7 +234,7 @@ export default function EvaluasiTKP() {
               fontWeight: "bold",
             }}
           >
-            <a>Evaluasi TKP</a>
+            <Link>Evaluasi TKP</Link>
           </Breadcrumb.Item>
         </Breadcrumb>
         <Container className={classes.containerTataCara}>

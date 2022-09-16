@@ -10,7 +10,6 @@ import PropTypes from "prop-types";
 import fileDownload from "js-file-download";
 import axios from "axios";
 import { ROUTES, API } from "../../../configs";
-import moment from "moment";
 
 export default class TableDashboard extends React.Component {
   constructor(props) {
@@ -96,15 +95,25 @@ export default class TableDashboard extends React.Component {
           >
             Reset
           </Button>
+<<<<<<< HEAD
           <Button
             type="primary"
             onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+=======
+          {/* <Button
+            type="link"
+>>>>>>> 41bf3209711a454d2792769bcf43d8ff05c21408
             size="small"
             style={{ width: 93.5, height: 28, background: '#DA1E20', borderRadius: '5px', color: '#FFFFFF', fontWeight: 700,
             fontSize: 12, border: 'none' }}
           >
+<<<<<<< HEAD
             Cari
           </Button>
+=======
+            Filter
+          </Button> */}
+>>>>>>> 41bf3209711a454d2792769bcf43d8ff05c21408
         </Space>
       </div>
     ),
@@ -162,6 +171,14 @@ export default class TableDashboard extends React.Component {
 
   render() {
     const { perPage } = this.props;
+    const showFormattedDate = (date) => {
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return new Date(date).toLocaleDateString("id-ID", options);
+    }; 
     const columns = [
       {
         title: "Nama TKP",
@@ -251,7 +268,9 @@ export default class TableDashboard extends React.Component {
         title: "Nik SPV",
         dataIndex: "nik_spv",
         key: "nik_spv",
-        sorter: (a, b) => a.nik.localeCompare(b.nik_spv),
+        sorter: (a, b) => {
+          return a.nik_spv - b.nik_spv;
+        },
         ...this.getColumnSearchProps("nik_spv"),
       },
       {
@@ -264,7 +283,7 @@ export default class TableDashboard extends React.Component {
       },
       {
         // width: "10%",
-        title: "Job Title",
+        title: "Job Title Levelling",
         dataIndex: "jobTitle",
         key: "jobTitle",
         sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
@@ -299,7 +318,7 @@ export default class TableDashboard extends React.Component {
           return aa - bb;
         },
         render : (text) => {
-          return text ? moment(text).format("DD MMMM YYYY") : "-";
+          return text ? showFormattedDate(text) : "-";
         }
       },
       {
@@ -309,18 +328,22 @@ export default class TableDashboard extends React.Component {
         fixed: "right",
         render: (key) => (
           <div>
-            <span
-              onClick={this._handleOpenDetail.bind(this, key)}
-              style={{ marginRight: 15, cursor: "pointer" }}
-            >
-              <EyeTwoTone />
-            </span>
-            <span>
-              <DownloadOutlined
-                onClick={this._getDataTkp.bind(this, key)}
-                style={{ color: "#00FF00" }}
-              />
-            </span>
+            <Tooltip placement="bottom" title={"Lihat Detail"}>
+              <span
+                onClick={this._handleOpenDetail.bind(this, key)}
+                style={{ marginRight: 15, cursor: "pointer" }}
+              >
+                <EyeTwoTone />
+              </span>
+            </Tooltip>
+            <Tooltip placement="bottom" title={"Unduh Data"}>
+              <span>
+                <DownloadOutlined
+                  onClick={this._getDataTkp.bind(this, key)}
+                  style={{ color: "#00FF00" }}
+                />
+              </span>
+            </Tooltip>
           </div>
         ),
       },

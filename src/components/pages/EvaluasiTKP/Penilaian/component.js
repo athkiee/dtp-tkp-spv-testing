@@ -11,6 +11,7 @@ import TableRow from "./TableRow";
 import moment from "moment";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import ModalSuccess from "../../../ModalSuccess";
+import Link from "@material-ui/core/Link";
 
 const mockData = [
   {
@@ -805,12 +806,12 @@ class PenilaianTKP extends React.Component {
           <div className={classes.appBarSpacer} />
           <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
             <Breadcrumb.Item style={{ cursor: "pointer" }}>
-              <a onClick={this._handleBreadcumbs}>Beranda</a>
+              <Link onClick={this._handleBreadcumbs}>Beranda</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item style={{ cursor: "pointer" }}>
-              <a a onClick={this._handleBreadcumbs2}>
+              <Link a onClick={this._handleBreadcumbs2}>
                 Evaluasi TKP
-              </a>
+              </Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item
               style={{
@@ -819,7 +820,7 @@ class PenilaianTKP extends React.Component {
                 fontWeight: "bold",
               }}
             >
-              <a>Evaluasi Penilaian Kinerja TKP</a>
+              <Link>Evaluasi Penilaian Kinerja TKP</Link>
             </Breadcrumb.Item>
           </Breadcrumb>
           <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>

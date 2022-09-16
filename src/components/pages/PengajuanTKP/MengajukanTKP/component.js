@@ -7,6 +7,7 @@ import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import Link from "@material-ui/core/Link";
 
 const useStyles = (theme) => ({
   root: {
@@ -103,10 +104,10 @@ class MengajukanTKP extends React.Component {
           <div className={classes.appBarSpacer} />
           <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
             <Breadcrumb.Item style={{ cursor: "pointer" }}>
-              <a onClick={_handleBreadcumbs}>Beranda</a>
+              <Link onClick={_handleBreadcumbs}>Beranda</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item style={{ cursor: "pointer" }}>
-              <a>Pengajuan TKP</a>
+              <Link>Pengajuan TKP</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item
               style={{
@@ -115,7 +116,7 @@ class MengajukanTKP extends React.Component {
                 fontWeight: "bold",
               }}
             >
-              <a>Ajukan TKP</a>
+              <Link>Ajukan TKP</Link>
             </Breadcrumb.Item>
           </Breadcrumb>
           <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
@@ -224,6 +225,7 @@ class MengajukanTKP extends React.Component {
                           matchesNIK === ""
                             ? this.setState({
                               nik_supervisor: e.target.value,
+                              // eslint-disable-next-line
                               nik_supervisor: matchesNIK,
                             })
                             : this.setState({
