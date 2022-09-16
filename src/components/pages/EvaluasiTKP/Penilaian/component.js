@@ -173,6 +173,7 @@ class PenilaianTKP extends React.Component {
       id_job_title: "",
       modalSuccess: false,
       bidang: "",
+      renderExtend: false,
     };
   }
 
@@ -250,6 +251,7 @@ class PenilaianTKP extends React.Component {
       error_perpanjang_kontrak,
       extendStatus,
       milestone,
+      renderExtend,
     } = this.state;
     if (nilai_evaluasi === "") {
       error_nilai = true;
@@ -259,6 +261,7 @@ class PenilaianTKP extends React.Component {
     } else {
       extendStatus = checked;
       milestone = "step2";
+      renderExtend = true;
     }
     this.setState({
       nilai_evaluasi,
@@ -266,6 +269,7 @@ class PenilaianTKP extends React.Component {
       error_perpanjang_kontrak,
       extendStatus,
       milestone,
+      renderExtend
     });
   };
 
@@ -377,7 +381,7 @@ class PenilaianTKP extends React.Component {
   _handleBack = () => {
     this.setState({
       milestone: "step1",
-      checkedPromotion: "",
+      renderExtend: false
     });
   };
 
@@ -764,7 +768,7 @@ class PenilaianTKP extends React.Component {
   };
 
   render() {
-    const { milestone, checkedPromotion, dataTKP, extendStatus } = this.state;
+    const { milestone, checkedPromotion, dataTKP, extendStatus, renderExtend } = this.state;
     const { classes } = this.props;
     const namaTKP = get(dataTKP.data_tkp, "nama_lengkap");
     const bidangTKP = get(dataTKP.data_tkp, "nama_bidang");
@@ -889,9 +893,9 @@ class PenilaianTKP extends React.Component {
               : milestone === "step2"
               ? this._renderMilestone2()
               : ""}
-            {checkedPromotion === 1 && extendStatus === 1
+            {checkedPromotion === 1 && extendStatus === 1 && renderExtend
               ? this._renderMilestone2Promotion()
-              : checkedPromotion === 0 && extendStatus === 1
+              : checkedPromotion === 0 && extendStatus === 1 && renderExtend
               ? this._renderMilestone2NonPromotion()
               : ""}
           </Container>

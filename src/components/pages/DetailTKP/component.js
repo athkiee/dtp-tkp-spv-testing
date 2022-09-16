@@ -198,7 +198,8 @@ class DetailTKP extends React.Component {
 
   _handleDokumenPenunjang = async (value) => {
     let token = localStorage.getItem("token");
-    if (value.title === "CV") {
+    console.log('asdasdasd', value);
+    if (value.title === "CV" || value.title === "Berita Acara") {
       await axios
         .get(
           "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_file/" +
@@ -749,6 +750,7 @@ class DetailTKP extends React.Component {
     const typeAuth = localStorage.getItem("typeAuth");
     const nikSpv = localStorage.getItem("nik");
     const namaSpv = localStorage.getItem("nama");
+    console.log('coba', get(dataDetail, "file_berita_acara_wawancara"));
 
     return (
       <div className={classes.root}>
@@ -1029,7 +1031,7 @@ class DetailTKP extends React.Component {
                         <p>:</p>
                       </Grid>
                       <Grid item xs={6}>
-                        {item.title === "Berita Acara" ? (
+                        {item.title === "Berita Acara" && item.desc !== null ? (
                           <a
                             className="descLihat"
                             onClick={this._handleDokumenPenunjang.bind(this, item)}
@@ -1043,6 +1045,9 @@ class DetailTKP extends React.Component {
                     </Grid>
                   ))}
                 </div>
+                {this._renderModalUpload()}
+                {this._renderDokumenFoto()}
+                {this._renderDokumenPenunjang()}
               </TabPane>
               <TabPane tab="Status Terakhir" key="5">
                 <h2
