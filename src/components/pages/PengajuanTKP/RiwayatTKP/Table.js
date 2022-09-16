@@ -63,7 +63,7 @@ export default class TableRiwayat extends React.Component {
       },
     });
   }
-  getColumnSearchProps = (dataIndex) => ({
+  getColumnSearchProps = (dataIndex, title) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -75,7 +75,7 @@ export default class TableRiwayat extends React.Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`Cari ${title} disini`}
           value={selectedKeys[0]}
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -87,33 +87,21 @@ export default class TableRiwayat extends React.Component {
         />
         <Space>
           <Button
-            type="primary"
-            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button
             onClick={() => this.handleReset(clearFilters)}
             size="small"
-            style={{ width: 90 }}
+            style={{ width: 93.5, height: 28, background: '#FFFFFF', borderRadius: '5px', color: '#000000', fontWeight: 700,
+            fontSize: 12, border: '1px solid #C4C4C4' }}
           >
             Reset
           </Button>
           <Button
-            type="link"
+            type="primary"
+            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
             size="small"
-            onClick={() => {
-              confirm({ closeDropdown: false });
-              this.setState({
-                searchText: selectedKeys[0],
-                searchedColumn: dataIndex,
-              });
-            }}
+            style={{ width: 93.5, height: 28, background: '#DA1E20', borderRadius: '5px', color: '#FFFFFF', fontWeight: 700,
+            fontSize: 12, border: 'none' }}
           >
-            Filter
+            Cari
           </Button>
         </Space>
       </div>
@@ -283,28 +271,28 @@ export default class TableRiwayat extends React.Component {
         width: "20%",
         className: "clientName" ? "show" : "hide",
         sorter: (a, b) => a.name.localeCompare(b.name),
-        ...this.getColumnSearchProps("name"),
+        ...this.getColumnSearchProps("name", "Nama TKP"),
       },
       {
         title: "Bidang",
         dataIndex: "bidang",
         key: "bidang",
         sorter: (a, b) => a.bidang.localeCompare(b.bidang),
-        ...this.getColumnSearchProps("bidang"),
+        ...this.getColumnSearchProps("bidang", "Bidang"),
       },
       {
         title: "Job Title",
         dataIndex: "jobTitle",
         key: "jobTitle",
         sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
-        ...this.getColumnSearchProps("jobTitle"),
+        ...this.getColumnSearchProps("jobTitle", "Job Title"),
       },
       {
         title: "Status",
         dataIndex: "status",
         key: "status",
         sorter: (a, b) => a.status.localeCompare(b.status),
-        ...this.getColumnSearchProps("status"),
+        ...this.getColumnSearchProps("status", "Status"),
         render: (text) => this._renderStatus(text)
       },
       {
@@ -355,17 +343,17 @@ export default class TableRiwayat extends React.Component {
         key: "name",
         className: "clientName" ? "show" : "hide",
         sorter: (a, b) => a.name.localeCompare(b.name),
-        ...this.getColumnSearchProps("name"),
+        ...this.getColumnSearchProps("name", "Nama TKP"),
         render: (text) => {
           return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
         },
       },
       {
-        title: "Supervisor/PIC",
+        title: "Supervisor",
         dataIndex: "supervisor",
         key: "supervisor",
         sorter: (a, b) => a.supervisor.localeCompare(b.supervisor),
-        ...this.getColumnSearchProps("supervisor"),
+        ...this.getColumnSearchProps("supervisor", "Supervisor"),
         render: (text) => {
           return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
         },
@@ -374,7 +362,7 @@ export default class TableRiwayat extends React.Component {
         title: "NIK SPV",
         dataIndex: "nik_spv",
         key: "nik_spv",
-        ...this.getColumnSearchProps("nik_spv"),
+        ...this.getColumnSearchProps("nik_spv", "NIK SPV"),
         render: (text) => {
           return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
         },
@@ -383,7 +371,7 @@ export default class TableRiwayat extends React.Component {
         title: "Loker",
         dataIndex: "loker",
         key: "loker",
-        ...this.getColumnSearchProps("loker"),
+        ...this.getColumnSearchProps("loker", "Loker"),
         sorter: (a, b) => a.loker.localeCompare(b.loker),
         render: (text) => {
           return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
@@ -393,7 +381,7 @@ export default class TableRiwayat extends React.Component {
         title: "Status",
         dataIndex: "status",
         key: "status",
-        ...this.getColumnSearchProps("status"),
+        ...this.getColumnSearchProps("status", "Status"),
         render: (text) => this._renderStatus(text)
 
       },
@@ -402,7 +390,7 @@ export default class TableRiwayat extends React.Component {
         title: "Job Title",
         dataIndex: "jobTitle",
         key: "jobTitle",
-        ...this.getColumnSearchProps("jobTitle"),
+        ...this.getColumnSearchProps("jobTitle", "Job Title"),
         sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
         render: (text) => {
           return <Typography style={{ fontSize: "14px" }}>{text}</Typography>;
@@ -431,7 +419,7 @@ export default class TableRiwayat extends React.Component {
         title: "Perubahan Status Terakhir",
         dataIndex: "last_status",
         key: "last_status",
-        ...this.getColumnSearchProps("last_status"),
+        ...this.getColumnSearchProps("last_status", "Perubahan Status Terakhir"),
         sorter: (a, b) => a.last_status.localeCompare(b.last_status),
       },
 

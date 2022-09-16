@@ -64,7 +64,7 @@ export default class TableDashboard extends React.Component {
     });
   }
 
-  getColumnSearchProps = (dataIndex) => ({
+  getColumnSearchProps = (dataIndex, title) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -76,7 +76,7 @@ export default class TableDashboard extends React.Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`Cari ${title} disini`}
           value={selectedKeys[0]}
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -88,34 +88,32 @@ export default class TableDashboard extends React.Component {
         />
         <Space>
           <Button
-            type="primary"
-            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button
             onClick={() => this.handleReset(clearFilters)}
             size="small"
-            style={{ width: 90 }}
+            style={{ width: 93.5, height: 28, background: '#FFFFFF', borderRadius: '5px', color: '#000000', fontWeight: 700,
+            fontSize: 12, border: '1px solid #C4C4C4' }}
           >
             Reset
           </Button>
+<<<<<<< HEAD
+          <Button
+            type="primary"
+            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+=======
           {/* <Button
             type="link"
+>>>>>>> 41bf3209711a454d2792769bcf43d8ff05c21408
             size="small"
-            onClick={() => {
-              confirm({ closeDropdown: false });
-              this.setState({
-                searchText: selectedKeys[0],
-                searchedColumn: dataIndex,
-              });
-            }}
+            style={{ width: 93.5, height: 28, background: '#DA1E20', borderRadius: '5px', color: '#FFFFFF', fontWeight: 700,
+            fontSize: 12, border: 'none' }}
           >
+<<<<<<< HEAD
+            Cari
+          </Button>
+=======
             Filter
           </Button> */}
+>>>>>>> 41bf3209711a454d2792769bcf43d8ff05c21408
         </Space>
       </div>
     ),
@@ -187,28 +185,28 @@ export default class TableDashboard extends React.Component {
         dataIndex: "name",
         key: "name",
         sorter: (a, b) => a.name.localeCompare(b.name),
-        ...this.getColumnSearchProps("name"),
+        ...this.getColumnSearchProps("name", "Nama TKP"),
       },
       {
         title: "Job Title",
         dataIndex: "jobTitle",
         key: "jobTitle",
         sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
-        ...this.getColumnSearchProps("jobTitle"),
+        ...this.getColumnSearchProps("jobTitle", "Job Title"),
       },
       {
         title: "Job Role",
         dataIndex: "roles",
         key: "roles",
         sorter: (a, b) => a.roles.localeCompare(b.roles),
-        ...this.getColumnSearchProps("roles"),
+        ...this.getColumnSearchProps("roles", "Job Role"),
       },
       {
         title: "Mitra",
         dataIndex: "mitra",
         key: "mitra",
         sorter: (a, b) => a.mitra.localeCompare(b.mitra),
-        ...this.getColumnSearchProps("mitra"),
+        ...this.getColumnSearchProps("mitra", "Mitra"),
       },
       {
         width: 125,
@@ -255,7 +253,7 @@ export default class TableDashboard extends React.Component {
         dataIndex: "name",
         key: "name",
         sorter: (a, b) => a.name.localeCompare(b.name),
-        ...this.getColumnSearchProps("name"),
+        ...this.getColumnSearchProps("name", "Nama TKP"),
       },
       {
         // width: "13%",
@@ -263,7 +261,7 @@ export default class TableDashboard extends React.Component {
         dataIndex: "supervisor",
         key: "supervisor",
         sorter: (a, b) => a.supervisor.localeCompare(b.supervisor),
-        ...this.getColumnSearchProps("supervisor"),
+        ...this.getColumnSearchProps("supervisor", "Supervisor"),
       },
       {
         // width: "10%",
@@ -281,7 +279,7 @@ export default class TableDashboard extends React.Component {
         dataIndex: "loker",
         key: "loker",
         sorter: (a, b) => a.loker.localeCompare(b.loker),
-        ...this.getColumnSearchProps("loker"),
+        ...this.getColumnSearchProps("loker", "Loker"),
       },
       {
         // width: "10%",
@@ -289,7 +287,7 @@ export default class TableDashboard extends React.Component {
         dataIndex: "jobTitle",
         key: "jobTitle",
         sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
-        ...this.getColumnSearchProps("jobTitle"),
+        ...this.getColumnSearchProps("jobTitle", "Job Title"),
       },
       {
         // width: "18%",
@@ -298,7 +296,7 @@ export default class TableDashboard extends React.Component {
         key: "kelompokPekerjaan",
         sorter: (a, b) =>
           a.kelompokPekerjaan.localeCompare(b.kelompokPekerjaan),
-        ...this.getColumnSearchProps("kelompokPekerjaan"),
+        ...this.getColumnSearchProps("kelompokPekerjaan", "Kelompok Pekerjaan"),
       },
 
       {
@@ -307,7 +305,7 @@ export default class TableDashboard extends React.Component {
         dataIndex: "mitra",
         key: "mitra",
         sorter: (a, b) => a.mitra.localeCompare(b.mitra),
-        ...this.getColumnSearchProps("mitra"),
+        ...this.getColumnSearchProps("mitra", "Mitra"),
       },
       {
         // width: "7%",

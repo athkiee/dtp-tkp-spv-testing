@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import "antd/dist/antd.css";
-import { Table, Input, Button, Space } from "antd";
+import { Table, Input, Button, Space, Tooltip } from "antd";
 import {
   SearchOutlined,
   FileAddOutlined,
@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import CircleIcon from "@mui/icons-material/Circle";
 import ModalSuccess from "../../ModalSuccess";
 import ModalConfirmation from "../../ModalConfirmation";
+import { EditOutlined } from "@ant-design/icons";
 
 const token = localStorage.getItem("token");
 
@@ -21,7 +22,7 @@ export default class TableDashboard extends React.Component {
     searchedColumn: "",
     modalSuccess: false,
     dialogConfirmation: false,
-    evaluasi_id: ''
+    evaluasi_id: "",
   };
 
   componentDidMount() {
@@ -57,9 +58,13 @@ export default class TableDashboard extends React.Component {
     const { evaluasi_id } = this.state;
     const list_tkp = [{ id_tkp: evaluasi_id }];
     axios
-      .post(API.detailTkp + "evaluasi-tkp/kirim", {list_tkp}, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .post(
+        API.detailTkp + "evaluasi-tkp/kirim",
+        { list_tkp },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then(() => {
         this.setState({
           modalSuccess: true,
@@ -67,7 +72,7 @@ export default class TableDashboard extends React.Component {
       });
   };
 
-  getColumnSearchProps = (dataIndex) => ({
+  getColumnSearchProps = (dataIndex, title) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -79,7 +84,7 @@ export default class TableDashboard extends React.Component {
           ref={(node) => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`Cari ${title} disini`}
           value={selectedKeys[0]}
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -91,33 +96,21 @@ export default class TableDashboard extends React.Component {
         />
         <Space>
           <Button
-            type="primary"
-            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button
             onClick={() => this.handleReset(clearFilters)}
             size="small"
-            style={{ width: 90 }}
+            style={{ width: 93.5, height: 28, background: '#FFFFFF', borderRadius: '5px', color: '#000000', fontWeight: 700,
+            fontSize: 12, border: '1px solid #C4C4C4' }}
           >
             Reset
           </Button>
           <Button
-            type="link"
+            type="primary"
+            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
             size="small"
-            onClick={() => {
-              confirm({ closeDropdown: false });
-              this.setState({
-                searchText: selectedKeys[0],
-                searchedColumn: dataIndex,
-              });
-            }}
+            style={{ width: 93.5, height: 28, background: '#DA1E20', borderRadius: '5px', color: '#FFFFFF', fontWeight: 700,
+            fontSize: 12, border: 'none' }}
           >
-            Filter
+            Cari
           </Button>
         </Space>
       </div>
@@ -155,14 +148,14 @@ export default class TableDashboard extends React.Component {
   _renderModalConfirm = (key) => {
     this.setState({
       dialogConfirmation: true,
-      evaluasi_id: key
-    })
-  }
+      evaluasi_id: key,
+    });
+  };
 
   _renderStatus = (id) => {
     const status = id.status;
     const formEval = id.evaluasi;
-    if (status === 1 && formEval === 3 || status === 2 && formEval === 3) {
+    if ((status === 1 && formEval === 3) || (status === 2 && formEval === 3)) {
       return (
         <Typography
           style={{
@@ -173,7 +166,10 @@ export default class TableDashboard extends React.Component {
           <CircleIcon style={{ fontSize: "14px" }} /> Draft
         </Typography>
       );
-    } else if (status === 1 && formEval === 1 || status === 1 && formEval === 2) {
+    } else if (
+      (status === 1 && formEval === 1) ||
+      (status === 1 && formEval === 2)
+    ) {
       return (
         <Typography
           style={{
@@ -208,12 +204,7 @@ export default class TableDashboard extends React.Component {
   };
 
   render() {
-    const { selectedRowKeys, dataTKP } = this.state;
-    console.log("asda", dataTKP);
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    };
+    const { dataTKP } = this.state;
 
     const columns = [
       {
@@ -222,20 +213,20 @@ export default class TableDashboard extends React.Component {
         key: "name",
         width: "20%",
         sorter: (a, b) => a.name.localeCompare(b.name),
-        ...this.getColumnSearchProps("name"),
+        ...this.getColumnSearchProps("name", "Nama TKP"),
       },
       {
         title: "Job Title",
         dataIndex: "jobTitle",
         key: "jobTitle",
         sorter: (a, b) => a.jobTitle.localeCompare(b.jobTitle),
-        ...this.getColumnSearchProps("jobTitle"),
+        ...this.getColumnSearchProps("jobTitle", "Job Title"),
       },
       {
         title: "Status Penilaian",
         dataIndex: ["name", "key"],
         sorter: (a, b) => a.name.localeCompare(b.name),
-        ...this.getColumnSearchProps("status"),
+        ...this.getColumnSearchProps("status", "Status Penilaian"),
         render: (text, id) => this._renderStatus(id),
       },
       {
@@ -243,7 +234,7 @@ export default class TableDashboard extends React.Component {
         dataIndex: "mitra",
         key: "mitra",
         sorter: (a, b) => a.mitra.localeCompare(b.mitra),
-        ...this.getColumnSearchProps("mitra"),
+        ...this.getColumnSearchProps("mitra", "Mitra"),
       },
       {
         width: 125,
@@ -252,16 +243,32 @@ export default class TableDashboard extends React.Component {
         fixed: "right",
         render: (text, id) => (
           <div>
-            {id.status !== 0 ? (
-              <FileAddOutlined
-                onClick={this._handleOpenDetail.bind(this, id.key)}
-                style={{
-                  marginRight: 20,
-                  fontSize: "25px",
-                  color: "#DA1E20",
-                  cursor: "pointer",
-                }}
-              />
+            {(id.status === 1 && id.evaluasi === 1) ||
+            (id.status === 1 && id.evaluasi === 2) ? (
+              <Tooltip placement="bottom" title={"Tambah Penilaian"}>
+                <FileAddOutlined
+                  onClick={this._handleOpenDetail.bind(this, id.key)}
+                  style={{
+                    marginRight: 20,
+                    fontSize: "25px",
+                    color: "#DA1E20",
+                    cursor: "pointer",
+                  }}
+                />
+              </Tooltip>
+            ) : (id.status === 1 && id.evaluasi === 3) ||
+              (id.status === 2 && id.evaluasi === 3) ? (
+              <Tooltip placement="bottom" title={"Edit Penilaian"}>
+                <EditOutlined
+                  onClick={this._handleOpenDetail.bind(this, id.key)}
+                  style={{
+                    marginRight: 20,
+                    fontSize: "25px",
+                    color: "#1F9515",
+                    cursor: "pointer",
+                  }}
+                />
+              </Tooltip>
             ) : (
               <FileAddOutlined
                 disabled
@@ -272,16 +279,19 @@ export default class TableDashboard extends React.Component {
                 }}
               />
             )}
-            {id.status === 2 && id.evaluasi === 3 || id.status === 1 && id.evaluasi === 3 ? (
-              <SendOutlined
-                onClick={this._renderModalConfirm.bind(this, id.key)}
-                style={{
-                  transform: "rotate(-45deg)",
-                  fontSize: "25px",
-                  color: "#BF22C2",
-                  cursor: "pointer",
-                }}
-              />
+            {(id.status === 2 && id.evaluasi === 3) ||
+            (id.status === 1 && id.evaluasi === 3) ? (
+              <Tooltip placement="bottom" title={"Kirim Penilaian"}>
+                <SendOutlined
+                  onClick={this._renderModalConfirm.bind(this, id.key)}
+                  style={{
+                    transform: "rotate(-45deg)",
+                    fontSize: "25px",
+                    color: "#BF22C2",
+                    cursor: "pointer",
+                  }}
+                />
+              </Tooltip>
             ) : (
               <SendOutlined
                 style={{
@@ -298,11 +308,7 @@ export default class TableDashboard extends React.Component {
 
     return (
       <div>
-        <Table
-          columns={columns}
-          rowSelection={rowSelection}
-          dataSource={dataTKP}
-        />
+        <Table columns={columns} dataSource={dataTKP} />
         <ModalConfirmation
           title={"Kirim Penilaian Evaluasi TKP"}
           description={"Anda yakin ingin mengirimkan Penilaian Evaluasi TKP?"}
