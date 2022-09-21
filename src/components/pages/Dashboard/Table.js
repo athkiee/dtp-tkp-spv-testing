@@ -51,6 +51,7 @@ export default class TableDashboard extends React.Component {
         this.setState({
           dataTKP: tkp,
         });
+        console.log(tkp)
       });
   }
 
@@ -95,25 +96,11 @@ export default class TableDashboard extends React.Component {
           >
             Reset
           </Button>
-<<<<<<< HEAD
           <Button
             type="primary"
-            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-=======
-          {/* <Button
-            type="link"
->>>>>>> 41bf3209711a454d2792769bcf43d8ff05c21408
-            size="small"
-            style={{ width: 93.5, height: 28, background: '#DA1E20', borderRadius: '5px', color: '#FFFFFF', fontWeight: 700,
-            fontSize: 12, border: 'none' }}
-          >
-<<<<<<< HEAD
+            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}>
             Cari
           </Button>
-=======
-            Filter
-          </Button> */}
->>>>>>> 41bf3209711a454d2792769bcf43d8ff05c21408
         </Space>
       </div>
     ),
