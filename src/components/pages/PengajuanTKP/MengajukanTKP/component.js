@@ -27,6 +27,7 @@ const useStyles = (theme) => ({
       borderColor: "#DA1E20",
     },
   },
+  appBarSpacer: theme.mixins.toolbar,
   containerTataCara: {
     maxWidth: "95.3%",
     height: 360,
