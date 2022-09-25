@@ -10,9 +10,10 @@ import {
 import { API, ROUTES } from "../../../configs";
 import Typography from "@material-ui/core/Typography";
 import CircleIcon from "@mui/icons-material/Circle";
-import ModalSuccess from "../../ModalSuccess";
-import ModalConfirmation from "../../ModalConfirmation";
+import ModalSuccess from "../../element/ModalSuccess";
+import ModalConfirmation from "../../element/ModalConfirmation";
 import { EditOutlined } from "@ant-design/icons";
+import PropTypes from "prop-types";
 
 const token = localStorage.getItem("token");
 
@@ -23,6 +24,7 @@ export default class TableDashboard extends React.Component {
     modalSuccess: false,
     dialogConfirmation: false,
     evaluasi_id: "",
+    dataTKP: [],
   };
 
   componentDidMount() {
@@ -47,6 +49,16 @@ export default class TableDashboard extends React.Component {
           dataTKP: tkp,
         });
       });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { perPage } = this.props;
+    this.setState({
+      pagination: {
+        ...nextProps.pagination,
+        pageSize: perPage,
+      },
+    });
   }
 
   _handleOpenDetail = (key) => {
@@ -98,8 +110,16 @@ export default class TableDashboard extends React.Component {
           <Button
             onClick={() => this.handleReset(clearFilters)}
             size="small"
-            style={{ width: 93.5, height: 28, background: '#FFFFFF', borderRadius: '5px', color: '#000000', fontWeight: 700,
-            fontSize: 12, border: '1px solid #C4C4C4' }}
+            style={{
+              width: 93.5,
+              height: 28,
+              background: "#FFFFFF",
+              borderRadius: "5px",
+              color: "#000000",
+              fontWeight: 700,
+              fontSize: 12,
+              border: "1px solid #C4C4C4",
+            }}
           >
             Reset
           </Button>
@@ -107,8 +127,16 @@ export default class TableDashboard extends React.Component {
             type="primary"
             onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
             size="small"
-            style={{ width: 93.5, height: 28, background: '#DA1E20', borderRadius: '5px', color: '#FFFFFF', fontWeight: 700,
-            fontSize: 12, border: 'none' }}
+            style={{
+              width: 93.5,
+              height: 28,
+              background: "#DA1E20",
+              borderRadius: "5px",
+              color: "#FFFFFF",
+              fontWeight: 700,
+              fontSize: 12,
+              border: "none",
+            }}
           >
             Cari
           </Button>
@@ -180,7 +208,11 @@ export default class TableDashboard extends React.Component {
           <CircleIcon style={{ fontSize: "14px" }} /> Belum Dinilai
         </Typography>
       );
-    } else if (status === 0 && formEval === 4) {
+    } else if (
+      (status === 0 && formEval === 4) ||
+      (status === 0 && formEval === 3) ||
+      (status === 1 && formEval === 4)
+    ) {
       return (
         <Typography
           style={{
@@ -205,6 +237,7 @@ export default class TableDashboard extends React.Component {
 
   render() {
     const { dataTKP } = this.state;
+    const { perPage } = this.props;
 
     const columns = [
       {
@@ -308,7 +341,20 @@ export default class TableDashboard extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={dataTKP} />
+        <Table
+          columns={columns}
+          dataSource={dataTKP}
+          pagination={{ pageSize: perPage }}
+          footer={() =>
+            "Menampilkan 1 - " +
+            (this.state.dataTKP.length < perPage
+              ? this.state.dataTKP.length
+              : perPage) +
+            " dari " +
+            this.state.dataTKP.length +
+            " data"
+          }
+        />
         <ModalConfirmation
           title={"Kirim Penilaian Evaluasi TKP"}
           description={"Anda yakin ingin mengirimkan Penilaian Evaluasi TKP?"}
@@ -325,3 +371,13 @@ export default class TableDashboard extends React.Component {
     );
   }
 }
+
+TableDashboard.defaultProps = {
+  classes: {},
+  perPage: 10,
+};
+
+TableDashboard.propTypes = {
+  classes: PropTypes.object,
+  perPage: PropTypes.string.isRequired,
+};

@@ -10,7 +10,7 @@ import axios from "axios";
 import TableRow from "./TableRow";
 import moment from "moment";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import ModalSuccess from "../../../ModalSuccess";
+import ModalSuccess from "../../../element/ModalSuccess";
 import Link from "@material-ui/core/Link";
 
 const mockData = [
@@ -172,8 +172,8 @@ class PenilaianTKP extends React.Component {
       jobTT: "",
       jobRole: "",
       id_job_title: "",
+      file_name: "",
       modalSuccess: false,
-      bidang: "",
       renderExtend: false,
     };
   }
@@ -188,14 +188,16 @@ class PenilaianTKP extends React.Component {
         this.setState({
           dataTKP: detailTKP,
           nilai_evaluasi: detailTKP.total_nilai_evaluasi_kerja || "",
-          checked: detailTKP.status_perpanjangan_kontrak || "",
+          checked: (detailTKP && detailTKP.status_perpanjangan_kontrak) || "",
           reason_kontrak: detailTKP.alasan_perpanjangan_kontrak || "",
-          checkedPromotion: detailTKP.status_rekomendasi_naik_job_level || "",
+          checkedPromotion:
+            (detailTKP && detailTKP.status_rekomendasi_naik_job_level) || "",
           id_job_title: detailTKP.id_job_title_usulan || "",
           reason_levelling: detailTKP.alasan_rekomendasi_naik_job_level || "",
           bidang: detailTKP.id_bidang_usulan || "",
           jobTT: detailTKP.id_job_title_levelling_usulan || "",
           jobRole: detailTKP.id_job_role_usulan || "",
+          file_name: detailTKP.file_hasil_penilaian_kinerja_tkp || "",
         });
       });
     axios.get(API.allJobTitle).then((response) => {
@@ -270,7 +272,7 @@ class PenilaianTKP extends React.Component {
       error_perpanjang_kontrak,
       extendStatus,
       milestone,
-      renderExtend
+      renderExtend,
     });
   };
 
@@ -382,7 +384,7 @@ class PenilaianTKP extends React.Component {
   _handleBack = () => {
     this.setState({
       milestone: "step1",
-      renderExtend: false
+      renderExtend: false,
     });
   };
 
@@ -484,11 +486,13 @@ class PenilaianTKP extends React.Component {
       extendStatus,
       checkedPromotion,
       file_evaluasi,
+      file_name,
       error_evaluasi,
       reason_kontrak,
       error_reason_kontrak,
-      dataTKP,
     } = this.state;
+
+    console.log("test", file_name);
 
     if (extendStatus === 0) {
       return (
@@ -530,8 +534,9 @@ class PenilaianTKP extends React.Component {
                 acceptFiles="application/pdf"
                 uploadType="Penilaian Evaluasi TKP"
                 onChange={this._handleFilesFromDrag.bind(this, "file_evaluasi")}
-                hintError={error_evaluasi}
+                hintError={error_evaluasi ? true : false}
                 value={file_evaluasi}
+                name={file_name}
               />
               <p className={classes.negativeCase}>
                 {error_evaluasi
@@ -614,6 +619,7 @@ class PenilaianTKP extends React.Component {
       bidang,
       jobTT,
       jobRole,
+      file_name,
     } = this.state;
     const optionJobTitle = datajobTitle.map((d) => (
       <Option key={d.key} roles={d.keyRoles}>
@@ -710,8 +716,9 @@ class PenilaianTKP extends React.Component {
               acceptFiles="application/pdf"
               uploadType="Penilaian Evaluasi TKP"
               onChange={this._handleFilesFromDrag.bind(this, "file_evaluasi")}
-              hintError={error_evaluasi}
+              hintError={error_evaluasi ? true : false}
               value={file_evaluasi}
+              name={file_name}
             />
             <p className={classes.noteModal}>
               Dokumen hasil penilaian kinerja tidak boleh kosong
@@ -733,7 +740,7 @@ class PenilaianTKP extends React.Component {
 
   _renderMilestone2NonPromotion = () => {
     const { classes } = this.props;
-    const { file_evaluasi, error_evaluasi } = this.state;
+    const { file_evaluasi, error_evaluasi, file_name } = this.state;
     return (
       <Container className={classes.container2}>
         <div style={{ margin: 20 }}>
@@ -747,8 +754,9 @@ class PenilaianTKP extends React.Component {
               acceptFiles="application/pdf"
               uploadType="Penilaian Evaluasi TKP"
               onChange={this._handleFilesFromDrag.bind(this, "file_evaluasi")}
-              hintError={error_evaluasi}
+              hintError={error_evaluasi ? true : false}
               value={file_evaluasi}
+              name={file_name}
             />
             <p className={classes.noteModal}>
               Dokumen hasil penilaian kinerja tidak boleh kosong
@@ -769,7 +777,8 @@ class PenilaianTKP extends React.Component {
   };
 
   render() {
-    const { milestone, checkedPromotion, dataTKP, extendStatus, renderExtend } = this.state;
+    const { milestone, checkedPromotion, dataTKP, extendStatus, renderExtend } =
+      this.state;
     const { classes } = this.props;
     const namaTKP = get(dataTKP.data_tkp, "nama_lengkap");
     const bidangTKP = get(dataTKP.data_tkp, "nama_bidang");

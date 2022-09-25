@@ -17,9 +17,9 @@ import { PushpinOutlined, DownloadOutlined } from "@ant-design/icons";
 import { API } from "../../../configs";
 import axios from "axios";
 import fileDownload from "js-file-download";
-import ModalConfirmation from "../../ModalConfirmation";
-import ModalSuccess from "../../ModalSuccess";
-import ModalLoading from "../../ModalLoading";
+import ModalConfirmation from "../../element/ModalConfirmation";
+import ModalSuccess from "../../element/ModalSuccess";
+import ModalLoading from "../../element/ModalLoading";
 
 const drawerWidth = 240;
 const { Option } = Select;
@@ -135,7 +135,6 @@ class Dashboard extends React.Component {
       dialogSuccess: false,
       dialogLoading: false,
       hiddenColumns: [],
-
     };
   }
 
@@ -153,21 +152,18 @@ class Dashboard extends React.Component {
     const nama = localStorage.getItem("nama");
     console.log(token);
 
- 
-
     const buttonPin = (
       <Menu>
         <Menu.Item key="0">
-          <Checkbox 
+          <Checkbox
             onChange={(e) => {
               this.setState({
                 dialogConfirmation: true,
               });
-            }
-            }
-
-
-          >Nama TKP</Checkbox>
+            }}
+          >
+            Nama TKP
+          </Checkbox>
         </Menu.Item>
         <Menu.Item key="1">
           <Checkbox>Job Title</Checkbox>
@@ -355,7 +351,7 @@ class Dashboard extends React.Component {
                 </Popover>
               </div>
             </div>
-            <TableDashboard perPage={showData}  />
+            <TableDashboard perPage={showData} />
           </Container>
         </main>
       </div>

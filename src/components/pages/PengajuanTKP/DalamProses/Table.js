@@ -40,7 +40,7 @@ export default class TableDalamProses extends React.Component {
         const tkp = response.data.map((tkp) => ({
           index: tkp,
           key: tkp.id_tkp,
-          tanggal_pengajuan: moment(tkp.tanggal_pengajuan).format('LL'),
+          tanggal_pengajuan: moment(tkp.tanggal_pengajuan).format("LL"),
           name: tkp.nama_lengkap,
           jobTitle: tkp.t_job_title_levelling.nama_job_title_levelling,
           roles: tkp.t_job_role.nama_job_role,
@@ -95,8 +95,16 @@ export default class TableDalamProses extends React.Component {
           <Button
             onClick={() => this.handleReset(clearFilters)}
             size="small"
-            style={{ width: 93.5, height: 28, background: '#FFFFFF', borderRadius: '5px', color: '#000000', fontWeight: 700,
-            fontSize: 12, border: '1px solid #C4C4C4' }}
+            style={{
+              width: 93.5,
+              height: 28,
+              background: "#FFFFFF",
+              borderRadius: "5px",
+              color: "#000000",
+              fontWeight: 700,
+              fontSize: 12,
+              border: "1px solid #C4C4C4",
+            }}
           >
             Reset
           </Button>
@@ -104,8 +112,16 @@ export default class TableDalamProses extends React.Component {
             type="primary"
             onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
             size="small"
-            style={{ width: 93.5, height: 28, background: '#DA1E20', borderRadius: '5px', color: '#FFFFFF', fontWeight: 700,
-            fontSize: 12, border: 'none' }}
+            style={{
+              width: 93.5,
+              height: 28,
+              background: "#DA1E20",
+              borderRadius: "5px",
+              color: "#FFFFFF",
+              fontWeight: 700,
+              fontSize: 12,
+              border: "none",
+            }}
           >
             Cari
           </Button>
@@ -151,10 +167,14 @@ export default class TableDalamProses extends React.Component {
   _getDataTkp = async (value) => {
     const token = localStorage.getItem("token");
     const dataTkp = await axios
-      .get(`http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` + value.key, {
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: "blob",
-      })
+      .get(
+        `http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` +
+          value.key,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        }
+      )
       .then((response) => response)
       .catch((error) => console.error(error));
 
@@ -170,7 +190,7 @@ export default class TableDalamProses extends React.Component {
         <Typography
           style={{
             color: "rgba(129, 199, 114, 1)",
-            fontSize: "14px"
+            fontSize: "14px",
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
@@ -181,7 +201,7 @@ export default class TableDalamProses extends React.Component {
         <Typography
           style={{
             color: "rgba(238, 46, 36, 1)",
-            fontSize: "14px"
+            fontSize: "14px",
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
@@ -193,7 +213,7 @@ export default class TableDalamProses extends React.Component {
           style={{
             color: "#36ADFD",
             fontSize: "14px",
-            width: 220
+            width: 220,
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
@@ -204,7 +224,7 @@ export default class TableDalamProses extends React.Component {
         <Typography
           style={{
             color: "#F1B44C",
-            fontSize: "14px"
+            fontSize: "14px",
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
@@ -215,38 +235,34 @@ export default class TableDalamProses extends React.Component {
         <Typography
           style={{
             color: "#FF8E26",
-            fontSize: "14px"
+            fontSize: "14px",
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
         </Typography>
       );
-    }
-    else if (text === "Wawancara") {
+    } else if (text === "Wawancara") {
       return (
         <Typography
           style={{
             color: "#FF787B",
-            fontSize: "14px"
+            fontSize: "14px",
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
         </Typography>
       );
-    }
-    else {
+    } else {
       return (
         <Typography
           variant="span"
-          style={{ color: "rgba(173, 173, 173, 1)",
-          fontSize: "14px" }}
-          
+          style={{ color: "rgba(173, 173, 173, 1)", fontSize: "14px" }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
         </Typography>
       );
     }
-  }
+  };
 
   render() {
     const { perPage } = this.props;
@@ -284,12 +300,12 @@ export default class TableDalamProses extends React.Component {
         key: "status",
         sorter: (a, b) => a.status.localeCompare(b.status),
         ...this.getColumnSearchProps("status", "Status"),
-        render: (text) => this._renderStatus(text)
+        render: (text) => this._renderStatus(text),
       },
       {
         width: 125,
         title: "Aksi",
-        dataIndex: ['name', 'key'],
+        dataIndex: ["name", "key"],
         fixed: "right",
         render: (text, id) => (
           <div>
@@ -316,14 +332,12 @@ export default class TableDalamProses extends React.Component {
 
     const columnsekbid = [
       {
-       
         title: "No",
         dataIndex: "index",
         key: "index",
         render: (text, name, index) => index + 1,
       },
       {
-        
         title: "Bidang",
         dataIndex: "bidang",
         key: "bidang",
@@ -331,7 +345,6 @@ export default class TableDalamProses extends React.Component {
         ...this.getColumnSearchProps("bidang", "Bidang"),
       },
       {
-      
         title: "Nama TKP",
         dataIndex: "name",
         key: "name",
@@ -339,7 +352,6 @@ export default class TableDalamProses extends React.Component {
         ...this.getColumnSearchProps("name", "Nama TKP"),
       },
       {
-        
         title: "Supervisor",
         dataIndex: "supervisor",
         key: "supervisor",
@@ -347,7 +359,6 @@ export default class TableDalamProses extends React.Component {
         ...this.getColumnSearchProps("supervisor", "Supervisor"),
       },
       {
-        
         title: "Nik SPV",
         dataIndex: "nik_spv",
         key: "nik_spv",
@@ -369,7 +380,6 @@ export default class TableDalamProses extends React.Component {
         ...this.getColumnSearchProps("jobTitle", "Job Title"),
       },
       {
-        
         title: "Kelompok Pekerjaan",
         dataIndex: "kelompokPekerjaan",
         key: "kelompokPekerjaan",
@@ -425,9 +435,16 @@ export default class TableDalamProses extends React.Component {
         columns={typeAuth === "sekretaris" ? columnsekbid : columns}
         dataSource={this.state.dataTKP}
         pagination={{ pageSize: perPage }}
-        scroll={{ x:"max-content" }}
-        footer={() => ("Menampilkan 1-" + perPage + " dari " + this.state.dataTKP.length + " data")}
-      
+        scroll={{ x: "max-content" }}
+        footer={() =>
+          "Menampilkan 1 - " +
+          (this.state.dataTKP.length < perPage
+            ? this.state.dataTKP.length
+            : perPage) +
+          " dari " +
+          this.state.dataTKP.length +
+          " data"
+        }
       />
     );
   }
