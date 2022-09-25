@@ -89,8 +89,16 @@ export default class TableRiwayat extends React.Component {
           <Button
             onClick={() => this.handleReset(clearFilters)}
             size="small"
-            style={{ width: 93.5, height: 28, background: '#FFFFFF', borderRadius: '5px', color: '#000000', fontWeight: 700,
-            fontSize: 12, border: '1px solid #C4C4C4' }}
+            style={{
+              width: 93.5,
+              height: 28,
+              background: "#FFFFFF",
+              borderRadius: "5px",
+              color: "#000000",
+              fontWeight: 700,
+              fontSize: 12,
+              border: "1px solid #C4C4C4",
+            }}
           >
             Reset
           </Button>
@@ -98,8 +106,16 @@ export default class TableRiwayat extends React.Component {
             type="primary"
             onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
             size="small"
-            style={{ width: 93.5, height: 28, background: '#DA1E20', borderRadius: '5px', color: '#FFFFFF', fontWeight: 700,
-            fontSize: 12, border: 'none' }}
+            style={{
+              width: 93.5,
+              height: 28,
+              background: "#DA1E20",
+              borderRadius: "5px",
+              color: "#FFFFFF",
+              fontWeight: 700,
+              fontSize: 12,
+              border: "none",
+            }}
           >
             Cari
           </Button>
@@ -168,7 +184,7 @@ export default class TableRiwayat extends React.Component {
         <Typography
           style={{
             color: "rgba(129, 199, 114, 1)",
-            fontSize: "14px"
+            fontSize: "14px",
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
@@ -179,7 +195,7 @@ export default class TableRiwayat extends React.Component {
         <Typography
           style={{
             color: "rgba(238, 46, 36, 1)",
-            fontSize: "14px"
+            fontSize: "14px",
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
@@ -191,7 +207,7 @@ export default class TableRiwayat extends React.Component {
           style={{
             color: "#36ADFD",
             fontSize: "14px",
-            width: 220
+            width: 220,
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
@@ -202,7 +218,7 @@ export default class TableRiwayat extends React.Component {
         <Typography
           style={{
             color: "#F1B44C",
-            fontSize: "14px"
+            fontSize: "14px",
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
@@ -213,38 +229,34 @@ export default class TableRiwayat extends React.Component {
         <Typography
           style={{
             color: "#FF8E26",
-            fontSize: "14px"
+            fontSize: "14px",
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
         </Typography>
       );
-    }
-    else if (text === "Wawancara") {
+    } else if (text === "Wawancara") {
       return (
         <Typography
           style={{
             color: "#FF787B",
-            fontSize: "14px"
+            fontSize: "14px",
           }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
         </Typography>
       );
-    }
-    else {
+    } else {
       return (
         <Typography
           variant="span"
-          style={{ color: "rgba(173, 173, 173, 1)",
-          fontSize: "14px" }}
-          
+          style={{ color: "rgba(173, 173, 173, 1)", fontSize: "14px" }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> {text}
         </Typography>
       );
     }
-  }
+  };
 
   render() {
     const { filterStat } = this.props;
@@ -293,12 +305,12 @@ export default class TableRiwayat extends React.Component {
         key: "status",
         sorter: (a, b) => a.status.localeCompare(b.status),
         ...this.getColumnSearchProps("status", "Status"),
-        render: (text) => this._renderStatus(text)
+        render: (text) => this._renderStatus(text),
       },
       {
         width: 125,
         title: "Aksi",
-        dataIndex: ['name', 'key'],
+        dataIndex: ["name", "key"],
         fixed: "right",
         render: (text, id) => (
           <div>
@@ -382,8 +394,7 @@ export default class TableRiwayat extends React.Component {
         dataIndex: "status",
         key: "status",
         ...this.getColumnSearchProps("status", "Status"),
-        render: (text) => this._renderStatus(text)
-
+        render: (text) => this._renderStatus(text),
       },
 
       {
@@ -419,7 +430,10 @@ export default class TableRiwayat extends React.Component {
         title: "Perubahan Status Terakhir",
         dataIndex: "last_status",
         key: "last_status",
-        ...this.getColumnSearchProps("last_status", "Perubahan Status Terakhir"),
+        ...this.getColumnSearchProps(
+          "last_status",
+          "Perubahan Status Terakhir"
+        ),
         sorter: (a, b) => a.last_status.localeCompare(b.last_status),
       },
 
@@ -459,7 +473,11 @@ export default class TableRiwayat extends React.Component {
         pagination={{ pageSize: perPage }}
         scroll={{ x: "max-content" }}
         footer={() =>
-          "menampilkan 1-" + perPage + " dari " + sourceData.length + " data"
+          "Menampilkan 1 - " +
+          (sourceData.length < perPage ? sourceData.length : perPage) +
+          " dari " +
+          sourceData.length +
+          " data"
         }
       />
     );

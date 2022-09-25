@@ -16,9 +16,9 @@ import { PushpinOutlined, DownloadOutlined } from "@ant-design/icons";
 import { API, ROUTES } from "../../../../configs";
 import axios from "axios";
 import fileDownload from "js-file-download";
-import ModalConfirmation from "../../../ModalConfirmation";
-import ModalSuccess from "../../../ModalSuccess";
-import ModalLoading from "../../../ModalLoading";
+import ModalConfirmation from "../../../element/ModalConfirmation";
+import ModalSuccess from "../../../element/ModalSuccess";
+import ModalLoading from "../../../element/ModalLoading";
 import Link from "@material-ui/core/Link";
 
 const { Option } = Select;
@@ -69,7 +69,7 @@ class RiwayatTKP extends React.Component {
       dialogZip: false,
       dialogSuccess: false,
       dialogLoading: false,
-      fStatus: '',
+      fStatus: "",
     };
   }
 
@@ -86,8 +86,8 @@ class RiwayatTKP extends React.Component {
   };
 
   _handleBreadcumbs = () => {
-    window.location = ROUTES.DASHBOARD()
-  }
+    window.location = ROUTES.DASHBOARD();
+  };
 
   render() {
     const { classes } = this.props;
@@ -168,7 +168,6 @@ class RiwayatTKP extends React.Component {
       </Menu>
     );
 
-
     const filterShowdata = [
       {
         key: 10,
@@ -190,36 +189,36 @@ class RiwayatTKP extends React.Component {
 
     const filterStatus = [
       {
-        key: '',
-        value: 'Semua',
+        key: "",
+        value: "Semua",
       },
       {
-        key: 'Menunggu Konfirmasi',
-        value: 'Menunggu Konfirmasi',
+        key: "Menunggu Konfirmasi",
+        value: "Menunggu Konfirmasi",
       },
       {
-        key: 'Wawancara',
-        value: 'Wawancara',
+        key: "Wawancara",
+        value: "Wawancara",
       },
       {
-        key: 'Diterima',
-        value: 'Diterima',
+        key: "Diterima",
+        value: "Diterima",
       },
       {
-        key: 'Ditolak',
-        value: 'Ditolak',
+        key: "Ditolak",
+        value: "Ditolak",
       },
       {
-        key: 'Resign',
-        value: 'Resign',
+        key: "Resign",
+        value: "Resign",
       },
       {
-        key: 'Perubahan Job Title',
-        value: 'Perubahan Job Title',
+        key: "Perubahan Job Title",
+        value: "Perubahan Job Title",
       },
       {
-        key: 'Kontrak Tidak Diperpanjang',
-        value: 'Kontrak Tidak Diperpanjang',
+        key: "Kontrak Tidak Diperpanjang",
+        value: "Kontrak Tidak Diperpanjang",
       },
     ];
 
@@ -230,29 +229,28 @@ class RiwayatTKP extends React.Component {
       <Option key={d.key}>{d.value}</Option>
     ));
 
-
     return (
       <div className={classes.root}>
         <HeadBar />
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
-          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <Breadcrumb.Item style={{ cursor: "pointer" }}>
               <Link onClick={this._handleBreadcumbs}>Beranda</Link>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item style={{ cursor: "pointer" }}>
               <Link>Pengajuan TKP</Link>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item
-            style={{
-              cursor: "pointer",
-              fontColor: "#DA1E20 !important",
-              fontWeight: "bold",
-            }}
-          >
+            </Breadcrumb.Item>
+            <Breadcrumb.Item
+              style={{
+                cursor: "pointer",
+                fontColor: "#DA1E20 !important",
+                fontWeight: "bold",
+              }}
+            >
               <Link>Riwayat</Link>
-          </Breadcrumb.Item>
-        </Breadcrumb>
+            </Breadcrumb.Item>
+          </Breadcrumb>
           <h1 style={{ marginLeft: 35, marginTop: 10, fontSize: 20 }}>
             <strong>Riwayat</strong>
           </h1>
@@ -360,4 +358,3 @@ class RiwayatTKP extends React.Component {
 }
 
 export default withStyles(styles, { withTheme: true })(RiwayatTKP);
-

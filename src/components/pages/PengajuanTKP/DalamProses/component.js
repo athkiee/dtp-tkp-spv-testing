@@ -16,9 +16,9 @@ import { PushpinOutlined, DownloadOutlined } from "@ant-design/icons";
 import { API, ROUTES } from "../../../../configs";
 import axios from "axios";
 import fileDownload from "js-file-download";
-import ModalConfirmation from "../../../ModalConfirmation";
-import ModalSuccess from "../../../ModalSuccess";
-import ModalLoading from "../../../ModalLoading";
+import ModalConfirmation from "../../../element/ModalConfirmation";
+import ModalSuccess from "../../../element/ModalSuccess";
+import ModalLoading from "../../../element/ModalLoading";
 import Link from "@material-ui/core/Link";
 
 const { Option } = Select;
@@ -84,8 +84,8 @@ class DalamProsesPengajuanTKP extends React.Component {
   };
 
   _handleBreadcumbs = () => {
-    window.location = ROUTES.DASHBOARD()
-  }
+    window.location = ROUTES.DASHBOARD();
+  };
 
   render() {
     const { classes } = this.props;
@@ -195,27 +195,28 @@ class DalamProsesPengajuanTKP extends React.Component {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Breadcrumb style={{ marginLeft: 35, marginTop: 35 }}>
-          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            <Breadcrumb.Item style={{ cursor: "pointer" }}>
               <Link onClick={this._handleBreadcumbs}>Beranda</Link>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item style={{ cursor: "pointer" }}>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item style={{ cursor: "pointer" }}>
               <Link>Pengajuan TKP</Link>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item
-            style={{
-              cursor: "pointer",
-              fontColor: "#DA1E20 !important",
-              fontWeight: "bold",
-            }}
-          >
+            </Breadcrumb.Item>
+            <Breadcrumb.Item
+              style={{
+                cursor: "pointer",
+                fontColor: "#DA1E20 !important",
+                fontWeight: "bold",
+              }}
+            >
               <Link>Dalam Proses</Link>
-          </Breadcrumb.Item>
-        </Breadcrumb>
+            </Breadcrumb.Item>
+          </Breadcrumb>
           <h1 style={{ marginLeft: 35, marginTop: 10, fontSize: 20 }}>
             <strong>Dalam Proses</strong>
           </h1>
           <p style={{ marginLeft: 35, marginBottom: 10 }}>
-            Kelola data TKP berstatus Menunggu Konfirmasi dan Wawancara pada tabel di bawah ini.
+            Kelola data TKP berstatus Menunggu Konfirmasi dan Wawancara pada
+            tabel di bawah ini.
           </p>
           <Container className={classes.container}>
             <div

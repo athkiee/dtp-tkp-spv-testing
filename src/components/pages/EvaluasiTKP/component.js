@@ -14,6 +14,8 @@ import { Button, Breadcrumb, Dropdown, Popover, Checkbox, Menu } from "antd";
 import HeadBar from "../../constant/headBar";
 import { ROUTES, API } from "../../../configs";
 import Link from "@material-ui/core/Link";
+import ModalSuccess from "../../element/ModalSuccess";
+import ModalConfirmation from "../../element/ModalConfirmation";
 
 const nikSpv = sessionStorage.getItem("nik");
 const { Option } = Select;
@@ -62,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
     height: "auto",
     float: "left",
     marginLeft: 35,
+    marginBottom: 35,
     backgroundColor: "white",
     borderRadius: 10,
     maxWidth: "95.3%",
@@ -123,14 +126,38 @@ const buttonPin = (
 );
 
 export default function EvaluasiTKP() {
+  const nik_spv = localStorage.getItem("nik");
+  const token = localStorage.getItem("token");
   const classes = useStyles();
   const urlFormulir = API.getFormulir;
   const [evaluasiLink, getEvaluasi] = useState("");
-  const token = localStorage.getItem("token");
+  const [dataTKP, setData] = useState([]);
+  const [confirmation, setConfirmation] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const fetchData = () => {
+    axios
+      .get(API.tkpUnderSpv + nik_spv + "/aktif", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        const tkp = response.data.map((tkp) => ({
+          key: tkp.id_tkp,
+          name: tkp.nama_lengkap,
+          jobTitle: tkp.t_job_title_levelling.nama_job_title_levelling,
+          status: tkp.status_buka_evaluasi,
+          evaluasi: tkp.t_evaluasi_tkps.status_evaluasi,
+          roles: tkp.t_job_role.nama_job_role,
+          mitra: tkp.t_mitra.nama_mitra,
+        }));
+        setData(tkp);
+      });
+  };
 
   useEffect(() => {
-    downloadEvaluasi();
-  },);
+    // downloadEvaluasi();
+    fetchData();
+  }, []);
 
   const downloadEvaluasi = () => {
     axios
@@ -218,6 +245,36 @@ export default function EvaluasiTKP() {
     <Option key={d.key}>{d.value}</Option>
   ));
 
+  const _handleConfirmationSendAll = () => {
+    setConfirmation(true);
+  };
+
+  const _handleSendAllEvaluasi = () => {
+    const filter = dataTKP.filter((data) => {
+      return (
+        (data.status === 1 && data.evaluasi === 3) ||
+        (data.status === 2 && data.evaluasi === 3)
+      );
+    });
+    let id_tkp = filter.map((val) => {
+      return val.key;
+    });
+    let list_tkp = [{ id_tkp: id_tkp }];
+    console.log(filter);
+    axios
+      .post(
+        API.detailTkp + "evaluasi-tkp/kirim",
+        { list_tkp },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((res) => {
+        console.log("coba", res);
+        setSuccess(true);
+      });
+  };
+
   return (
     <div className={classes.root}>
       <HeadBar />
@@ -290,9 +347,25 @@ export default function EvaluasiTKP() {
               </div>
             </div>
             <div style={{ marginTop: 25 }}>
-              <Button style={{ marginRight: 20, borderRadius: 3, background: '#D51100', color: 'white', fontSize: 14, fontWeight: 700 }}>
+              <Button
+                style={{
+                  marginRight: 20,
+                  borderRadius: 3,
+                  background: "#D51100",
+                  color: "white",
+                  fontSize: 14,
+                  fontWeight: 700,
+                }}
+                onClick={_handleConfirmationSendAll}
+              >
                 Kirim Semua
-                <SendOutlined style={{ marginLeft: 40, marginBottom: 10, transform: 'rotate(-45deg)' }} />
+                <SendOutlined
+                  style={{
+                    marginLeft: 40,
+                    marginBottom: 10,
+                    transform: "rotate(-45deg)",
+                  }}
+                />
               </Button>
               <Dropdown overlay={exportData} trigger={["click"]}>
                 <a
@@ -318,6 +391,22 @@ export default function EvaluasiTKP() {
             </div>
           </div>
           <TableDashboard />
+          <ModalConfirmation
+            title={"Kirim Semua Penilaian Evaluasi TKP"}
+            description={
+              "Anda yakin ingin mengirimkan Semua Penilaian Evaluasi TKP?"
+            }
+            open={confirmation}
+            // handleClose={setConfirmation(false)}
+            getData={_handleSendAllEvaluasi}
+          />
+          <ModalSuccess
+            open={success}
+            label={
+              <center>Semua Penilaian Evaluasi TKP Berhasil dikirim</center>
+            }
+            handleClose={() => window.location.reload()}
+          />
         </Container>
       </main>
     </div>

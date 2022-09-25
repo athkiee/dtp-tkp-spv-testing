@@ -14,7 +14,7 @@ import { Row, Col } from "antd";
 import { Avatar, Breadcrumb } from "antd";
 import { API, ROUTES } from "../../../configs";
 import moment from "moment";
-import ModalSuccess from "../../ModalSuccess";
+import ModalSuccess from "../../element/ModalSuccess";
 import Link from "@material-ui/core/Link";
 
 const { Panel } = Collapse;
@@ -1033,12 +1033,12 @@ class DetailTKP extends React.Component {
                       </Grid>
                       <Grid item xs={6}>
                         {item.title === "Berita Acara" && item.desc !== null ? (
-                          <a
+                          <p
                             className="descLihat"
                             onClick={this._handleDokumenPenunjang.bind(this, item)}
                           >
                             Lihat
-                          </a>
+                          </p>
                         ) : (
                           <p className="desc">{item.desc}</p>
                         )}

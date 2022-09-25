@@ -51,7 +51,7 @@ export default class TableDashboard extends React.Component {
         this.setState({
           dataTKP: tkp,
         });
-        console.log(tkp)
+        console.log(tkp);
       });
   }
 
@@ -91,14 +91,34 @@ export default class TableDashboard extends React.Component {
           <Button
             onClick={() => this.handleReset(clearFilters)}
             size="small"
-            style={{ width: 93.5, height: 28, background: '#FFFFFF', borderRadius: '5px', color: '#000000', fontWeight: 700,
-            fontSize: 12, border: '1px solid #C4C4C4' }}
+            style={{
+              width: 93.5,
+              height: 28,
+              background: "#FFFFFF",
+              borderRadius: "5px",
+              color: "#000000",
+              fontWeight: 700,
+              fontSize: 12,
+              border: "1px solid #C4C4C4",
+            }}
           >
             Reset
           </Button>
           <Button
             type="primary"
-            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}>
+            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+            size="small"
+            style={{
+              width: 93.5,
+              height: 28,
+              background: "#DA1E20",
+              borderRadius: "5px",
+              color: "#FFFFFF",
+              fontWeight: 700,
+              fontSize: 12,
+              border: "none",
+            }}
+          >
             Cari
           </Button>
         </Space>
@@ -143,10 +163,14 @@ export default class TableDashboard extends React.Component {
   _getDataTkp = async (value) => {
     const token = localStorage.getItem("token");
     const dataTkp = await axios
-      .get(`http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` + value.key, {
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: "blob",
-      })
+      .get(
+        `http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` +
+          value.key,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        }
+      )
       .then((response) => response)
       .catch((error) => console.error(error));
 
@@ -165,7 +189,7 @@ export default class TableDashboard extends React.Component {
         day: "numeric",
       };
       return new Date(date).toLocaleDateString("id-ID", options);
-    }; 
+    };
     const columns = [
       {
         title: "Nama TKP",
@@ -198,7 +222,7 @@ export default class TableDashboard extends React.Component {
       {
         width: 125,
         title: "Aksi",
-        dataIndex: ['name', 'key'],
+        dataIndex: ["name", "key"],
         fixed: "right",
         render: (text, id) => (
           <div>
@@ -223,11 +247,8 @@ export default class TableDashboard extends React.Component {
       },
     ];
 
-    
-
     const columnsekbid = [
       {
-        
         // width: "4%",
         title: "N0",
         dataIndex: "index",
@@ -304,9 +325,9 @@ export default class TableDashboard extends React.Component {
           const bb = new Date(b.tanggalOnboard);
           return aa - bb;
         },
-        render : (text) => {
+        render: (text) => {
           return text ? showFormattedDate(text) : "-";
-        }
+        },
       },
       {
         // width: "5%",
@@ -342,9 +363,17 @@ export default class TableDashboard extends React.Component {
         columns={typeAuth === "sekretaris" ? columnsekbid : columns}
         dataSource={this.state.dataTKP}
         pagination={{ pageSize: perPage }}
-        scroll={{x: "max-content" }}
+        scroll={{ x: "max-content" }}
         size="middle"
-        footer={() => 'Menampilkan 1 - ' + perPage + ' dari ' + this.state.dataTKP.length + ' data'}
+        footer={() =>
+          "Menampilkan 1 - " +
+          (this.state.dataTKP.length < perPage
+            ? this.state.dataTKP.length
+            : perPage) +
+          " dari " +
+          this.state.dataTKP.length +
+          " data"
+        }
       />
     );
   }
