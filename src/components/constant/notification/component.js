@@ -185,7 +185,7 @@ export default class NotificationPopover extends React.Component {
                                 Notifikasi
                                 
                             </Typography>
-                            <Link style={{ fontSize: "12px", textAlign: "center", padding: '12px', fontFamily: 'Roboto',
+                            <Link style={{ fontSize: "12px", textAlign: "center", padding: '12px', fontFamily: 'Montserrat',
                                 fontWeight: 400, color: '#EE2E24', textDecoration: "none"
                             }} onClick={this.handlereadall}>
                                 Tandai semua telah dibaca </Link>

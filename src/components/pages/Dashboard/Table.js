@@ -51,6 +51,7 @@ export default class TableDashboard extends React.Component {
         this.setState({
           dataTKP: tkp,
         });
+        console.log(tkp);
       });
   }
 
