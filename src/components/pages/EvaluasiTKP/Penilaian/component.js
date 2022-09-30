@@ -579,6 +579,11 @@ class PenilaianTKP extends React.Component {
               onChange={this._handleChange}
               value={reason_kontrak}
             />
+            <p className={classes.negativeCase}>
+              {error_reason_kontrak
+                ? "Alasan kontrak TKP diperpanjang tidak boleh kosong"
+                : ""}
+            </p>
           </div>
           <div style={{ margin: 20 }}>
             <label className="form-label">
@@ -758,8 +763,10 @@ class PenilaianTKP extends React.Component {
               value={file_evaluasi}
               name={file_name}
             />
-            <p className={classes.noteModal}>
-              Dokumen hasil penilaian kinerja tidak boleh kosong
+            <p className={classes.negativeCase}>
+              {error_evaluasi
+                ? "Dokumen hasil penilaian kinerja tidak boleh kosong"
+                : ""}
             </p>
           </div>
         </div>
