@@ -49,6 +49,16 @@ const styles = (theme) => ({
       backgroundColor: "white",
       borderColor: "#DA1E20",
     },
+    "&:active": {
+      color: "#DA1E20",
+      backgroundColor: "white",
+      borderColor: "#DA1E20",
+    },
+    "&:focus": {
+      color: "#DA1E20",
+      backgroundColor: "white",
+      borderColor: "#DA1E20",
+    },
   },
   negativeCase: {
     color: "#EE2E24",
@@ -188,10 +198,16 @@ class PenilaianTKP extends React.Component {
         this.setState({
           dataTKP: detailTKP,
           nilai_evaluasi: detailTKP.total_nilai_evaluasi_kerja || "",
-          checked: (detailTKP && detailTKP.status_perpanjangan_kontrak) || "",
+          checked:
+            (detailTKP && detailTKP.status_perpanjangan_kontrak) === 0
+              ? 0
+              : (detailTKP && detailTKP.status_perpanjangan_kontrak) || "",
           reason_kontrak: detailTKP.alasan_perpanjangan_kontrak || "",
           checkedPromotion:
-            (detailTKP && detailTKP.status_rekomendasi_naik_job_level) || "",
+            (detailTKP && detailTKP.status_rekomendasi_naik_job_level) === 0
+              ? 0
+              : (detailTKP && detailTKP.status_rekomendasi_naik_job_level) ||
+                "",
           id_job_title: detailTKP.id_job_title_usulan || "",
           reason_levelling: detailTKP.alasan_rekomendasi_naik_job_level || "",
           bidang: detailTKP.id_bidang_usulan || "",
@@ -340,6 +356,10 @@ class PenilaianTKP extends React.Component {
     formData.append("status_perpanjangan_kontrak", this.state.extendStatus);
     formData.append("alasan_perpanjangan_kontrak", this.state.reason_kontrak);
     formData.append(
+      "status_rekomendasi_naik_job_level",
+      this.state.checkedPromotion
+    );
+    formData.append(
       "file_hasil_penilaian_kinerja_tkp",
       this.state.file_evaluasi
     );
@@ -353,16 +373,18 @@ class PenilaianTKP extends React.Component {
         .put(API.detailTkp + id_tkp + "/evaluasi-tkp", formData, {
           headers: { Authorization: `Bearer ${token}` },
         })
-        .then(() => {
+        .then((res) => {
           this.setState({
             modalSuccess: true,
           });
+          console.log("just", res);
         });
     }
     this.setState({
       error_reason_kontrak,
       error_evaluasi,
     });
+    console.log("test", formData);
   };
 
   _handleBreadcumbs = () => {
@@ -385,6 +407,9 @@ class PenilaianTKP extends React.Component {
     this.setState({
       milestone: "step1",
       renderExtend: false,
+      error_evaluasi: false,
+      error_perpanjang_kontrak: false,
+      error_reason_kontrak: false,
     });
   };
 
@@ -444,7 +469,7 @@ class PenilaianTKP extends React.Component {
         </div>
         <div style={{ margin: 20 }}>
           <label className="form-label">
-            Apakah Kontrak TKP di Perpanjang{important}
+            Apakah kontrak TKP diperpanjang{important}
           </label>
           <div>
             <table>
@@ -492,8 +517,6 @@ class PenilaianTKP extends React.Component {
       error_reason_kontrak,
     } = this.state;
 
-    console.log("test", file_name);
-
     if (extendStatus === 0) {
       return (
         <Container className={classes.container2}>
@@ -526,8 +549,9 @@ class PenilaianTKP extends React.Component {
           <div style={{ margin: 20 }}>
             <div>
               <label className="form-label">
-                Silakan upload dokumen/file Hasil Penilaian TKP 2021 yang sudah
-                di tanda tangani oleh Supervisor dan Atasan langsung Supervisor
+                Silakan upload dokumen/file Hasil Penilaian TKP{" "}
+                {new Date().getFullYear()} yang sudah di tanda tangani oleh
+                Supervisor dan Atasan langsung Supervisor
                 {important}
               </label>
               <DragAndDrop
@@ -540,7 +564,7 @@ class PenilaianTKP extends React.Component {
               />
               <p className={classes.negativeCase}>
                 {error_evaluasi
-                  ? "Dokumen hasil penilaian kinerja tidak boleh kosong"
+                  ? "Dokumen Hasil Penilaian Kinerja TKP tidak boleh kosong"
                   : ""}
               </p>
             </div>
@@ -713,9 +737,10 @@ class PenilaianTKP extends React.Component {
         <div style={{ margin: 20 }}>
           <div>
             <label className="form-label">
-              Silakan upload dokumen/file Hasil Penilaian Kinerja TKP 2021 dalam
-              bentuk PDF yang sudah ditandatangani oleh Supervisor dan Atasan
-              Langsung Supervisor{important}
+              Silakan upload dokumen/file Hasil Penilaian Kinerja TKP{" "}
+              {new Date().getFullYear()} dalam bentuk PDF yang sudah
+              ditandatangani oleh Supervisor dan Atasan Langsung Supervisor
+              {important}
             </label>
             <DragAndDrop
               acceptFiles="application/pdf"
@@ -725,8 +750,10 @@ class PenilaianTKP extends React.Component {
               value={file_evaluasi}
               name={file_name}
             />
-            <p className={classes.noteModal}>
-              Dokumen hasil penilaian kinerja tidak boleh kosong
+            <p className={classes.negativeCase}>
+              {error_evaluasi
+                ? "Dokumen Hasil Penilaian Kinerja TKP tidak boleh kosong"
+                : ""}
             </p>
           </div>
         </div>
@@ -751,9 +778,10 @@ class PenilaianTKP extends React.Component {
         <div style={{ margin: 20 }}>
           <div>
             <label className="form-label">
-              Silakan upload dokumen/file Hasil Penilaian Kinerja TKP 2021 dalam
-              bentuk PDF yang sudah ditandatangani oleh Supervisor dan Atasan
-              Langsung Supervisor{important}
+              Silakan upload dokumen/file Hasil Penilaian Kinerja TKP{" "}
+              {new Date().getFullYear()} dalam bentuk PDF yang sudah
+              ditandatangani oleh Supervisor dan Atasan Langsung Supervisor
+              {important}
             </label>
             <DragAndDrop
               acceptFiles="application/pdf"
@@ -765,7 +793,7 @@ class PenilaianTKP extends React.Component {
             />
             <p className={classes.negativeCase}>
               {error_evaluasi
-                ? "Dokumen hasil penilaian kinerja tidak boleh kosong"
+                ? "Dokumen Hasil Penilaian Kinerja TKP tidak boleh kosong"
                 : ""}
             </p>
           </div>
@@ -814,6 +842,7 @@ class PenilaianTKP extends React.Component {
         desc: bidangTKP || "-",
       },
     ];
+    console.log("test", checkedPromotion);
 
     return (
       <div className={classes.root}>
@@ -840,7 +869,9 @@ class PenilaianTKP extends React.Component {
             </Breadcrumb.Item>
           </Breadcrumb>
           <h1 style={{ marginLeft: 35, marginTop: 35, fontSize: 20 }}>
-            <strong>Evaluasi Penilaian Kinerja TKP 2021 TKP</strong>
+            <strong>
+              Evaluasi Penilaian Kinerja TKP DXB {new Date().getFullYear()}
+            </strong>
           </h1>
           <p style={{ marginLeft: 35, marginBottom: 10 }}>
             Lengkapi data Evaluasi TKP dibawah ini.

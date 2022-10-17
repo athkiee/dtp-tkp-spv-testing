@@ -1382,7 +1382,6 @@ class FormPengajuanTKP extends React.Component {
                       onBlur={handleBlur}
                       hintError={touched.cv && errors.cv}
                       value={this.state.cv}
-                      name={"cv"}
                     />
                     <p
                       className={
@@ -1407,7 +1406,6 @@ class FormPengajuanTKP extends React.Component {
                       onBlur={handleBlur}
                       hintError={touched.foto_scanktp && errors.foto_scanktp}
                       value={this.state.foto_scanktp}
-                      name={"foto_scanktp"}
                     />
                     <p
                       className={
@@ -1431,7 +1429,6 @@ class FormPengajuanTKP extends React.Component {
                       )}
                       onBlur={handleBlur}
                       value={this.state.file_skck}
-                      name={"file_skck"}
                     />
 
                     <p

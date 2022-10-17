@@ -12,8 +12,8 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import { ROUTES } from "../../configs/";
 
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
+import Popover from "@mui/material/Popover";
+import Typography from "@mui/material/Typography";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,6 +82,8 @@ export default function SideMenu() {
     setAnchorEl(null);
   };
 
+  const typeAuth = localStorage.getItem("typeAuth");
+
   const open1 = Boolean(anchorEl);
   return (
     <div>
@@ -100,11 +102,10 @@ export default function SideMenu() {
               ? classes.ListItemafter
               : classes.ListItembefore
           }
-          
         >
           <HomeOutlinedIcon />
         </ListItemIcon>
-       
+
         <ListItemText primary="Beranda" />
       </ListItem>
 
@@ -115,7 +116,7 @@ export default function SideMenu() {
       >
         <ListItemIcon
           className={open ? classes.ListItembefore : classes.ListItemafter}
-          aria-owns={open ? 'mouse-over-popover' : undefined}
+          aria-owns={open ? "mouse-over-popover" : undefined}
           aria-haspopup="true"
           onMouseEnter={handlePopoverOpen}
           onMouseLeave={handlePopoverClose}
@@ -125,17 +126,17 @@ export default function SideMenu() {
         <Popover
           id="mouse-over-popover"
           sx={{
-            pointerEvents: 'none',
+            pointerEvents: "none",
           }}
           open={open1}
           anchorEl={anchorEl}
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
+            vertical: "bottom",
+            horizontal: "right",
           }}
           transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
+            vertical: "top",
+            horizontal: "left",
           }}
           onClose={handlePopoverClose}
           disableRestoreFocus
@@ -143,7 +144,6 @@ export default function SideMenu() {
           <Typography sx={{ p: 1 }}>Mengajukan TKP</Typography>
           <Typography sx={{ p: 1 }}>Dalam Proses</Typography>
           <Typography sx={{ p: 1 }}>Riwayat </Typography>
-
         </Popover>
 
         <ListItemText primary="Pengajuan TKP" />
@@ -194,27 +194,33 @@ export default function SideMenu() {
         </Link>
       </Collapse>
 
-      <Link to={ROUTES.KELOLA_EVALUASI_TKP} style={{ color: "black" }}>
-        <ListItem>
-          <ListItemIcon
-            className={
-              window.location.pathname === "/kelola-evaluasi-tkp"
-                ? classes.ListItemafter
-                : classes.ListItembefore
-            }
-          >
-            <PeopleIcon />
-          </ListItemIcon>
-          <ListItemText
-            className={
-              window.location.pathname === "/kelola-evaluasi-tkp"
-                ? classes.ListItemafter
-                : classes.ListItembefore
-            }
-            primary="Evaluasi TKP"
-          ></ListItemText>
-        </ListItem>
-      </Link>
+      {typeAuth === "supervisor" ? (
+        <Link to={ROUTES.KELOLA_EVALUASI_TKP} style={{ color: "black" }}>
+          <ListItem>
+            <ListItemIcon
+              className={
+                window.location.pathname === "/kelola-evaluasi-tkp" ||
+                window.location.pathname === "/penilaian-tkp"
+                  ? classes.ListItemafter
+                  : classes.ListItembefore
+              }
+            >
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText
+              className={
+                window.location.pathname === "/kelola-evaluasi-tkp" ||
+                window.location.pathname === "/penilaian-tkp"
+                  ? classes.ListItemafter
+                  : classes.ListItembefore
+              }
+              primary="Evaluasi TKP"
+            ></ListItemText>
+          </ListItem>
+        </Link>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

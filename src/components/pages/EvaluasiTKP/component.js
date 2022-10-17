@@ -16,6 +16,7 @@ import { ROUTES, API } from "../../../configs";
 import Link from "@material-ui/core/Link";
 import ModalSuccess from "../../element/ModalSuccess";
 import ModalConfirmation from "../../element/ModalConfirmation";
+import ModalFailed from "../../element/ModalFailed";
 
 const nikSpv = sessionStorage.getItem("nik");
 const { Option } = Select;
@@ -128,47 +129,49 @@ const buttonPin = (
 export default function EvaluasiTKP() {
   const nik_spv = localStorage.getItem("nik");
   const token = localStorage.getItem("token");
+  const typeAuth = localStorage.getItem("typeAuth");
   const classes = useStyles();
   const urlFormulir = API.getFormulir;
   const [evaluasiLink, getEvaluasi] = useState("");
   const [dataTKP, setData] = useState([]);
   const [confirmation, setConfirmation] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  const fetchData = () => {
-    axios
-      .get(API.tkpUnderSpv + nik_spv + "/aktif", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        const tkp = response.data.map((tkp) => ({
-          key: tkp.id_tkp,
-          name: tkp.nama_lengkap,
-          jobTitle: tkp.t_job_title_levelling.nama_job_title_levelling,
-          status: tkp.status_buka_evaluasi,
-          evaluasi: tkp.t_evaluasi_tkps.status_evaluasi,
-          roles: tkp.t_job_role.nama_job_role,
-          mitra: tkp.t_mitra.nama_mitra,
-        }));
-        setData(tkp);
-      });
-  };
+  const [authCheck, setCheck] = useState(false);
 
   useEffect(() => {
-    // downloadEvaluasi();
+    const fetchData = () => {
+      const downloadEvaluasi = () => {
+        axios
+          .get(urlFormulir, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            const urlEvaluasi = response.data;
+            getEvaluasi(urlEvaluasi);
+            console.log("test", response);
+          });
+      };
+      downloadEvaluasi();
+      axios
+        .get(API.tkpUnderSpv + nik_spv + "/aktif", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          const tkp = response.data.map((tkp) => ({
+            key: tkp.id_tkp,
+            name: tkp.nama_lengkap,
+            jobTitle: tkp.t_job_title_levelling.nama_job_title_levelling,
+            status: tkp.status_buka_evaluasi,
+            evaluasi: tkp.t_evaluasi_tkps.status_evaluasi,
+            roles: tkp.t_job_role.nama_job_role,
+            mitra: tkp.t_mitra.nama_mitra,
+          }));
+          setData(tkp);
+        });
+      if (typeAuth === "sekretaris") setCheck(true);
+    };
     fetchData();
   }, []);
-
-  const downloadEvaluasi = () => {
-    axios
-      .get(urlFormulir, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        const urlEvaluasi = response.data;
-        getEvaluasi(urlEvaluasi);
-      });
-  };
 
   // const getDataCSV = async () => {
   //   const nama = localStorage.getItem("nama");
@@ -260,7 +263,6 @@ export default function EvaluasiTKP() {
       return val.key;
     });
     let list_tkp = [{ id_tkp: id_tkp }];
-    console.log(filter);
     axios
       .post(
         API.detailTkp + "evaluasi-tkp/kirim",
@@ -269,8 +271,7 @@ export default function EvaluasiTKP() {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then((res) => {
-        console.log("coba", res);
+      .then(() => {
         setSuccess(true);
       });
   };
@@ -299,7 +300,7 @@ export default function EvaluasiTKP() {
             Tata Cara Pengisian Evaluasi TKP
           </h2>
           <ol style={{ marginLeft: 20 }}>
-            <li>Silahkan unduh Dokumen Form Evaluasi sesuai kebutuhan</li>
+            <li>Silakan unduh Dokumen Form Evaluasi sesuai kebutuhan</li>
             <li>
               Bila pengisian dokumen telah selesai, simpan dengan format Excel
               (.xls)
@@ -391,6 +392,12 @@ export default function EvaluasiTKP() {
             </div>
           </div>
           <TableDashboard />
+          <ModalFailed
+            title={"Peringatan"}
+            description={"Halaman ini hanya bisa di akses oleh Supervisor"}
+            open={authCheck}
+            handleClose={() => (window.location = ROUTES.DASHBOARD())}
+          />
           <ModalConfirmation
             title={"Kirim Semua Penilaian Evaluasi TKP"}
             description={
