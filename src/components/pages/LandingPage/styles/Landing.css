@@ -1,26 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 
 .container-landing {
-  margin: 100px auto;
-  width: 1280px;
-  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.2);
+  width: 100%;
   position: relative;
-  border-radius: 10px;
-  height: 720px;
+  height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
 
 .form-content-left {
-  background: linear-gradient(
-    90deg, white
-  );
   border-radius: 10px 0 0 10px;
   position: relative;
 }
 
 .landing-img {
-  width: 95%;
   height: 100%;
   position: absolute;
   top: 50%;

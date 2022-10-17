@@ -46,11 +46,21 @@ const styles = (theme) => ({
     display: "flex",
     justifyContent: "center",
   },
+  previewImage: {
+    display: "block",
+    width: 617,
+    height: 376,
+    margin: "0px auto",
+  },
+  containerButton: {
+    display: "flex",
+  },
   appBarSpacer: theme.mixins.toolbar,
   buttonUnduh: {
-    width: 216,
-    height: 56,
-    marginTop: 10,
+    width: "100%",
+    maxWidth: 403,
+    height: 43,
+    margin: "10px auto",
     borderRadius: 15,
     background: "#D51100",
     outline: "none",
@@ -58,7 +68,6 @@ const styles = (theme) => ({
     color: "#fff",
     fontWeight: 700,
     fontSize: 24,
-    justifyContent: "center",
     cursor: "pointer",
   },
   buttonSimpan: {
@@ -199,7 +208,7 @@ class DetailTKP extends React.Component {
 
   _handleDokumenPenunjang = async (value) => {
     let token = localStorage.getItem("token");
-    console.log('asdasdasd', value);
+    console.log("asdasdasd", value);
     if (value.title === "CV" || value.title === "Berita Acara") {
       await axios
         .get(
@@ -382,14 +391,17 @@ class DetailTKP extends React.Component {
             document={{
               url: preview,
             }}
+            css={{ height: "720px" }}
             hideNavbar={true}
           />
-          <button
-            className={classes.buttonUnduh}
-            onClick={() => window.open(preview)}
-          >
-            Unduh
-          </button>
+          <div className={classes.containerButton}>
+            <button
+              className={classes.buttonUnduh}
+              onClick={() => window.open(preview)}
+            >
+              Unduh
+            </button>
+          </div>
         </Modal>
       </div>
     );
@@ -417,13 +429,18 @@ class DetailTKP extends React.Component {
           >
             {modalTitle}
           </h2>
-          <img src={preview} alt="preview" />
-          <button
-            className={classes.buttonUnduh}
-            onClick={() => window.open(preview)}
-          >
-            Unduh
-          </button>
+          <div>
+            <img src={preview} alt="preview" className={classes.previewImage} />
+          </div>
+
+          <div className={classes.containerButton}>
+            <button
+              className={classes.buttonUnduh}
+              onClick={() => window.open(preview)}
+            >
+              Unduh
+            </button>
+          </div>
         </Modal>
       </div>
     );
@@ -751,7 +768,7 @@ class DetailTKP extends React.Component {
     const typeAuth = localStorage.getItem("typeAuth");
     const nikSpv = localStorage.getItem("nik");
     const namaSpv = localStorage.getItem("nama");
-    console.log('coba', get(dataDetail, "file_berita_acara_wawancara"));
+    console.log("coba", get(dataDetail, "file_berita_acara_wawancara"));
 
     return (
       <div className={classes.root}>
@@ -987,7 +1004,7 @@ class DetailTKP extends React.Component {
                             <UploadOutlined /> Unggah SKCK
                           </button>
                         ) : (
-                            <Link
+                          <Link
                             className="descLihat"
                             onClick={
                               item.title === "Foto/Scan KTP"
@@ -996,7 +1013,7 @@ class DetailTKP extends React.Component {
                             }
                           >
                             Lihat
-                            </Link>
+                          </Link>
                         )}
                       </Grid>
                     </Grid>
@@ -1035,7 +1052,10 @@ class DetailTKP extends React.Component {
                         {item.title === "Berita Acara" && item.desc !== null ? (
                           <p
                             className="descLihat"
-                            onClick={this._handleDokumenPenunjang.bind(this, item)}
+                            onClick={this._handleDokumenPenunjang.bind(
+                              this,
+                              item
+                            )}
                           >
                             Lihat
                           </p>

@@ -187,11 +187,11 @@ export default class TableDashboard extends React.Component {
       return (
         <Typography
           style={{
-            color: "#EB681F",
+            color: "#6D76ED",
             fontSize: "14px",
           }}
         >
-          <CircleIcon style={{ fontSize: "14px" }} /> Draft
+          <CircleIcon style={{ fontSize: "14px" }} /> Sedang Dinilai
         </Typography>
       );
     } else if (
@@ -216,7 +216,7 @@ export default class TableDashboard extends React.Component {
       return (
         <Typography
           style={{
-            color: "#1F9515",
+            color: "#87C779",
             fontSize: "14px",
           }}
         >
@@ -227,7 +227,7 @@ export default class TableDashboard extends React.Component {
       return (
         <Typography
           variant="span"
-          style={{ color: "rgba(173, 173, 173, 1)", fontSize: "14px" }}
+          style={{ color: "#666666", fontSize: "14px" }}
         >
           <CircleIcon style={{ fontSize: "14px" }} /> Belum Dibuka
         </Typography>
