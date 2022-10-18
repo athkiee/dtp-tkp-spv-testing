@@ -176,6 +176,8 @@ class PenilaianTKP extends React.Component {
       datajobTitle: [],
       dataBidang: [],
       datajtLevel: [],
+      allJobTitleLevelling:[],
+      allJobRoles:[],
       datajobRole: [],
       bidang: "",
       jobTitle: "",
@@ -208,13 +210,14 @@ class PenilaianTKP extends React.Component {
               ? 0
               : (detailTKP && detailTKP.status_rekomendasi_naik_job_level) ||
                 "",
-          id_job_title: detailTKP.id_job_title_usulan || "",
+          id_job_title: detailTKP.job_title_usulan.id_job_title_usulan || "",
           reason_levelling: detailTKP.alasan_rekomendasi_naik_job_level || "",
-          bidang: detailTKP.id_bidang_usulan || "",
-          jobTT: detailTKP.id_job_title_levelling_usulan || "",
-          jobRole: detailTKP.id_job_role_usulan || "",
+          bidang: detailTKP.bidang_usulan.id_bidang_usulan || "",
+          jobTT: detailTKP.job_title_levelling_usulan.id_job_title_levelling_usulan || "",
+          jobRole: detailTKP.job_role_usulan.id_job_role_usulan || "",
           file_name: detailTKP.file_hasil_penilaian_kinerja_tkp || "",
         });
+        // console.log("bidang",this.state.dataTKP.bidang_usulan.id_bidang_usulan)
       });
     axios.get(API.allJobTitle).then((response) => {
       const jobTitle = response.data.map((jobTitle) => ({
@@ -235,7 +238,28 @@ class PenilaianTKP extends React.Component {
         dataBidang: tribe,
       });
     });
+    // all job title leveling
+    axios.get(API.allJobTitleLevelling).then((response) => {
+      const jtLevel = response.data.map((jtLevel) => ({
+        key: jtLevel.id_job_title_levelling,
+        name: jtLevel.nama_job_title_levelling,
+      }));
+      this.setState({
+        allJobTitleLevelling: jtLevel,
+      });
+    });
+    // all job role
+    axios.get(API.allJobRoles).then((response) => {
+      const roles = response.data.map((roles) => ({
+        key: roles.id_job_role,
+        name: roles.nama_job_role,
+      }));
+      this.setState({
+        allJobRoles: roles,
+      });
+    });
   }
+  
 
   _handleChange = (event) => {
     const target = event.target;
@@ -439,6 +463,8 @@ class PenilaianTKP extends React.Component {
     const { classes } = this.props;
     const { checked, error_nilai, error_perpanjang_kontrak, nilai_evaluasi } =
       this.state;
+
+  
 
     return (
       <Container className={classes.container2}>
@@ -649,6 +675,9 @@ class PenilaianTKP extends React.Component {
       jobTT,
       jobRole,
       file_name,
+      allJobTitleLevelling,
+      allJobRoles,
+      sort_job_title_levelling
     } = this.state;
     const optionJobTitle = datajobTitle.map((d) => (
       <Option key={d.key} roles={d.keyRoles}>
@@ -664,6 +693,15 @@ class PenilaianTKP extends React.Component {
     const optionJobRole = datajobRole.map((d) => (
       <Option key={d.key}>{d.name}</Option>
     ));
+
+    // console.log("dataBidang", dataBidang)
+    // console.log("dataJobROle", datajobTitle)
+    // console.log("a", allJobTitleLevelling)
+    // console.log("datajobrole", datajobRole)
+
+      
+
+  
 
     return (
       <Container className={classes.container2}>
@@ -682,7 +720,15 @@ class PenilaianTKP extends React.Component {
             onChange={this._handleSelect.bind(this, "bidang")}
             value={bidang}
           >
-            {optionBidang}
+            {/* {optionBidang} */}
+            {dataBidang.map((data) => (
+              <Select.Option
+                key={data.key}
+                value={data.key}
+              >
+                {data.name}
+              </Select.Option>
+            ))}
           </Select>
         </div>
         <div style={{ margin: 20 }}>
@@ -694,7 +740,16 @@ class PenilaianTKP extends React.Component {
             onChange={this._onChangeJobTitle}
             value={id_job_title}
           >
-            {optionJobTitle}
+            {/* {optionJobTitle} */}
+            {datajobTitle.map((data) => (
+              <Select.Option
+                key={data.key}
+                value={data.key}
+                roles={data.keyRoles}
+              >
+                {data.name}
+              </Select.Option>
+            ))}
           </Select>
         </div>
         <div style={{ margin: 20 }}>
@@ -706,7 +761,15 @@ class PenilaianTKP extends React.Component {
             onChange={this._handleSelect.bind(this, "jobTT")}
             value={jobTT}
           >
-            {optionJTlevel}
+            {/* {optionJTlevel} */}
+            {allJobTitleLevelling.map((data) => (
+              <Select.Option
+                key={data.key}
+                value={data.key}
+              >
+                {data.name}
+              </Select.Option>
+            ))}
           </Select>
         </div>
         <div style={{ margin: 20 }}>
@@ -718,7 +781,15 @@ class PenilaianTKP extends React.Component {
             onChange={this._handleSelect.bind(this, "jobRole")}
             value={jobRole}
           >
-            {optionJobRole}
+            {/* {optionJobRole} */}
+            {allJobRoles.map((data) => (
+              <Select.Option
+                key={data.key}
+                value={data.key}
+              >
+                {data.name}
+              </Select.Option>
+            ))}
           </Select>
         </div>
         <div style={{ margin: 20 }}>
@@ -817,7 +888,7 @@ class PenilaianTKP extends React.Component {
     const { classes } = this.props;
     const namaTKP = get(dataTKP.data_tkp, "nama_lengkap");
     const bidangTKP = get(dataTKP.data_tkp, "nama_bidang");
-    console.log("asdad", dataTKP);
+    // console.log("asdad", dataTKP);
     const listProfilerSpv = [
       {
         title: "Nama Supervisor",
@@ -835,14 +906,14 @@ class PenilaianTKP extends React.Component {
     const listProfilerTKP = [
       {
         title: "Nama Bidang/Tribe",
-        desc: namaTKP || "-",
+        desc:  bidangTKP || "-",
       },
       {
         title: "Nama Lengkap Sesuai KTP",
-        desc: bidangTKP || "-",
+        desc: namaTKP || "-",
       },
     ];
-    console.log("test", checkedPromotion);
+    // console.log("test", checkedPromotion);
 
     return (
       <div className={classes.root}>
