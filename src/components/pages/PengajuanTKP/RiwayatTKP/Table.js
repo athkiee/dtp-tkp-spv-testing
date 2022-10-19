@@ -7,7 +7,7 @@ import {
   DownloadOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
-import { ROUTES } from "../../../../configs";
+import { API, ROUTES } from "../../../../configs";
 import Typography from "@material-ui/core/Typography";
 import CircleIcon from "@mui/icons-material/Circle";
 import PropTypes from "prop-types";
@@ -28,13 +28,9 @@ export default class TableRiwayat extends React.Component {
     const token = localStorage.getItem("token");
     const nik_spv = localStorage.getItem("nik");
     axios
-      .get(
-        "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/filter/tkp-under-spv/" +
-          nik_spv,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .get(`${API.kpUnderSpv}` + nik_spv, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
         const riwayat = response.data.map((riwayat) => ({
           key: riwayat.id_tkp,
@@ -161,14 +157,10 @@ export default class TableRiwayat extends React.Component {
   _getDataTkp = async (value) => {
     const token = localStorage.getItem("token");
     const dataTkp = await axios
-      .get(
-        `http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` +
-          value.key,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          responseType: "blob",
-        }
-      )
+      .get(`${API.getZipFile}` + value.key, {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: "blob",
+      })
       .then((response) => response)
       .catch((error) => console.error(error));
 

@@ -65,8 +65,9 @@ function LoginSupervisor(props) {
   const handleLogin = () => {
     setError(null);
     setLoading(true);
+    console.log(process.env.REACT_APP_BASE_URL);
     axios
-      .post(API.loginSpv, {
+      .post(`${API.loginSpv}`, {
         nik: nik.value,
         password: password.value,
       })
@@ -93,6 +94,7 @@ function LoginSupervisor(props) {
         setLoading(false);
 
         setError(error.response.data.message);
+        console.log(error);
 
         // else setError("Something went wrong. Please try again later.");
         // setError(response.data.errors[0].message);
