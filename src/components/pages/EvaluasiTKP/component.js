@@ -148,7 +148,6 @@ export default function EvaluasiTKP() {
           .then((response) => {
             const urlEvaluasi = response.data;
             getEvaluasi(urlEvaluasi);
-            console.log("test", response);
           });
       };
       downloadEvaluasi();
@@ -254,26 +253,24 @@ export default function EvaluasiTKP() {
 
   const _handleSendAllEvaluasi = () => {
     const filter = dataTKP.filter((data) => {
-      return (
-        (data.status === 1 && data.evaluasi === 3) ||
-        (data.status === 2 && data.evaluasi === 3)
-      );
+      return data.evaluasi === 3;
     });
     let id_tkp = filter.map((val) => {
-      return val.key;
+      return { "id_tkp": val.key };
     });
-    let list_tkp = [{ id_tkp: id_tkp }];
+    let data = id_tkp
+    
     axios
       .post(
         `${API.detailTkp}` + "evaluasi-tkp/kirim",
-        { list_tkp },
+        { "list_tkp": data },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
       .then(() => {
         setSuccess(true);
-      });
+      })
   };
 
   return (

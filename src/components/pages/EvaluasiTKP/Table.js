@@ -40,8 +40,8 @@ export default class TableDashboard extends React.Component {
           key: tkp.id_tkp,
           name: tkp.nama_lengkap,
           jobTitle: tkp.t_job_title_levelling.nama_job_title_levelling,
-          status: tkp.status_buka_evaluasi,
-          evaluasi: tkp.t_evaluasi_tkps.status_evaluasi,
+          status_evaluasi: tkp.status_buka_evaluasi,
+          status_penilaian: tkp.t_evaluasi_tkps.status_evaluasi,
           roles: tkp.t_job_role.nama_job_role,
           mitra: tkp.t_mitra.nama_mitra,
         }));
@@ -181,23 +181,21 @@ export default class TableDashboard extends React.Component {
   };
 
   _renderStatus = (id) => {
-    const status = id.status;
-    const formEval = id.evaluasi;
-    if ((status === 1 && formEval === 3) || (status === 2 && formEval === 3)) {
+    const status = id.status_evaluasi;
+    const statusPenilaian = id.status_penilaian;
+    if (statusPenilaian === 4) {
       return (
         <Typography
           style={{
-            color: "#6D76ED",
+            color: "#87C779",
             fontSize: "14px",
           }}
         >
-          <CircleIcon style={{ fontSize: "14px" }} /> Sedang Dinilai
+          <CircleIcon style={{ fontSize: "14px" }} /> Sudah Dinilai
         </Typography>
+        
       );
-    } else if (
-      (status === 1 && formEval === 1) ||
-      (status === 1 && formEval === 2)
-    ) {
+    } else if (statusPenilaian === 1 || statusPenilaian === 2) {
       return (
         <Typography
           style={{
@@ -208,22 +206,18 @@ export default class TableDashboard extends React.Component {
           <CircleIcon style={{ fontSize: "14px" }} /> Belum Dinilai
         </Typography>
       );
-    } else if (
-      (status === 0 && formEval === 4) ||
-      (status === 0 && formEval === 3) ||
-      (status === 1 && formEval === 4)
-    ) {
+    } else if (statusPenilaian === 3) {
       return (
         <Typography
           style={{
-            color: "#87C779",
+            color: "#6D76ED",
             fontSize: "14px",
           }}
         >
-          <CircleIcon style={{ fontSize: "14px" }} /> Sudah Dinilai
+          <CircleIcon style={{ fontSize: "14px" }} /> Sedang Dinilai
         </Typography>
       );
-    } else {
+    } else if (status === 0) {
       return (
         <Typography
           variant="span"
@@ -276,8 +270,8 @@ export default class TableDashboard extends React.Component {
         fixed: "right",
         render: (text, id) => (
           <div>
-            {(id.status === 1 && id.evaluasi === 1) ||
-            (id.status === 1 && id.evaluasi === 2) ? (
+            {(id.status_evaluasi === 1 && id.status_penilaian === 1) ||
+              (id.status_evaluasi === 1 && id.status_penilaian === 2) ? (
               <Tooltip placement="bottom" title={"Tambah Penilaian"}>
                 <FileAddOutlined
                   onClick={this._handleOpenDetail.bind(this, id.key)}
@@ -289,8 +283,8 @@ export default class TableDashboard extends React.Component {
                   }}
                 />
               </Tooltip>
-            ) : (id.status === 1 && id.evaluasi === 3) ||
-              (id.status === 2 && id.evaluasi === 3) ? (
+            ) : (id.status_evaluasi === 1 && id.status_penilaian === 3) ||
+                (id.status_evaluasi === 1 && id.status_penilaian === 4) ? (
               <Tooltip placement="bottom" title={"Edit Penilaian"}>
                 <EditOutlined
                   onClick={this._handleOpenDetail.bind(this, id.key)}
@@ -312,8 +306,7 @@ export default class TableDashboard extends React.Component {
                 }}
               />
             )}
-            {(id.status === 2 && id.evaluasi === 3) ||
-            (id.status === 1 && id.evaluasi === 3) ? (
+            {(id.status_penilaian === 3 ) ? (
               <Tooltip placement="bottom" title={"Kirim Penilaian"}>
                 <SendOutlined
                   onClick={this._renderModalConfirm.bind(this, id.key)}

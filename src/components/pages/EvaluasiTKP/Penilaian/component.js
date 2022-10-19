@@ -210,12 +210,12 @@ class PenilaianTKP extends React.Component {
               ? 0
               : (detailTKP && detailTKP.status_rekomendasi_naik_job_level) ||
                 "",
-          id_job_title: detailTKP.job_title_usulan.id_job_title_usulan || "",
-          reason_levelling: detailTKP.alasan_rekomendasi_naik_job_level || "",
-          bidang: detailTKP.bidang_usulan.id_bidang_usulan || "",
-          jobTT: detailTKP.job_title_levelling_usulan.id_job_title_levelling_usulan || "",
-          jobRole: detailTKP.job_role_usulan.id_job_role_usulan || "",
-          file_name: detailTKP.file_hasil_penilaian_kinerja_tkp || "",
+          id_job_title: detailTKP.job_title_usulan && detailTKP.job_title_usulan.id_job_title_usulan,
+          reason_levelling: detailTKP.alasan_rekomendasi_naik_job_level || " " ,
+          bidang: detailTKP.bidang_usulan && detailTKP.bidang_usulan.id_bidang_usulan,
+          jobTT: detailTKP.job_title_levelling_usulan && detailTKP.job_title_levelling_usulan.id_job_title_levelling_usulan ,
+          jobRole: detailTKP.job_role_usulan && detailTKP.job_role_usulan.id_job_role_usulan ,
+          file_name: detailTKP.file_hasil_penilaian_kinerja_tkp  ,
         });
         // console.log("bidang",this.state.dataTKP.bidang_usulan.id_bidang_usulan)
       });
