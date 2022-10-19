@@ -401,7 +401,7 @@ export default function EvaluasiTKP() {
               "Anda yakin ingin mengirimkan Semua Penilaian Evaluasi TKP?"
             }
             open={confirmation}
-            // handleClose={setConfirmation(false)}
+            handleClose={() => setConfirmation(false)}
             getData={_handleSendAllEvaluasi}
           />
           <ModalSuccess
