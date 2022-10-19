@@ -153,7 +153,7 @@ export default function EvaluasiTKP() {
       };
       downloadEvaluasi();
       axios
-        .get(API.tkpUnderSpv + nik_spv + "/aktif", {
+        .get(`${API.tkpUnderSpv}` + nik_spv + "/aktif", {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
@@ -265,7 +265,7 @@ export default function EvaluasiTKP() {
     let list_tkp = [{ id_tkp: id_tkp }];
     axios
       .post(
-        API.detailTkp + "evaluasi-tkp/kirim",
+        `${API.detailTkp}` + "evaluasi-tkp/kirim",
         { list_tkp },
         {
           headers: { Authorization: `Bearer ${token}` },

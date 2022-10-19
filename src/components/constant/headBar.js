@@ -45,7 +45,7 @@ class HeadBar extends React.Component {
     const token = localStorage.getItem("token");
     const auth = localStorage.getItem("typeAuth");
     if (auth === "supervisor" && token !== null) {
-      axios.get(API.checkToken + `?token=${token}`).then((response) => {
+      axios.get(`${API.checkToken}` + `?token=${token}`).then((response) => {
         const status = response.data;
         if (status !== "OK") {
           this.setState({ modalExpired: true });
@@ -54,15 +54,15 @@ class HeadBar extends React.Component {
       });
     }
     if (auth === "sekretaris" && token !== null) {
-      axios.get(API.checkToken + `?token=${token}`).then((response) => {
+      axios.get(`${API.checkToken}` + `?token=${token}`).then((response) => {
         const status = response.data;
         if (status !== "OK") {
           this.setState({ modalExpired: true });
           localStorage.clear();
         }
       });
-    } 
-    if(token === null) {
+    }
+    if (token === null) {
       this.setState({ modalExpired: true });
       localStorage.clear();
     }
@@ -259,8 +259,6 @@ class HeadBar extends React.Component {
                     color: "#DA1E20",
                     fontFamily: "Montserrat",
                   }}
-
-                
                 >
                   Keluar
                 </Typography>
@@ -288,7 +286,7 @@ class HeadBar extends React.Component {
                 <Button
                   onClick={this.handleCloseModal}
                   style={{
-                    borderColor:"black",
+                    borderColor: "black",
                     color: "black",
                     width: "60%",
                     height: "40px",
@@ -305,8 +303,8 @@ class HeadBar extends React.Component {
                 container
                 irection="row"
                 justifyContent="center"
-                alignItems="flex-end">
-
+                alignItems="flex-end"
+              >
                 <Button
                   variant="contained"
                   onClick={this.handleLogout}

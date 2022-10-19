@@ -30,7 +30,7 @@ export default class TableDashboard extends React.Component {
     const nik_spv = localStorage.getItem("nik");
 
     axios
-      .get(API.tkpUnderSpv + nik_spv + "/aktif", {
+      .get(`${API.tkpUnderSpv}` + nik_spv + "/aktif", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -163,14 +163,10 @@ export default class TableDashboard extends React.Component {
   _getDataTkp = async (value) => {
     const token = localStorage.getItem("token");
     const dataTkp = await axios
-      .get(
-        `http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_zip_file/` +
-          value.key,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          responseType: "blob",
-        }
-      )
+      .get(`${API.getZipFile}` + value.key, {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: "blob",
+      })
       .then((response) => response)
       .catch((error) => console.error(error));
 

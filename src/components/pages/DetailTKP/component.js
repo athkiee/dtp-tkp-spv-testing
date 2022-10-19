@@ -185,7 +185,7 @@ class DetailTKP extends React.Component {
     let id_tkp = localStorage.getItem("detail_id");
     let token = localStorage.getItem("token");
     axios
-      .get(API.detailTkp + id_tkp, {
+      .get(`${API.detailTkp}` + id_tkp, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -195,7 +195,7 @@ class DetailTKP extends React.Component {
         });
       });
     axios
-      .get(API.detailTkp + id_tkp + "/riwayat", {
+      .get(`${API.detailTkp}` + id_tkp + "/riwayat", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -211,13 +211,9 @@ class DetailTKP extends React.Component {
     console.log("asdasdasd", value);
     if (value.title === "CV" || value.title === "Berita Acara") {
       await axios
-        .get(
-          "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_file/" +
-            value.desc,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
+        .get(`${API.getFile}` + value.desc, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then((response) => {
           const urlDokumen = response.data;
           this.setState({
@@ -229,13 +225,9 @@ class DetailTKP extends React.Component {
         });
     } else if (value.title === "SKCK") {
       await axios
-        .get(
-          "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_file/" +
-            value.desc,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
+        .get(`${API.getFile}` + value.desc, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then((response) => {
           const urlDokumen = response.data;
           this.setState({
@@ -258,13 +250,9 @@ class DetailTKP extends React.Component {
   _handleDokumenFoto = async (value) => {
     let token = localStorage.getItem("token");
     await axios
-      .get(
-        "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/get_file/" +
-          value.desc,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .get(`${API.getFile}` + value.desc, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
         const urlDokumen = response.data;
         this.setState({
@@ -298,13 +286,9 @@ class DetailTKP extends React.Component {
       payload.append("id_tkp", id_tkp);
       payload.append("file_skck", file_skck);
       axios
-        .put(
-          "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/tkp/documents/upload-skck",
-          payload,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
+        .put(`${API.uploadSKCK}`, payload, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then((res) => {
           this.setState({
             modalInputSkck: false,
