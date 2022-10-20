@@ -170,7 +170,7 @@ export default function EvaluasiTKP() {
       if (typeAuth === "sekretaris") setCheck(true);
     };
     fetchData();
-  }, []);
+  }, [nik_spv, token, typeAuth, urlFormulir]);
 
   // const getDataCSV = async () => {
   //   const nama = localStorage.getItem("nama");
@@ -262,8 +262,8 @@ export default function EvaluasiTKP() {
     
     axios
       .post(
-        `${API.detailTkp}` + "evaluasi-tkp/kirim",
-        { "list_tkp": data },
+        `${API.detailTkp}evaluasi-tkp/kirim`,
+        { list_tkp: data },
         {
           headers: { Authorization: `Bearer ${token}` },
         }

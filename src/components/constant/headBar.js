@@ -45,7 +45,7 @@ class HeadBar extends React.Component {
     const token = localStorage.getItem("token");
     const auth = localStorage.getItem("typeAuth");
     if (auth === "supervisor" && token !== null) {
-      axios.get(`${API.checkToken}` + `?token=${token}`).then((response) => {
+      axios.get(`${API.checkToken}?token=${token}`).then((response) => {
         const status = response.data;
         if (status !== "OK") {
           this.setState({ modalExpired: true });
@@ -54,7 +54,7 @@ class HeadBar extends React.Component {
       });
     }
     if (auth === "sekretaris" && token !== null) {
-      axios.get(`${API.checkToken}` + `?token=${token}`).then((response) => {
+      axios.get(`${API.checkToken}?token=${token}`).then((response) => {
         const status = response.data;
         if (status !== "OK") {
           this.setState({ modalExpired: true });
