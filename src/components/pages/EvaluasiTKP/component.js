@@ -256,21 +256,21 @@ export default function EvaluasiTKP() {
       return data.evaluasi === 3;
     });
     let id_tkp = filter.map((val) => {
-      return { "id_tkp": val.key };
+      return { id_tkp: val.key };
     });
-    let data = id_tkp
-    
+    let data = id_tkp;
+
     axios
       .post(
         `${API.detailTkp}` + "evaluasi-tkp/kirim",
-        { "list_tkp": data },
+        { list_tkp: data },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
       .then(() => {
         setSuccess(true);
-      })
+      });
   };
 
   return (
@@ -401,7 +401,7 @@ export default function EvaluasiTKP() {
               "Anda yakin ingin mengirimkan Semua Penilaian Evaluasi TKP?"
             }
             open={confirmation}
-            // handleClose={setConfirmation(false)}
+            handleClose={() => setConfirmation(false)}
             getData={_handleSendAllEvaluasi}
           />
           <ModalSuccess
