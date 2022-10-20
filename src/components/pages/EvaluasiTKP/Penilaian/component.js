@@ -12,6 +12,7 @@ import moment from "moment";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import ModalSuccess from "../../../element/ModalSuccess";
 import Link from "@material-ui/core/Link";
+import { Formik } from "formik";
 
 const mockData = [
   {
@@ -426,7 +427,7 @@ class PenilaianTKP extends React.Component {
   _handleFilesFromDrag = (name, file) => {
     this.setState({
       [name]: file,
-      file_name: file.name,
+      file_name: file?.name,
       error_evaluasi: false,
     });
   };
