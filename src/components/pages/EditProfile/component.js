@@ -9,12 +9,14 @@ import { EditOutlined } from "@ant-design/icons";
 
 import "./styles.css";
 
-// import ModalSuccess from "../../../element/ModalSuccess";
-// import ModalFailed from "../../../element/ModalFailed";
+import ModalSuccess from "../../element/ModalSubmit/success.js";
+import ModalFailed from "../../element/ModalSubmit/failed.js";
+
 
 function EditProfile(){
-  const token = localStorage.getItem("token");
-
+  const token_spv = localStorage.getItem("token");
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hZG1pbiI6NywibmFtYV9sZW5na2FwIjoiQWRtaW4gdGVzdCAxIiwibmlrIjoiMTIzNDU2IiwiZW1haWwiOiJkdHB0a3AyMUBnbWFpbC5jb20iLCJub19ocCI6IjA4OTEyNzgzODY3MzciLCJ1c2VyX3R5cGUiOiJhZG1pbiIsImlhdCI6MTY2NjMwNjQzNCwiZXhwIjoxNjY2MzkyODM0fQ.vJjNfeZwCZjGnsvbDCnCqQrKJknSEpr1kn1fYdKO7ok"
+  const id = localStorage.getItem('id_spv');
   const [form] = Form.useForm();
   const [nikValid = true, setNikValid] = React.useState([]);
   const [passwordValid = true, setpasswordValid] = React.useState([]);
@@ -29,7 +31,75 @@ function EditProfile(){
   };
   React.useEffect(() => {
     fetchBidang();
+    loadData();
   }, []);
+
+  const [spv, setSpv] = useState([])
+
+  const loadData = () => {
+    axios
+      .get(API.loadSpv + id, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        if (res) {
+          form.setFieldsValue({
+            nik_spv: res.data.nik_spv,
+            nama_lengkap: res.data.nama_lengkap,
+            email: res.data.nik_spv + "@telkom.co.id",
+            no_hp: res.data.no_hp,
+            id_bidang: res.data.id_bidang
+            // props.data ? props.data.target_id : ""
+          });
+          setSpv(res.data)
+          // console.log("res", res)
+        }
+      });
+  };
+
+  const stringAvatar = () => {
+    const name = spv.nama_lengkap
+    if (name) {
+      const splitStringName = name.split(" ");
+      if (splitStringName.length === 1) {
+        return {
+          sx: {
+            bgcolor: stringToColor(name),
+          },
+          children: `${splitStringName[0][0]}`,
+        };
+      } else {
+        return {
+          sx: {
+            bgcolor: stringToColor(name),
+          },
+          children: `${splitStringName[0][0]}${
+            splitStringName[splitStringName.length - 1][0]
+          }`,
+        };
+      }
+    }
+  }
+  function stringToColor(string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+  }
+
 
   const fetchBidang = () => {
     axios
@@ -52,31 +122,32 @@ function EditProfile(){
       id_bidang: values.id_bidang,
       password: values.password,
     };
+    console.log("formSubmit", dataSpv)
     axios
-      .post(API.addSpv, dataSpv, {
+      .post(API.editSpv+id, dataSpv, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token_spv}`,
         },
       })
       .then(async (res) => {
         if (res) {
           await form.resetFields();
-          // setInputSukses(true);
+          setInputSukses(true);
         } 
       })
       .catch((error, response) => {
         // console.log("eror",error)
         // console.log("eror mes",error.response.data.message)
-        const message = error.response.data.message
+        const message = error.response.message
         if(message === "NIK sudah terdaftar"){
-          // setInputGagal(true);
+          setInputGagal(true);
           setErrorMessage(message)
         } else if(message === "No. Handphone sudah terdaftar"){
-          // setInputGagal(true);
+          setInputGagal(true);
           setErrorMessage(message)
-        } else if(message === "Email sudah terdaftar"){
-          // setInputGagal(true);
+        } else if(message === "Email sudah terdaftar" || "NIK Tidak sesuai format"){
+          setInputGagal(true);
           setErrorMessage("NIK sudah terdaftar")
         }
       });
@@ -238,31 +309,40 @@ function EditProfile(){
       // console.log('search:', value);
     };
     const [openForm = false, setOpenForm] = useState()
+    const foundBidang = bidang.find(obj => {
+      return obj.id_bidang === spv.id_bidang;
+    });
 
-    console.log(openForm)
+    const kodeBidang = foundBidang ? foundBidang.kode_bidang : ""
 
     const listProfiler = [
       {
         title: "NIK",
-        desc: "zz",
+        desc: spv.nik_spv,
       },
       {
         title: "Nama Supervisor",
-        desc: "-",
+        desc: spv.nama_lengkap,
       },
       {
         title: "Email",
-        desc: "-",
+        desc: spv.email,
       },
       {
         title: "Nomor WhatsApp Aktif",
-        desc: "-",
+        desc: spv.no_hp,
       },
       {
         title: "Bidang",
-        desc: "-",
+        desc: kodeBidang,
       },
     ];
+
+    const [inputSukses, setInputSukses] = useState(false)
+    const [inputGagal, setInputGagal] = useState(false)
+    const refreshPage = () =>{
+      window.location = ROUTES.EDIT_PROFILE()
+    }
 
     return(
         <div className={classes.root}>
@@ -327,10 +407,12 @@ function EditProfile(){
                       <Avatar
                       size={110}
                       style={{
-                        color: "#f56a00",
+                        color: "#131b23",
+                        fontSize:"2rem",
+                        fontWeight: "bold",
                         backgroundColor: "#EAEAF1",
                       }}
-                      // {...stringAvatar(get(dataDetail, "nama_lengkap"))}
+                      {...stringAvatar(spv.nama_lengkap)}
                       />
                     </Col>
                     <Col
@@ -343,8 +425,7 @@ function EditProfile(){
                               marginTop: 25,
                               width:"max-content",
                       }}>
-                        Karina Wang
-                       
+                        {spv.nama_lengkap}  
                         <span
                           onClick={()=>
                             setOpenForm(!openForm)
@@ -405,7 +486,7 @@ function EditProfile(){
                       { required: true, message: "Masukkan NIK"},
                       { pattern: /^[\d]{6,6}$/, message:"NIK tidak valid"},                
                     ]}     
-                    help={nikValid ? "NIK terdiri dari 6 digit" : null}
+                    // help={nikValid ? "NIK terdiri dari 6 digit" : null}
                     style={{marginBottom:8}} 
                   > 
                     <InputNumber type="number" style={{width: "100%"}} onChange={handleChange}
@@ -451,7 +532,7 @@ function EditProfile(){
                       {required: true, message: "Masukkan nomor Whatsapp aktif"},
                       {pattern : /^(\+62|62|0)8[1-9][0-9]{3,12}$/}
                     ]}
-                    help={ phoneValid ? "Nomor WhatsApp Aktif terdiri dari 6-15 karakter" : null }
+                    // help={ phoneValid ? "Nomor WhatsApp Aktif terdiri dari 6-15 karakter" : null }
                     style={{marginBottom:8}}
                   >
                     <Input style={{width:"100%"}}/>
@@ -524,9 +605,9 @@ function EditProfile(){
                   <Form.Item 
                   name="password"
                   rules={[
-                    { pattern: /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/ , message: "alpa"},         
+                    { pattern: /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/ , message: "Sandi setidaknya terdiri dari 8 karakter alfanumerik"},         
                   ]}
-                  help="Sandi setidaknya terdiri dari 8 karakter alfanumerik"
+                  // help="Sandi setidaknya terdiri dari 8 karakter alfanumerik"
                   style={{marginBottom:8}}>
                     <Input.Password />
                   </Form.Item>
@@ -590,7 +671,24 @@ function EditProfile(){
           </Grid>
         </Container>
         <Container maxWidth="lg" className={classes.container}></Container>
-
+        <ModalSuccess
+          open={inputSukses}
+          handleClose={() => {
+            setInputSukses(false)
+            refreshPage()
+            }
+          }
+          title={"Data Berhasil Diubah"}
+        />
+        <ModalFailed
+          open={inputGagal}
+          handleClose={() =>
+            setInputGagal(false)
+          }
+          color={"#2ECC71"}
+          title={errorMessage}
+          description={"Data akun Supervisor gagal diubah "}
+        />
             </main>
         </div>
     );
