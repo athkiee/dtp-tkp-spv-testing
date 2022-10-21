@@ -194,7 +194,10 @@ export default class TableDashboard extends React.Component {
           <CircleIcon style={{ fontSize: "14px" }} /> Sudah Dinilai
         </Typography>
       );
-    } else if (status === 1 || statusPenilaian === 2) {
+    } else if (
+      (status === 1 && statusPenilaian === 2) ||
+      (status === 1 && statusPenilaian === 1)
+    ) {
       return (
         <Typography
           style={{
