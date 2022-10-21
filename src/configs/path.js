@@ -21,6 +21,7 @@ function Path() {
       <Route path={ROUTES.PENGAJUAN_TKP_RIWAYAT()} component={pages.RiwayatTKP} />
       <Route path={ROUTES.DETAIL_TKP()} component={pages.DetailTKP} />
       <Route path={ROUTES.PENILAIAN_TKP()} component={pages.PenilaianTKP} />
+      <Route path={ROUTES.EDIT_PROFILE()} component={pages.EditProfile} />
     </Router>
   );
 }

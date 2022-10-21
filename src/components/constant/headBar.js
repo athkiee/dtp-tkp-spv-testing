@@ -27,6 +27,7 @@ import { useStyles } from "./stylesHeadBar";
 import { withRouter } from "react-router-dom";
 import ModalLoginExpired from "../element/ModalLoginExpired";
 import { ROUTES, API } from "../../configs";
+import { Link } from "react-router-dom";
 
 class HeadBar extends React.Component {
   constructor(props) {
@@ -197,9 +198,13 @@ class HeadBar extends React.Component {
               className={classes.iconbutton}
               onClick={this.handleClose}
             >
+              <Link to={ROUTES.EDIT_PROFILE} style={{ color: "black" }}>
               <Box width="140px" textAlign={"left"}>
+              
                 Profile
               </Box>
+              </Link>
+
             </IconButton>
           </Box>
           <Box>

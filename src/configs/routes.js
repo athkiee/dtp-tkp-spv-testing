@@ -35,6 +35,9 @@ const routes = {
   PENILAIAN_TKP() {
     return `/penilaian-tkp`;
   },
+  EDIT_PROFILE(){
+    return `/edit-profile`;
+  }
 };
 
 export default routes;
