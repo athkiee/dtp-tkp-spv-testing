@@ -205,9 +205,9 @@ function LoginSekre(props) {
                 />
               </Grid>
               <Grid item className="mt-2" style={{ marginTop: "10px" }}>
-                <Link to="/forgot-password" style={{ color: "#D51100" }}>
+                {/* <Link to="/forgot-password" style={{ color: "#D51100" }}>
                   Lupa Password?
-                </Link>
+                </Link> */}
               </Grid>
             </Grid>
           </div>
