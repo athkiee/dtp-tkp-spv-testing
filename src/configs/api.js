@@ -1,7 +1,5 @@
 const tokenSpv = localStorage.getItem("token");
-const baseUrl =
-  "http://ec2-54-179-167-74.ap-southeast-1.compute.amazonaws.com:4004/";
-
+const baseUrl = process.env.REACT_APP_BASE_URL;
 const token = {
   headers: { Authorization: `Bearer ${tokenSpv}` },
 };
