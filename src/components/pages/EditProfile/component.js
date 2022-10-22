@@ -15,7 +15,7 @@ import ModalFailed from "../../element/ModalSubmit/failed.js";
 
 function EditProfile(){
   const token_spv = localStorage.getItem("token");
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hZG1pbiI6NywibmFtYV9sZW5na2FwIjoiQWRtaW4gdGVzdCAxIiwibmlrIjoiMTIzNDU2IiwiZW1haWwiOiJkdHB0a3AyMUBnbWFpbC5jb20iLCJub19ocCI6IjA4OTEyNzgzODY3MzciLCJ1c2VyX3R5cGUiOiJhZG1pbiIsImlhdCI6MTY2NjMwNjQzNCwiZXhwIjoxNjY2MzkyODM0fQ.vJjNfeZwCZjGnsvbDCnCqQrKJknSEpr1kn1fYdKO7ok"
+  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hZG1pbiI6NywibmFtYV9sZW5na2FwIjoiQWRtaW4gdGVzdCAxIiwibmlrIjoiMTIzNDU2IiwiZW1haWwiOiJkdHB0a3AyMUBnbWFpbC5jb20iLCJub19ocCI6IjA4OTEyNzgzODY3MzciLCJ1c2VyX3R5cGUiOiJhZG1pbiIsImlhdCI6MTY2NjMwNjQzNCwiZXhwIjoxNjY2MzkyODM0fQ.vJjNfeZwCZjGnsvbDCnCqQrKJknSEpr1kn1fYdKO7ok"
   const id = localStorage.getItem('id_spv');
   const [form] = Form.useForm();
   // eslint-disable-next-line
@@ -35,6 +35,7 @@ function EditProfile(){
   React.useEffect(() => {
     fetchBidang();
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [spv, setSpv] = useState([])
@@ -42,7 +43,7 @@ function EditProfile(){
   const loadData = () => {
     axios
       .get(API.loadSpv + id, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token_spv}` },
       })
       .then((res) => {
         if (res) {
@@ -107,7 +108,7 @@ function EditProfile(){
   const fetchBidang = () => {
     axios
       .get(API.allBidang, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token_spv}` },
       })
       .then((res) => {
         if (res) {
@@ -125,7 +126,7 @@ function EditProfile(){
       id_bidang: values.id_bidang,
       password: values.password,
     };
-    console.log("formSubmit", dataSpv)
+    // console.log("formSubmit", dataSpv)
     axios
       .post(API.editSpv+id, dataSpv, {
         headers: {
@@ -154,6 +155,7 @@ function EditProfile(){
           setErrorMessage("NIK sudah terdaftar")
         }
       });
+      localStorage.setItem('nama', values.nama_lengkap);
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -493,7 +495,7 @@ function EditProfile(){
                     style={{marginBottom:8}} 
                   > 
                     <InputNumber type="number" style={{width: "100%"}} onChange={handleChange}
-                    onWheel={(e) => e.target.blur()}/>            
+                    onWheel={(e) => e.target.blur()} disabled/>            
                   </Form.Item>
 
                   <label className="form-label">
@@ -514,7 +516,7 @@ function EditProfile(){
                       }
                     ]}
                   >    
-                  <Input/>
+                  <Input disabled/>
                   </Form.Item>
                   <label className="form-label">Email{important}</label>
                   <Form.Item
@@ -523,7 +525,7 @@ function EditProfile(){
                     //   { required: true, message: "Email tidak boleh kosong" },
                     // ]}
                   >
-                    <Input readOnly/>
+                    <Input disabled/>
                   </Form.Item>
 
                   <label className="form-label">
@@ -538,7 +540,7 @@ function EditProfile(){
                     // help={ phoneValid ? "Nomor WhatsApp Aktif terdiri dari 6-15 karakter" : null }
                     style={{marginBottom:8}}
                   >
-                    <Input style={{width:"100%"}}/>
+                    <Input style={{width:"100%"}} disabled/>
                   </Form.Item>
 
                   <label className="form-label">Bidang{important}</label>
@@ -553,6 +555,7 @@ function EditProfile(){
                     optionFilterProp="children"
                     onSearch={onSearch}
                     filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+                    disabled
                     >
                       {bidang.length > 0
                         ? bidang.map((v, i) => (
@@ -564,7 +567,7 @@ function EditProfile(){
                     </Select>
                   </Form.Item>
 
-                  <Form.Item
+                  {/* <Form.Item
                   noStyle
                   shouldUpdate
                   >
@@ -576,8 +579,6 @@ function EditProfile(){
                         email,
                          } = getFieldsValue();
                       const formIsComplete = !!nik_spv && !!nama_lengkap && !!email && !!no_hp;
-                      setNikValid(!nik_spv ? false : true);
-                      setphoneValid(!no_hp ? false : true);
                       return (
                       <Button 
                         type="submit" 
@@ -600,7 +601,7 @@ function EditProfile(){
                       </Button>
                       );
                     }}
-                  </Form.Item>
+                  </Form.Item> */}
                 </TabPane>
               
                 <TabPane tab="Ubah Sandi" key="2" style={{paddingLeft:20, paddingTop:10}}>
@@ -649,6 +650,7 @@ function EditProfile(){
                         htmlType="submit"                  
                           disabled={!formIsComplete}   
                           style={{
+                            cursor:"pointer",
                             color:"white",
                             backgroundColor:"#d51200",
                             border:"none",
@@ -681,7 +683,7 @@ function EditProfile(){
             refreshPage()
             }
           }
-          title={"Data Berhasil Diubah"}
+          title={"Sandi Berhasil Diubah"}
         />
         <ModalFailed
           open={inputGagal}
@@ -690,7 +692,7 @@ function EditProfile(){
           }
           color={"#2ECC71"}
           title={errorMessage}
-          description={"Data akun Supervisor gagal diubah "}
+          description={"Sandi Gagal Diubah "}
         />
             </main>
         </div>
