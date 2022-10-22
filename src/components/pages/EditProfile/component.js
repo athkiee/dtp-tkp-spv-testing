@@ -18,6 +18,12 @@ function EditProfile(){
   // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hZG1pbiI6NywibmFtYV9sZW5na2FwIjoiQWRtaW4gdGVzdCAxIiwibmlrIjoiMTIzNDU2IiwiZW1haWwiOiJkdHB0a3AyMUBnbWFpbC5jb20iLCJub19ocCI6IjA4OTEyNzgzODY3MzciLCJ1c2VyX3R5cGUiOiJhZG1pbiIsImlhdCI6MTY2NjMwNjQzNCwiZXhwIjoxNjY2MzkyODM0fQ.vJjNfeZwCZjGnsvbDCnCqQrKJknSEpr1kn1fYdKO7ok"
   const id = localStorage.getItem('id_spv');
   const [form] = Form.useForm();
+  // eslint-disable-next-line
+  const [nikValid = true, setNikValid] = React.useState([]);
+  // eslint-disable-next-line
+  const [passwordValid = true, setpasswordValid] = React.useState([]);
+  // eslint-disable-next-line
+  const [phoneValid = true, setphoneValid] = React.useState([]);
   const [bidang, setBidang] = React.useState([]);
   const [errorMessage, setErrorMessage] = React.useState([]);
   const { TabPane } = Tabs;
