@@ -3,7 +3,6 @@ import { setSekbidSession } from "../../../../utils/Common";
 import axios from "axios";
 import "../styles/Login.css";
 import TextField from "@material-ui/core/TextField";
-import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 import { IMAGES, API } from "../../../../configs";
 import InputAdornment from "@material-ui/core/InputAdornment";
