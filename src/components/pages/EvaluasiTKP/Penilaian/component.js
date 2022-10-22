@@ -12,7 +12,6 @@ import moment from "moment";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import ModalSuccess from "../../../element/ModalSuccess";
 import Link from "@material-ui/core/Link";
-import { Formik } from "formik";
 
 const mockData = [
   {
@@ -31,7 +30,6 @@ const namaSpv = localStorage.getItem("nama");
 const emailSpv = localStorage.getItem("email");
 
 const important = <b style={{ color: "#EE2E24" }}>*</b>;
-const { Option } = Select;
 
 const styles = (theme) => ({
   root: {

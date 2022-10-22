@@ -60,12 +60,12 @@ export default function DragAndDrop(props) {
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles[0]);
     onChange(acceptedFiles[0]);
-  }, []);
+  }, [setFile, onChange]);
   const onClose = useCallback(() => {
     setFile(null);
     onChange(null);
     setFileName("");
-  }, []);
+  }, [setFile, onChange, setFileName]);
 
   const {
     getRootProps,
