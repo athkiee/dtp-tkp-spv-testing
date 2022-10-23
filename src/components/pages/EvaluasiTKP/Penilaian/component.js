@@ -3,7 +3,7 @@ import { Container, Grid } from "@material-ui/core";
 import HeadBar from "../../../constant/headBar";
 import DragAndDrop from "../../../element/DragAndDrop";
 import { withStyles } from "@material-ui/core/styles";
-import { Select, Input, Breadcrumb, Button } from "antd";
+import { Select, Input, InputNumber, Breadcrumb, Button } from "antd";
 import { ROUTES, API } from "../../../../configs";
 import { get } from "lodash";
 import axios from "axios";
@@ -43,6 +43,7 @@ const styles = (theme) => ({
     backgroundColor: "#DA1E20",
     marginBottom: 20,
     cursor: "pointer",
+    width: "100%",
     "&:hover": {
       color: "#DA1E20",
       backgroundColor: "white",
@@ -62,11 +63,21 @@ const styles = (theme) => ({
   negativeCase: {
     color: "#EE2E24",
     fontSize: 10,
+    marginLeft: 4,
+    marginTop: 2,
+  },
+  helperText: {
+    color: "black",
+    fontSize: 10,
+    marginLeft: 4,
+    marginTop: 2,
   },
   backButton: {
     display: "flex",
+    width: "100px",
     padding: 2,
     color: "#8E8181",
+    alignItems: "center",
     marginBottom: "-20px",
     cursor: "pointer",
     "& p": {
@@ -81,10 +92,11 @@ const styles = (theme) => ({
     color: "#000000",
   },
   container1: {
-    width: "100%",
+    width: "1034px",
     height: "auto",
     float: "left",
     marginLeft: 35,
+    marginBottom: 35,
     backgroundColor: "white",
     borderRadius: 10,
   },
@@ -113,6 +125,11 @@ const styles = (theme) => ({
     paddingLeft: 10,
     borderRadius: 5,
     height: 40,
+    width: "100%",
+  },
+  inputFormNumber: {
+    display: "block",
+    borderRadius: 5,
     width: "100%",
   },
   selectForm: {
@@ -168,9 +185,12 @@ class PenilaianTKP extends React.Component {
       nilai_evaluasi: "",
       reason_kontrak: "",
       reason_levelling: "",
-      error_nilai: false,
-      error_perpanjang_kontrak: false,
       error_reason_kontrak: false,
+      error_bidang: false,
+      error_jobTT: false,
+      error_joblevel: false,
+      error_jobRole: false,
+      error_reason_levelling: false,
       dataTKP: [],
       datajobTitle: [],
       dataBidang: [],
@@ -187,6 +207,7 @@ class PenilaianTKP extends React.Component {
       modalSuccess: false,
       renderExtend: false,
     };
+    this.form = React.createRef();
   }
 
   async componentDidMount() {
@@ -266,20 +287,24 @@ class PenilaianTKP extends React.Component {
 
   _handleChange = (event) => {
     const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
+    const value = target?.type === "checkbox" ? target?.checked : target?.value;
+    const name = target?.name;
 
     this.setState({
       [name]: value,
-      error_nilai: false,
       error_reason_kontrak: false,
+    });
+  };
+
+  _handleChangeNumber = (name, value) => {
+    this.setState({
+      [name]: value,
     });
   };
 
   _handleCheckboxExtend = (id) => {
     this.setState({
       checked: id,
-      error_perpanjang_kontrak: false,
     });
   };
 
@@ -290,29 +315,13 @@ class PenilaianTKP extends React.Component {
   };
 
   _handleSubmit1 = () => {
-    let {
-      checked,
-      nilai_evaluasi,
-      error_nilai,
-      error_perpanjang_kontrak,
-      extendStatus,
-      milestone,
-      renderExtend,
-    } = this.state;
-    if (nilai_evaluasi === "") {
-      error_nilai = true;
-    }
-    if (checked === "") {
-      error_perpanjang_kontrak = true;
-    } else {
-      extendStatus = checked;
-      milestone = "step2";
-      renderExtend = true;
-    }
+    let { checked, nilai_evaluasi, extendStatus, milestone, renderExtend } =
+      this.state;
+    extendStatus = checked;
+    milestone = "step2";
+    renderExtend = true;
     this.setState({
       nilai_evaluasi,
-      error_nilai,
-      error_perpanjang_kontrak,
       extendStatus,
       milestone,
       renderExtend,
@@ -326,6 +335,11 @@ class PenilaianTKP extends React.Component {
       error_evaluasi,
       file_evaluasi,
       file_name,
+      error_bidang,
+      error_jobTT,
+      error_joblevel,
+      error_jobRole,
+      error_reason_levelling,
     } = this.state;
     const formData = new FormData();
     formData.append("tanggal_evaluasi", moment());
@@ -352,6 +366,21 @@ class PenilaianTKP extends React.Component {
     if (reason_kontrak === "") {
       error_reason_kontrak = true;
     }
+    if (this.state.bidang === "") {
+      error_bidang = true;
+    }
+    if (this.state.id_job_title === "") {
+      error_jobTT = true;
+    }
+    if (this.state.jobTT === "") {
+      error_joblevel = true;
+    }
+    if (this.state.jobRole === "") {
+      error_jobRole = true;
+    }
+    if (this.state.reason_levelling === "") {
+      error_reason_levelling = true;
+    }
     if (file_evaluasi === "" && file_name === "") {
       error_evaluasi = true;
     } else {
@@ -368,6 +397,11 @@ class PenilaianTKP extends React.Component {
     this.setState({
       error_reason_kontrak,
       error_evaluasi,
+      error_bidang,
+      error_jobTT,
+      error_joblevel,
+      error_jobRole,
+      error_reason_levelling,
     });
   };
 
@@ -439,8 +473,12 @@ class PenilaianTKP extends React.Component {
       milestone: "step1",
       renderExtend: false,
       error_evaluasi: false,
-      error_perpanjang_kontrak: false,
       error_reason_kontrak: false,
+      error_bidang: false,
+      error_jobRole: false,
+      error_jobTT: false,
+      error_joblevel: false,
+      error_reason_levelling: false,
     });
   };
 
@@ -470,8 +508,8 @@ class PenilaianTKP extends React.Component {
 
   _renderMilestone1 = () => {
     const { classes } = this.props;
-    const { checked, error_nilai, error_perpanjang_kontrak, nilai_evaluasi } =
-      this.state;
+    const { checked, nilai_evaluasi } = this.state;
+    console.log("test", nilai_evaluasi);
 
     return (
       <Container className={classes.container2}>
@@ -485,19 +523,21 @@ class PenilaianTKP extends React.Component {
         </h2>
         <div style={{ margin: 20 }}>
           <label className="form-label">
-            Total Nilai Evaluasi Kerja{important}
+            Total Nilai Evaluasi Kinerja{important}
           </label>
-          <Input
+          <InputNumber
             variant="outlined"
-            className={classes.inputForm}
+            className={classes.inputFormNumber}
             type="number"
             placeholder="Contoh: 200"
             name={"nilai_evaluasi"}
             value={nilai_evaluasi}
-            onChange={this._handleChange}
+            onChange={this._handleChangeNumber.bind(this, "nilai_evaluasi")}
+            min={0}
+            max={500}
           />
-          <p className={classes.negativeCase}>
-            {error_nilai ? "Total Nilai Evaluasi Kerja tidak boleh kosong" : ""}
+          <p className={classes.helperText}>
+            Total Nilai Evaluasi Kinerja antara 0 hingga 500
           </p>
         </div>
         <div style={{ margin: 20 }}>
@@ -517,19 +557,19 @@ class PenilaianTKP extends React.Component {
                 ))}
               </tbody>
             </table>
-            <p className={classes.negativeCase}>
-              {error_perpanjang_kontrak
-                ? "Wajib pilih salah satu checkbox"
-                : ""}
-            </p>
           </div>
         </div>
-        <div>
+        <div style={{ padding: "0px 20px" }}>
           <Button
             type="primary"
             className={classes.submitForm}
             onClick={this._handleSubmit1}
-            disabled={nilai_evaluasi !== "" && checked !== "" ? false : true}
+            disabled={
+              (nilai_evaluasi !== "" && checked !== "") ||
+              (nilai_evaluasi === null && checked !== "")
+                ? false
+                : true
+            }
           >
             <strong>Berikutnya</strong>
           </Button>
@@ -602,7 +642,7 @@ class PenilaianTKP extends React.Component {
               </p>
             </div>
           </div>
-          <div>
+          <div style={{ padding: "0 20px" }}>
             <Button
               onClick={this._handleSubmitForm1}
               type="primary"
@@ -682,6 +722,11 @@ class PenilaianTKP extends React.Component {
       file_name,
       allJobTitleLevelling,
       allJobRoles,
+      error_bidang,
+      error_jobTT,
+      error_joblevel,
+      error_jobRole,
+      error_reason_levelling,
     } = this.state;
 
     return (
@@ -695,11 +740,15 @@ class PenilaianTKP extends React.Component {
         <div style={{ margin: 20 }}>
           <label className="form-label">Bidang{important}</label>
           <Select
+            showSearch
             className={classes.selectForm}
             placeholder=" Pilih Bidang/Tribe"
             name={"bidang"}
             onChange={this._handleSelect.bind(this, "bidang")}
             value={bidang}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().includes(input.toLowerCase())
+            }
           >
             {dataBidang.map((data) => (
               <Select.Option key={data.key} value={data.key}>
@@ -707,15 +756,22 @@ class PenilaianTKP extends React.Component {
               </Select.Option>
             ))}
           </Select>
+          <p className={classes.negativeCase}>
+            {error_bidang ? "Bidang Usulan tidak boleh kosong" : ""}
+          </p>
         </div>
         <div style={{ margin: 20 }}>
           <label className="form-label">Job Title{important}</label>
           <Select
+            showSearch
             name={"id_job_title"}
             className={classes.selectForm}
             placeholder=" Pilih Job Title Usulan"
             onChange={this._onChangeJobTitle}
             value={id_job_title}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().includes(input.toLowerCase())
+            }
           >
             {datajobTitle.map((data) => (
               <Select.Option
@@ -727,15 +783,22 @@ class PenilaianTKP extends React.Component {
               </Select.Option>
             ))}
           </Select>
+          <p className={classes.negativeCase}>
+            {error_jobTT ? "Job Title Usulan tidak boleh kosong" : ""}
+          </p>
         </div>
         <div style={{ margin: 20 }}>
           <label className="form-label">Job Title Levelling{important}</label>
           <Select
+            showSearch
             name={"jobTT"}
             className={classes.selectForm}
             placeholder=" Pilih Job Title Level Usulan"
             onChange={this._handleSelect.bind(this, "jobTT")}
             value={jobTT}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().includes(input.toLowerCase())
+            }
           >
             {allJobTitleLevelling.map((data) => (
               <Select.Option key={data.key} value={data.key}>
@@ -743,15 +806,24 @@ class PenilaianTKP extends React.Component {
               </Select.Option>
             ))}
           </Select>
+          <p className={classes.negativeCase}>
+            {error_joblevel
+              ? "Job Title Levelling Usulan tidak boleh kosong"
+              : ""}
+          </p>
         </div>
         <div style={{ margin: 20 }}>
           <label className="form-label">Job Role{important}</label>
           <Select
+            showSearch
             name={"jobRole"}
             className={classes.selectForm}
             placeholder=" Pilih Job Role"
             onChange={this._handleSelect.bind(this, "jobRole")}
             value={jobRole}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().includes(input.toLowerCase())
+            }
           >
             {allJobRoles.map((data) => (
               <Select.Option key={data.key} value={data.key}>
@@ -759,6 +831,9 @@ class PenilaianTKP extends React.Component {
               </Select.Option>
             ))}
           </Select>
+          <p className={classes.negativeCase}>
+            {error_jobRole ? "Job Role Usulan tidak boleh kosong" : ""}
+          </p>
         </div>
         <div style={{ margin: 20 }}>
           <label className="form-label">
@@ -772,6 +847,11 @@ class PenilaianTKP extends React.Component {
             onChange={this._handleChange}
             value={reason_levelling}
           />
+          <p className={classes.negativeCase}>
+            {error_reason_levelling
+              ? "Alasan rekomendasi kenaikan Job Title tidak boleh kosong"
+              : ""}
+          </p>
         </div>
         <div style={{ margin: 20 }}>
           <div>
@@ -796,7 +876,7 @@ class PenilaianTKP extends React.Component {
             </p>
           </div>
         </div>
-        <div>
+        <div style={{ padding: "0 20px" }}>
           <Button
             type="primary"
             className={classes.submitForm}
@@ -837,7 +917,7 @@ class PenilaianTKP extends React.Component {
             </p>
           </div>
         </div>
-        <div>
+        <div style={{ padding: "0 20px" }}>
           <Button
             onClick={this._handleSubmitForm1}
             type="primary"
@@ -969,7 +1049,7 @@ class PenilaianTKP extends React.Component {
             {milestone === "step2" ? (
               <div className={classes.backButton} onClick={this._handleBack}>
                 <ArrowLeftOutlined />
-                <p>Kembali</p>
+                <p style={{ marginBottom: 0 }}>Kembali</p>
               </div>
             ) : (
               ""
