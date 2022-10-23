@@ -10,7 +10,7 @@ import {
   SendOutlined,
   PushpinOutlined,
 } from "@ant-design/icons";
-import { Button, Breadcrumb, Dropdown, Popover, Checkbox, Menu } from "antd";
+import { Button, Breadcrumb, Popover, Checkbox, Menu } from "antd";
 import HeadBar from "../../constant/headBar";
 import { ROUTES, API } from "../../../configs";
 import Link from "@material-ui/core/Link";
@@ -18,7 +18,7 @@ import ModalSuccess from "../../element/ModalSuccess";
 import ModalConfirmation from "../../element/ModalConfirmation";
 import ModalFailed from "../../element/ModalFailed";
 
-const nikSpv = sessionStorage.getItem("nik");
+// const nikSpv = sessionStorage.getItem("nik");
 const { Option } = Select;
 
 const useStyles = makeStyles((theme) => ({
@@ -92,22 +92,22 @@ const jumlahData = (
   </Menu>
 );
 
-const exportData = (
-  <Menu>
-    <Menu.Item
-      key="0"
-      onClick={() => window.open(API.exportCsvUnderSpv + nikSpv + "/active")}
-    >
-      Ekspor Data (.Csv)
-    </Menu.Item>
-    <Menu.Item
-      key="1"
-      onClick={() => window.open(API.exportFileUnderSpv + nikSpv + "/active")}
-    >
-      Ekspor Data (.Zip)
-    </Menu.Item>
-  </Menu>
-);
+// const exportData = (
+//   <Menu>
+//     <Menu.Item
+//       key="0"
+//       onClick={() => window.open(API.exportCsvUnderSpv + nikSpv + "/active")}
+//     >
+//       Ekspor Data (.Csv)
+//     </Menu.Item>
+//     <Menu.Item
+//       key="1"
+//       onClick={() => window.open(API.exportFileUnderSpv + nikSpv + "/active")}
+//     >
+//       Ekspor Data (.Zip)
+//     </Menu.Item>
+//   </Menu>
+// );
 
 const buttonPin = (
   <Menu>
@@ -365,7 +365,7 @@ export default function EvaluasiTKP() {
                   }}
                 />
               </Button>
-              <Dropdown overlay={exportData} trigger={["click"]}>
+              {/* <Dropdown overlay={exportData} trigger={["click"]}>
                 <a
                   href="_black"
                   className="ant-dropdown-link"
@@ -376,7 +376,7 @@ export default function EvaluasiTKP() {
                     <DownloadOutlined style={{ marginLeft: 40 }} />
                   </Button>
                 </a>
-              </Dropdown>
+              </Dropdown> */}
 
               <Popover placement="bottom" content={buttonPin} trigger="click">
                 <PushpinOutlined
