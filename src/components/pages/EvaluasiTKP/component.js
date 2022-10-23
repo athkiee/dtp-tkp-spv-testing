@@ -4,7 +4,7 @@ import FileSaver from "file-saver";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import TableDashboard from "./Table";
-import { Select } from "antd";
+import { Select, Tooltip } from "antd";
 import {
   DownloadOutlined,
   SendOutlined,
@@ -137,6 +137,8 @@ export default function EvaluasiTKP() {
   const [confirmation, setConfirmation] = useState(false);
   const [success, setSuccess] = useState(false);
   const [authCheck, setCheck] = useState(false);
+  const [disableSKI, setDisableSKI] = useState(false);
+  const [disableISH, setDisableISH] = useState(false);
 
   useEffect(() => {
     const fetchData = () => {
@@ -147,7 +149,26 @@ export default function EvaluasiTKP() {
           })
           .then((response) => {
             const urlEvaluasi = response.data;
-            getEvaluasi(urlEvaluasi);
+            if (!urlEvaluasi.form_evaluasi_ski) {
+              setDisableSKI(true);
+            } else {
+              setDisableSKI(false);
+            }
+
+            if (!urlEvaluasi.form_evaluasi_ish) {
+              setDisableISH(true);
+            } else {
+              setDisableISH(false);
+            }
+
+            if (urlEvaluasi) {
+              getEvaluasi(urlEvaluasi);
+            }
+            console.log("test", response);
+          })
+          .catch((error) => {
+            setDisableSKI(true);
+            setDisableISH(true);
           });
       };
       downloadEvaluasi();
@@ -304,23 +325,52 @@ export default function EvaluasiTKP() {
             </li>
             <li>Upload Dokumen Evaluasi pada kolom “Aksi”</li>
           </ol>
-          <Button
-            type="primary"
-            icon={<DownloadOutlined />}
-            onClick={downloadISH}
-            className={classes.downloadForm}
-          >
-            Unduh Form Evaluasi ISH
-          </Button>
-
-          <Button
-            type="primary"
-            icon={<DownloadOutlined />}
-            onClick={downloadSKI}
-            className={classes.downloadForm}
-          >
-            Unduh Form Evaluasi SKI
-          </Button>
+          {disableISH ? (
+            <Tooltip title="Data tidak ada">
+              <Button
+                type="primary"
+                icon={<DownloadOutlined />}
+                onClick={downloadISH}
+                className={classes.downloadForm}
+                disabled={disableISH}
+              >
+                Unduh Form Evaluasi ISH
+              </Button>
+            </Tooltip>
+          ) : (
+            <Button
+              type="primary"
+              icon={<DownloadOutlined />}
+              onClick={downloadISH}
+              className={classes.downloadForm}
+              disabled={disableISH}
+            >
+              Unduh Form Evaluasi ISH
+            </Button>
+          )}
+          {disableSKI ? (
+            <Tooltip title="Data tidak ada">
+              <Button
+                type="primary"
+                icon={<DownloadOutlined />}
+                onClick={downloadSKI}
+                className={classes.downloadForm}
+                disabled={disableSKI}
+              >
+                Unduh Form Evaluasi SKI
+              </Button>
+            </Tooltip>
+          ) : (
+            <Button
+              type="primary"
+              icon={<DownloadOutlined />}
+              onClick={downloadSKI}
+              className={classes.downloadForm}
+              disabled={disableSKI}
+            >
+              Unduh Form Evaluasi SKI
+            </Button>
+          )}
         </Container>
         <Container maxWidth="lg" className={classes.container}>
           <div
@@ -388,13 +438,16 @@ export default function EvaluasiTKP() {
               </Popover>
             </div>
           </div>
+
           <TableDashboard />
+
           <ModalFailed
             title={"Peringatan"}
             description={"Halaman ini hanya bisa di akses oleh Supervisor"}
             open={authCheck}
             handleClose={() => (window.location = ROUTES.DASHBOARD())}
           />
+
           <ModalConfirmation
             title={"Kirim Semua Penilaian Evaluasi TKP"}
             description={
@@ -404,6 +457,7 @@ export default function EvaluasiTKP() {
             handleClose={() => setConfirmation(false)}
             getData={_handleSendAllEvaluasi}
           />
+
           <ModalSuccess
             open={success}
             label={
