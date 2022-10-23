@@ -191,7 +191,7 @@ export default function EvaluasiTKP() {
       if (typeAuth === "sekretaris") setCheck(true);
     };
     fetchData();
-  }, []);
+  }, [nik_spv, token, typeAuth, urlFormulir]);
 
   // const getDataCSV = async () => {
   //   const nama = localStorage.getItem("nama");
@@ -274,19 +274,17 @@ export default function EvaluasiTKP() {
 
   const _handleSendAllEvaluasi = () => {
     const filter = dataTKP.filter((data) => {
-      return (
-        (data.status === 1 && data.evaluasi === 3) ||
-        (data.status === 2 && data.evaluasi === 3)
-      );
+      return data.evaluasi === 3;
     });
     let id_tkp = filter.map((val) => {
-      return val.key;
+      return { id_tkp: val.key };
     });
-    let list_tkp = [{ id_tkp: id_tkp }];
+    let data = id_tkp;
+
     axios
       .post(
-        `${API.detailTkp}` + "evaluasi-tkp/kirim",
-        { list_tkp },
+        `${API.detailTkp}evaluasi-tkp/kirim`,
+        { list_tkp: data },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -456,7 +454,7 @@ export default function EvaluasiTKP() {
               "Anda yakin ingin mengirimkan Semua Penilaian Evaluasi TKP?"
             }
             open={confirmation}
-            // handleClose={setConfirmation(false)}
+            handleClose={() => setConfirmation(false)}
             getData={_handleSendAllEvaluasi}
           />
 

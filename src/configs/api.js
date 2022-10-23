@@ -1,6 +1,5 @@
 const tokenSpv = localStorage.getItem("token");
 const baseUrl = process.env.REACT_APP_BASE_URL;
-
 const token = {
   headers: { Authorization: `Bearer ${tokenSpv}` },
 };
@@ -37,4 +36,6 @@ export default {
   getZipFile: baseUrl + "tkp/get_zip_file/",
   getFile: baseUrl + "tkp/get_file/",
   uploadSKCK: baseUrl + "tkp/documents/upload-skck",
+  loadSpv: baseUrl + "spv/",
+  editSpv: baseUrl + "spv/edit/",
 };

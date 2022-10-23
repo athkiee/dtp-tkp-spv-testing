@@ -1,0 +1,14 @@
+.ant-tabs-ink-bar {
+    display: none;
+    }
+    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #d41400 !important; 
+    font-size: 0.90rem;
+    font-weight: bolder;
+    }
+    .ant-tabs-tab :hover {
+    color: #d41400 !important; 
+    }
+    .ant-breadcrumb-link a:hover{
+        color: #d41400;
+    }

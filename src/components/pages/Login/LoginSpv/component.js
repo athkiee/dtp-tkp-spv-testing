@@ -3,7 +3,6 @@ import { setUserSession } from "../../../../utils/Common";
 import axios from "axios";
 import "../styles/Login.css";
 import TextField from "@material-ui/core/TextField";
-import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 import { IMAGES, API } from "../../../../configs";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -209,9 +208,9 @@ function LoginSupervisor(props) {
                 />
               </Grid>
               <Grid item className="mt-2" style={{ marginTop: "10px" }}>
-                <Link to="/forgot-password" style={{ color: "#D51100" }}>
+                {/* <Link to="/forgot-password" style={{ color: "#D51100" }}>
                   Lupa Password?
-                </Link>
+                </Link> */}
               </Grid>
             </Grid>
           </div>

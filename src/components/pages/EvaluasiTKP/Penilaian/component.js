@@ -30,7 +30,6 @@ const namaSpv = localStorage.getItem("nama");
 const emailSpv = localStorage.getItem("email");
 
 const important = <b style={{ color: "#EE2E24" }}>*</b>;
-const { Option } = Select;
 
 const styles = (theme) => ({
   root: {
@@ -176,8 +175,8 @@ class PenilaianTKP extends React.Component {
       datajobTitle: [],
       dataBidang: [],
       datajtLevel: [],
-      allJobTitleLevelling:[],
-      allJobRoles:[],
+      allJobTitleLevelling: [],
+      allJobRoles: [],
       datajobRole: [],
       bidang: "",
       jobTitle: "",
@@ -210,14 +209,19 @@ class PenilaianTKP extends React.Component {
               ? 0
               : (detailTKP && detailTKP.status_rekomendasi_naik_job_level) ||
                 "",
-          id_job_title: detailTKP.job_title_usulan.id_job_title_usulan || "",
-          reason_levelling: detailTKP.alasan_rekomendasi_naik_job_level || "",
-          bidang: detailTKP.bidang_usulan.id_bidang_usulan || "",
-          jobTT: detailTKP.job_title_levelling_usulan.id_job_title_levelling_usulan || "",
-          jobRole: detailTKP.job_role_usulan.id_job_role_usulan || "",
+          id_job_title:
+            get(detailTKP.job_title_usulan, "id_job_title_usulan") || "",
+          reason_levelling:
+            (detailTKP && detailTKP.alasan_rekomendasi_naik_job_level) || "",
+          bidang: get(detailTKP.bidang_usulan, "id_bidang_usulan") || "",
+          jobTT:
+            get(
+              detailTKP.job_title_levelling_usulan,
+              "id_job_title_levelling_usulan"
+            ) || "",
+          jobRole: get(detailTKP.job_role_usulan, "id_job_role_usulan") || "",
           file_name: detailTKP.file_hasil_penilaian_kinerja_tkp || "",
         });
-        // console.log("bidang",this.state.dataTKP.bidang_usulan.id_bidang_usulan)
       });
     axios.get(API.allJobTitle).then((response) => {
       const jobTitle = response.data.map((jobTitle) => ({
@@ -259,7 +263,6 @@ class PenilaianTKP extends React.Component {
       });
     });
   }
-  
 
   _handleChange = (event) => {
     const target = event.target;
@@ -322,6 +325,7 @@ class PenilaianTKP extends React.Component {
       reason_kontrak,
       error_evaluasi,
       file_evaluasi,
+      file_name,
     } = this.state;
     const formData = new FormData();
     formData.append("tanggal_evaluasi", moment());
@@ -348,7 +352,7 @@ class PenilaianTKP extends React.Component {
     if (reason_kontrak === "") {
       error_reason_kontrak = true;
     }
-    if (file_evaluasi === "") {
+    if (file_evaluasi === "" && file_name === "") {
       error_evaluasi = true;
     } else {
       axios
@@ -373,6 +377,7 @@ class PenilaianTKP extends React.Component {
       reason_kontrak,
       error_evaluasi,
       file_evaluasi,
+      file_name,
     } = this.state;
     const formData = new FormData();
     formData.append("tanggal_evaluasi", moment());
@@ -390,7 +395,7 @@ class PenilaianTKP extends React.Component {
     if (reason_kontrak === "") {
       error_reason_kontrak = true;
     }
-    if (file_evaluasi === "") {
+    if (file_evaluasi === "" && file_name === "") {
       error_evaluasi = true;
     } else {
       axios
@@ -401,14 +406,12 @@ class PenilaianTKP extends React.Component {
           this.setState({
             modalSuccess: true,
           });
-          console.log("just", res);
         });
     }
     this.setState({
       error_reason_kontrak,
       error_evaluasi,
     });
-    console.log("test", formData);
   };
 
   _handleBreadcumbs = () => {
@@ -420,7 +423,11 @@ class PenilaianTKP extends React.Component {
   };
 
   _handleFilesFromDrag = (name, file) => {
-    this.setState({ [name]: file, error_evaluasi: false });
+    this.setState({
+      [name]: file,
+      file_name: file?.name,
+      error_evaluasi: false,
+    });
   };
 
   _handleSelect = (name, value) => {
@@ -444,17 +451,19 @@ class PenilaianTKP extends React.Component {
         name: jtLevel.nama_job_title_levelling,
       }));
       this.setState({
-        datajtLevel: jtLevel,
         id_job_title: key,
+        allJobTitleLevelling: jtLevel,
+        jobTT: "",
+        jobRole: "",
       });
     });
     axios.get(API.allJobRoles + roles.roles).then((response) => {
-      const jobRole = response.data.map((jobRole) => ({
+      const roles = response.data.map((jobRole) => ({
         key: jobRole.id_job_role,
         name: jobRole.nama_job_role,
       }));
       this.setState({
-        datajobRole: jobRole,
+        allJobRoles: roles,
       });
     });
   };
@@ -463,8 +472,6 @@ class PenilaianTKP extends React.Component {
     const { classes } = this.props;
     const { checked, error_nilai, error_perpanjang_kontrak, nilai_evaluasi } =
       this.state;
-
-  
 
     return (
       <Container className={classes.container2}>
@@ -667,8 +674,6 @@ class PenilaianTKP extends React.Component {
       error_evaluasi,
       datajobTitle,
       dataBidang,
-      datajtLevel,
-      datajobRole,
       reason_levelling,
       id_job_title,
       bidang,
@@ -677,31 +682,7 @@ class PenilaianTKP extends React.Component {
       file_name,
       allJobTitleLevelling,
       allJobRoles,
-      sort_job_title_levelling
     } = this.state;
-    const optionJobTitle = datajobTitle.map((d) => (
-      <Option key={d.key} roles={d.keyRoles}>
-        {d.name}
-      </Option>
-    ));
-    const optionBidang = dataBidang.map((d) => (
-      <Option key={d.key}>{d.name}</Option>
-    ));
-    const optionJTlevel = datajtLevel.map((d) => (
-      <Option key={d.key}>{d.name}</Option>
-    ));
-    const optionJobRole = datajobRole.map((d) => (
-      <Option key={d.key}>{d.name}</Option>
-    ));
-
-    // console.log("dataBidang", dataBidang)
-    // console.log("dataJobROle", datajobTitle)
-    // console.log("a", allJobTitleLevelling)
-    // console.log("datajobrole", datajobRole)
-
-      
-
-  
 
     return (
       <Container className={classes.container2}>
@@ -720,12 +701,8 @@ class PenilaianTKP extends React.Component {
             onChange={this._handleSelect.bind(this, "bidang")}
             value={bidang}
           >
-            {/* {optionBidang} */}
             {dataBidang.map((data) => (
-              <Select.Option
-                key={data.key}
-                value={data.key}
-              >
+              <Select.Option key={data.key} value={data.key}>
                 {data.name}
               </Select.Option>
             ))}
@@ -740,7 +717,6 @@ class PenilaianTKP extends React.Component {
             onChange={this._onChangeJobTitle}
             value={id_job_title}
           >
-            {/* {optionJobTitle} */}
             {datajobTitle.map((data) => (
               <Select.Option
                 key={data.key}
@@ -761,12 +737,8 @@ class PenilaianTKP extends React.Component {
             onChange={this._handleSelect.bind(this, "jobTT")}
             value={jobTT}
           >
-            {/* {optionJTlevel} */}
             {allJobTitleLevelling.map((data) => (
-              <Select.Option
-                key={data.key}
-                value={data.key}
-              >
+              <Select.Option key={data.key} value={data.key}>
                 {data.name}
               </Select.Option>
             ))}
@@ -781,12 +753,8 @@ class PenilaianTKP extends React.Component {
             onChange={this._handleSelect.bind(this, "jobRole")}
             value={jobRole}
           >
-            {/* {optionJobRole} */}
             {allJobRoles.map((data) => (
-              <Select.Option
-                key={data.key}
-                value={data.key}
-              >
+              <Select.Option key={data.key} value={data.key}>
                 {data.name}
               </Select.Option>
             ))}
@@ -888,7 +856,7 @@ class PenilaianTKP extends React.Component {
     const { classes } = this.props;
     const namaTKP = get(dataTKP.data_tkp, "nama_lengkap");
     const bidangTKP = get(dataTKP.data_tkp, "nama_bidang");
-    // console.log("asdad", dataTKP);
+    console.log("asdad", dataTKP);
     const listProfilerSpv = [
       {
         title: "Nama Supervisor",
@@ -905,15 +873,14 @@ class PenilaianTKP extends React.Component {
     ];
     const listProfilerTKP = [
       {
-        title: "Nama Bidang/Tribe",
-        desc:  bidangTKP || "-",
-      },
-      {
         title: "Nama Lengkap Sesuai KTP",
         desc: namaTKP || "-",
       },
+      {
+        title: "Nama Bidang/Tribe",
+        desc: bidangTKP || "-",
+      },
     ];
-    // console.log("test", checkedPromotion);
 
     return (
       <div className={classes.root}>

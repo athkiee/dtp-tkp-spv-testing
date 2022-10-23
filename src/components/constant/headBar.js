@@ -27,6 +27,7 @@ import { useStyles } from "./stylesHeadBar";
 import { withRouter } from "react-router-dom";
 import ModalLoginExpired from "../element/ModalLoginExpired";
 import { ROUTES, API } from "../../configs";
+import { Link } from "react-router-dom";
 
 class HeadBar extends React.Component {
   constructor(props) {
@@ -45,7 +46,7 @@ class HeadBar extends React.Component {
     const token = localStorage.getItem("token");
     const auth = localStorage.getItem("typeAuth");
     if (auth === "supervisor" && token !== null) {
-      axios.get(`${API.checkToken}` + `?token=${token}`).then((response) => {
+      axios.get(`${API.checkToken}?token=${token}`).then((response) => {
         const status = response.data;
         if (status !== "OK") {
           this.setState({ modalExpired: true });
@@ -54,7 +55,7 @@ class HeadBar extends React.Component {
       });
     }
     if (auth === "sekretaris" && token !== null) {
-      axios.get(`${API.checkToken}` + `?token=${token}`).then((response) => {
+      axios.get(`${API.checkToken}?token=${token}`).then((response) => {
         const status = response.data;
         if (status !== "OK") {
           this.setState({ modalExpired: true });
@@ -103,6 +104,31 @@ class HeadBar extends React.Component {
     this.setState({ openModal: false });
   };
 
+  stringAvatar = (name) => {
+    // const name = this.nama_lengkap
+    if (name) {
+      const splitStringName = name.split(" ");
+      if (splitStringName.length === 1) {
+        return {
+          // sx: {
+          //   bgcolor: stringToColor(name),
+          // },
+          children: `${splitStringName[0][0]}`,
+        };
+      } else {
+        return {
+          // sx: {
+          //   bgcolor: stringToColor(name),
+          // },
+          children: `${splitStringName[0][0]}${
+            splitStringName[splitStringName.length - 1][0]
+          }`,
+        };
+      }
+    }
+  }
+  
+
   render() {
     const { open, open1, anchorEl, openModal, openside, modalExpired } =
       this.state;
@@ -141,19 +167,24 @@ class HeadBar extends React.Component {
             ></Typography>
 
             <NotificationPopover />
+            <Link to={ROUTES.EDIT_PROFILE} style={{ color: "black" }}>
 
             <IconButton color="inherit">
               <Avatar
-                fontSize="large"
+                fontSize="small"
                 alt="Remy Sharp"
                 className={classes.avatar}
+                {...this.stringAvatar(this.nama_user)}  
               >
-                {this.nama_user.charAt(0).toUpperCase()}
+                {/* {this.nama_user.charAt(0).toUpperCase()} */}
+                
               </Avatar>
               <Typography className={classes.namaUser}>
                 {this.nama_user.split(" ")[0]}
               </Typography>
             </IconButton>
+            </Link>
+
 
             <IconButton color="inherit" onClick={this.handleClick1}>
               {open1 ? (
@@ -197,9 +228,13 @@ class HeadBar extends React.Component {
               className={classes.iconbutton}
               onClick={this.handleClose}
             >
+              <Link to={ROUTES.EDIT_PROFILE} style={{ color: "black" }}>
               <Box width="140px" textAlign={"left"}>
+              
                 Profile
               </Box>
+              </Link>
+
             </IconButton>
           </Box>
           <Box>
