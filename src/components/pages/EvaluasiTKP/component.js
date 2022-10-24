@@ -164,7 +164,6 @@ export default function EvaluasiTKP() {
             if (urlEvaluasi) {
               getEvaluasi(urlEvaluasi);
             }
-            console.log("test", response);
           })
           .catch((error) => {
             setDisableSKI(true);
