@@ -509,7 +509,6 @@ class PenilaianTKP extends React.Component {
   _renderMilestone1 = () => {
     const { classes } = this.props;
     const { checked, nilai_evaluasi } = this.state;
-    console.log("test", nilai_evaluasi);
 
     return (
       <Container className={classes.container2}>
@@ -936,7 +935,6 @@ class PenilaianTKP extends React.Component {
     const { classes } = this.props;
     const namaTKP = get(dataTKP.data_tkp, "nama_lengkap");
     const bidangTKP = get(dataTKP.data_tkp, "nama_bidang");
-    console.log("asdad", dataTKP);
     const listProfilerSpv = [
       {
         title: "Nama Supervisor",
